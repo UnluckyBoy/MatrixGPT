@@ -1,8 +1,11 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -163,6 +166,7 @@ public class MainFragment extends Fragment {
     }
 
     private void SetFailure_ShowView(String failure){
+        mAi_info_View.setText("");
         mShow_View.setText(failure);
     }
 }

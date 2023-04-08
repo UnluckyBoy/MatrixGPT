@@ -90,7 +90,8 @@
             android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             android:singleLine="false"
-            android:textSize="24dp" />
+            android:textIsSelectable="true"
+            android:textSize="24dp"/>
         <ImageView
             android:id="@+id/image_View"
             android:layout_width="match_parent"
