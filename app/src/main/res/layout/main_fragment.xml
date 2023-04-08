@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_text_layout"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="请输入"/>
+
+        <Button
+            android:id="@+id/forecast_btn"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_below="@id/edit_text"
+            android:background="@drawable/shape_btn"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="5dp"
+            android:text="预测" />
+
+        <Button
+            android:id="@+id/read_btn"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_below="@id/edit_text"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="210dp"
+            android:layout_marginLeft="210dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/shape_btn"
+            android:text="读取" />
+
+        <Button
+            android:id="@+id/chat_btn"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_below="@id/edit_text"
+            android:background="@drawable/shape_btn"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="5dp"
+            android:text="聊天" />
+
+        <Button
+            android:id="@+id/paint_btn"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_below="@id/edit_text"
+            android:background="@drawable/shape_btn"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="110dp"
+            android:layout_marginLeft="110dp"
+            android:text="绘画" />
+
+        <TextView
+            android:id="@+id/prompt_View"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:layout_below="@id/forecast_btn"
+            android:layout_marginTop="5dp"
+            android:text="提示:由于网络原因，AI可能没有快速响应"
+            android:gravity="center"
+            android:textColor="@color/LavaRed"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/ai_info_View"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/prompt_View"
+            android:layout_marginTop="5dp"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textSize="24dp" />
+
+        <TextView
+            android:id="@+id/show_View"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:layout_below="@id/ai_info_View"
+            android:layout_marginTop="5dp"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textSize="24dp" />
+        <ImageView
+            android:id="@+id/image_View"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:layout_below="@id/ai_info_View"
+            android:layout_marginTop="5dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

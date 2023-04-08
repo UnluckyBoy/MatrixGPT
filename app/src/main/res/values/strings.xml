@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MatrixGPT</string>
+    <string name="mainIcon">主页</string>
+    <string name="chatIcon">论坛</string>
+    <string name="userIcon">我的</string>
+</resources>
