@@ -1,15 +1,12 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
-import android.content.ClipboardManager;
-import android.content.ComponentName;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,13 +30,6 @@ import com.matrix.matrixgpt.Network.Service.ChatService;
 import com.matrix.matrixgpt.Network.Service.CreateImageService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
-import com.matrix.matrixgpt.UtilTool.StreamTool;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,13 +45,8 @@ public class MainFragment extends Fragment {
 
     private EditText mEditText;
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
-    private TextView mShow_View,mAi_info_View,mEditTextView;
+    private TextView mShow_View,mAi_info_View;
     private ImageView mImage_View;
-    private byte[] data;
-    private Bitmap bitmap;
-    private Handler handler = null;
-
-    private Map<String,Integer> mNumMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,29 +63,28 @@ public class MainFragment extends Fragment {
             view = inflater.inflate(R.layout.main_fragment, container, false);
 
             Bundle bundle = getArguments();
-
             Init_Component(view);
         }
         return view;
     }
 
     private void Init_Component(View view) {
-        Button mChatBtn,mPaintBbtn;
+        Button mChatBtn,mPaintBtn;
         mChatBtn=view.findViewById(R.id.chat_btn);
-        mPaintBbtn=view.findViewById(R.id.paint_btn);
+        mPaintBtn=view.findViewById(R.id.paint_btn);
+        //mSaveImgBtn=view.findViewById(R.id.saveImg_btn);
         mShow_View=view.findViewById(R.id.show_View);
-        mAi_info_View=view.findViewById(R.id.ai_info_View);
         mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
-        mShow_View.setTextIsSelectable(true);//可编辑
-
-        mEditTextView=view.findViewById(R.id.imageTextView);
-        mEditTextView.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
+        mAi_info_View=view.findViewById(R.id.ai_info_View);
 
         mEditText=view.findViewById(R.id.edit_text);
         mImage_View=view.findViewById(R.id.image_View);
 
+        mImage_View.setOnClickListener(new ImageClickListener());
+
         mChatBtn.setOnClickListener(new ClickListener());
-        mPaintBbtn.setOnClickListener(new ClickListener());
+        mPaintBtn.setOnClickListener(new ClickListener());
+        //mSaveImgBtn.setOnClickListener(new ClickListener());
     }
 
     private class ClickListener implements View.OnClickListener {
@@ -135,6 +119,8 @@ public class MainFragment extends Fragment {
                             if(!(response.body().equals(null))){
                                 mAi_info_View.setText("AI模型:"+response.body().getModel());
                                 mShow_View.setText(response.body().getChoices().get(0).getMessage().getContent());
+                            }else{
+                                Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -172,6 +158,8 @@ public class MainFragment extends Fragment {
                                  */
                                 ImageTool.SetImageView(mImage_View,response.body().getData().get(0).getUrl());
 
+                            }else{
+                                Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -195,5 +183,36 @@ public class MainFragment extends Fragment {
     private void SetFailure_ShowView(String failure){
         mAi_info_View.setText("");
         mShow_View.setText(failure);
+    }
+
+    /**
+     * ImageView长按响应方法
+     */
+    private class ImageClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if(mImage_View.getDrawable()!=null){
+                ShowDialog(v.getContext());
+            }
+        }
+    }
+
+    /**
+     * 保存确认
+     * @param mContext
+     */
+    public void ShowDialog(final Context mContext) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setIcon(R.drawable.save)
+                .setTitle("保存")
+                .setMessage("是否确定保存图片?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(mContext, "点击了确定按钮", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("取消", null)
+                .create()
+                .show();
     }
 }

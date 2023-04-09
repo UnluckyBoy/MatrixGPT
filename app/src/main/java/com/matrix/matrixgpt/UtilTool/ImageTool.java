@@ -34,7 +34,6 @@ public class ImageTool{
          * 在新开的线程中设置图片显示
          */
         Runnable runnable = new Runnable() {
-
             public void run() {
                 imageView.setImageBitmap(bitmap);
             }
@@ -49,7 +48,7 @@ public class ImageTool{
                     e.printStackTrace();
                 }
                 bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                // 子线程runnable将会执行
+                //子线程runnable将会执行
                 handler.post(runnable);
             }
         }.start();
