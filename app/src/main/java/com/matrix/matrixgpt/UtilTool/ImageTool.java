@@ -1,11 +1,17 @@
 package com.matrix.matrixgpt.UtilTool;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -67,5 +73,39 @@ public class ImageTool{
         InputStream inputStream = conn.getInputStream(); // 通过输入流获得图片数据
         byte[] data = StreamTool.readInputStream(inputStream); // 获得图片的二进制数据
         return data;
+    }
+
+    /**
+     * 保存bitmap到本地
+     *
+     * @param bitmap Bitmap
+     */
+    public static void saveBitmap(Bitmap bitmap, String path, Context mContext,String fileName) {
+        String savePath;
+        File filePic;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            savePath = path;
+        } else {
+            //Log.e("tag", "saveBitmap failure : sdcard not mounted");
+            return;
+        }
+        try {
+            filePic = new File(savePath,fileName);
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic+".png");
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            //Toast.makeText(mContext, "保存成功!!!", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Log.e("tag", "saveBitmap: " + e.getMessage());
+            Toast.makeText(mContext, "保存失败!!!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Log.i("tag", "saveBitmap success: " + filePic.getAbsolutePath());
+        Toast.makeText(mContext, "保存成功!!!", Toast.LENGTH_SHORT).show();
     }
 }

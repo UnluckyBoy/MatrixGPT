@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
@@ -29,8 +30,12 @@ import com.matrix.matrixgpt.Network.ReplyBean.CreateImageBean;
 import com.matrix.matrixgpt.Network.Service.ChatService;
 import com.matrix.matrixgpt.Network.Service.CreateImageService;
 import com.matrix.matrixgpt.R;
+import com.matrix.matrixgpt.UITool.MatrixDialog;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
+import com.matrix.matrixgpt.UtilTool.TimeTool;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainFragment extends Fragment {
+    private final String mImagePath="/sdcard/Download";
 
     private View view;
 
@@ -192,7 +198,8 @@ public class MainFragment extends Fragment {
         @Override
         public void onClick(View v) {
             if(mImage_View.getDrawable()!=null){
-                ShowDialog(v.getContext());
+                Bitmap bm =((BitmapDrawable) ((ImageView) mImage_View).getDrawable()).getBitmap();
+                ShowDialog(bm,v.getContext());
             }
         }
     }
@@ -201,18 +208,36 @@ public class MainFragment extends Fragment {
      * 保存确认
      * @param mContext
      */
-    public void ShowDialog(final Context mContext) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setIcon(R.drawable.save)
-                .setTitle("保存")
-                .setMessage("是否确定保存图片?")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(mContext, "点击了确定按钮", Toast.LENGTH_SHORT).show();
-                    }
-                }).setNegativeButton("取消", null)
-                .create()
-                .show();
+    public void ShowDialog(Bitmap bitmap,final Context mContext) {
+        String[] names = { "系统提示", "是否保存?", "确定", "取消" };
+        /**
+         * MatrixDialog中最后两个按钮的顺序与names的文本顺序相反
+         */
+        MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
+        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
+            /**
+             * 取消按钮
+             */
+            @Override
+            public void onClickListener2LastItem() {
+                Toast.makeText(mContext, "取消保存", Toast.LENGTH_SHORT).show();
+                mDialog.dismiss();
+            }
+
+            /**
+             * 确定按钮
+             */
+            @Override
+            public void onClickListener2SecondLastItem() {
+                //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
+                //String title = new Date(System.currentTimeMillis()).toString(); //获取当前时间
+                ImageTool.saveBitmap(bitmap,mImagePath,mContext, TimeTool.GetSystemTime());
+                //ImageTool.saveBitmap(bitmap,mImagePath,mContext, "test");
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
     }
+
+
 }

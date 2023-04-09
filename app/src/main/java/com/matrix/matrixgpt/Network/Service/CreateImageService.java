@@ -16,7 +16,7 @@ import retrofit2.http.POST;
 public interface CreateImageService {
     @Headers({
             "Content-Type:application/json",
-            "Authorization:Bearer 你的API-Key"
+            "Authorization:Bearer 你的API-KEY"
     })
     @POST("generations")
     Call<CreateImageBean> getState(
