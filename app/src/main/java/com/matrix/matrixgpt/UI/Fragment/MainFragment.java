@@ -1,10 +1,14 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
+import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -29,8 +33,13 @@ import com.matrix.matrixgpt.Network.Service.ChatService;
 import com.matrix.matrixgpt.Network.Service.CreateImageService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
+import com.matrix.matrixgpt.UtilTool.StreamTool;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +55,11 @@ public class MainFragment extends Fragment {
 
     private EditText mEditText;
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
-    private TextView mShow_View,mAi_info_View;
+    private TextView mShow_View,mAi_info_View,mEditTextView;
     private ImageView mImage_View;
+    private byte[] data;
+    private Bitmap bitmap;
+    private Handler handler = null;
 
     private Map<String,Integer> mNumMap;
 
@@ -79,6 +91,10 @@ public class MainFragment extends Fragment {
         mShow_View=view.findViewById(R.id.show_View);
         mAi_info_View=view.findViewById(R.id.ai_info_View);
         mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
+        mShow_View.setTextIsSelectable(true);//可编辑
+
+        mEditTextView=view.findViewById(R.id.imageTextView);
+        mEditTextView.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
 
         mEditText=view.findViewById(R.id.edit_text);
         mImage_View=view.findViewById(R.id.image_View);
@@ -95,6 +111,7 @@ public class MainFragment extends Fragment {
             switch(mBtnId){
                 case R.id.chat_btn:
                     String content=mEditText.getText().toString();//获取输入内容
+                    SetShowViewNull();
 
                     //Toast.makeText(view.getContext(),"点击了聊天按钮",Toast.LENGTH_SHORT).show();
                     SetLoad_ShowView();
@@ -131,8 +148,8 @@ public class MainFragment extends Fragment {
                     break;
                 case R.id.paint_btn:
                     String prompt=mEditText.getText().toString();//获取输入内容
+                    SetShowViewNull();
 
-                    //Toast.makeText(view.getContext(),"点击了绘画按钮",Toast.LENGTH_SHORT).show();
                     SetLoad_ShowView();
                     CreImgRequestBody mCreateImg=new CreImgRequestBody();
                     mCreateImg.setPrompt(prompt);
@@ -146,8 +163,15 @@ public class MainFragment extends Fragment {
                         public void onResponse(Call<CreateImageBean> call, Response<CreateImageBean> response) {
                             if(!(response.body().equals(null))){
                                 mAi_info_View.setText("");
-                                mShow_View.setText(response.body().getData().get(0).getUrl());
+                                //mShow_View.setText(response.body().getData().get(0).getUrl());
+                                //mEditTextView.setText(response.body().getData().get(0).getUrl());
                                 //Picasso.get().load(response.body().getData().get(0).getUrl()).into(mImage_View);
+
+                                /**
+                                 * 自定义工具类将url资源显示
+                                 */
+                                ImageTool.SetImageView(mImage_View,response.body().getData().get(0).getUrl());
+
                             }
                         }
 
@@ -163,6 +187,9 @@ public class MainFragment extends Fragment {
 
     private void SetLoad_ShowView(){
         mAi_info_View.setText("请稍后...");
+    }
+    private void SetShowViewNull(){
+        mShow_View.setText("");
     }
 
     private void SetFailure_ShowView(String failure){

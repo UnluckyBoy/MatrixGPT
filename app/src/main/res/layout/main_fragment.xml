@@ -92,6 +92,21 @@
             android:singleLine="false"
             android:textIsSelectable="true"
             android:textSize="24dp"/>
+
+        <EditText
+            android:id="@+id/imageTextView"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:layout_below="@id/ai_info_View"
+            android:layout_marginTop="5dp"
+            android:scrollbars="vertical"
+            android:singleLine="false"
+            android:textIsSelectable="true"
+            android:textSize="24dp"
+            android:background="@null"
+            android:editable="false"
+            android:textCursorDrawable="@null"/>
+
         <ImageView
             android:id="@+id/image_View"
             android:layout_width="match_parent"
