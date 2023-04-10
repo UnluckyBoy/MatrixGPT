@@ -53,6 +53,15 @@ public class MainFragment extends Fragment {
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
     private TextView mShow_View,mAi_info_View;
     private ImageView mImage_View;
+    private String agrs1=null;
+
+    public static MainFragment newInstance(String param1) {
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putString("agrs1", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +78,7 @@ public class MainFragment extends Fragment {
             view = inflater.inflate(R.layout.main_fragment, container, false);
 
             Bundle bundle = getArguments();
+            agrs1 = bundle.getString("agrs1");
             Init_Component(view);
         }
         return view;

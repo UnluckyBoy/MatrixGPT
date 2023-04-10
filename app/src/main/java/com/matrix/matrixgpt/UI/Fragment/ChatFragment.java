@@ -13,10 +13,20 @@ import com.matrix.matrixgpt.R;
 
 public class ChatFragment extends Fragment {
     private View view;
-    @Nullable
+    private String agrs1=null;
+
+
+    public static ChatFragment newInstance(String param1) {
+        ChatFragment fragment = new ChatFragment();
+        Bundle args = new Bundle();
+        args.putString("agrs1", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,ViewGroup container,
+                             Bundle savedInstanceState) {
 //        view = inflater.inflate(R.layout.chat_fragment,container,false);
 //        // Inflate the layout for this fragment
 //        return view;
@@ -29,6 +39,7 @@ public class ChatFragment extends Fragment {
             view = inflater.inflate(R.layout.chat_fragment, container, false);
 
             Bundle bundle = getArguments();
+            agrs1 = bundle.getString("agrs1");
 
         }
         return view;

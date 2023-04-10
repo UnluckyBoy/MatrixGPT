@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,12 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Fragment.ChatFragment;
 import com.matrix.matrixgpt.UI.Fragment.MainFragment;
 import com.matrix.matrixgpt.UI.Fragment.UserFragment;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] mFragmentContainer;
     // 用于标记最后一个fragment的标签
     public int mLastFragmentTag;
+
+    private static boolean mBackKeyPressed = false;//记录是否有首次按键
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +77,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mMainFragment = new MainFragment();
-        mChatFragment = new ChatFragment();
-        mUserFragment = new UserFragment();
+        Intent intent=getIntent();
+        String id=intent.getStringExtra("U_id");
+        if(id==null){
+            mMainFragment = MainFragment.newInstance("");
+            mChatFragment= ChatFragment.newInstance("");
+            mUserFragment=UserFragment.newInstance("");
+        }else{
+            mMainFragment = MainFragment.newInstance(id);
+            mChatFragment= ChatFragment.newInstance(id);
+            mUserFragment=UserFragment.newInstance(id);
+        }
+        //mMainFragment = new MainFragment();
+        //mChatFragment = new ChatFragment();
+        //mUserFragment = new UserFragment();
         mFragmentContainer = new Fragment[]{mMainFragment, mChatFragment, mUserFragment};
         mainFrame = (FrameLayout) findViewById(R.id.fragment_container);
         //设置fragment到布局
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mMainFragment).show(mMainFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, mMainFragment)
+                .show(mMainFragment)
+                .commit();
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -91,14 +112,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_mainIcon:
-                    //这里因为需要对3个fragment进行切换
+                    /**
+                     * 这里因为需要对3个fragment进行切换
+                     * 如果只是想测试按钮点击，不管fragment的切换，可以把start到end里面的内容去掉
+                     */
                     //start
                     if (mLastFragmentTag != 0) {
                         switchFragment(mLastFragmentTag, 0);
                         mLastFragmentTag = 0;
                     }
                     //end
-                    //如果只是想测试按钮点击，不管fragment的切换，可以把start到end里面的内容去掉
                     return true;
                 case R.id.action_chatIcon:
                     if (mLastFragmentTag != 1) {
@@ -143,6 +166,28 @@ public class MainActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //虚拟键盘也透明
             // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+
+    /**
+     * 退出检测
+     */
+    @Override
+    public void onBackPressed() {
+        if(!mBackKeyPressed){
+            Toast.makeText(this, "再滑一次退出", Toast.LENGTH_SHORT).show();
+            mBackKeyPressed = true;
+            new Timer().schedule(new TimerTask() {//延时两秒，如果超出则擦错第一次按键记录
+                @Override
+                public void run() {
+                    mBackKeyPressed = false;
+                }
+            }, 2000);
+        }
+        else{
+            //退出程序
+            this.finish();
+            System.exit(0);
         }
     }
 }

@@ -13,6 +13,16 @@ import com.matrix.matrixgpt.R;
 
 public class UserFragment extends Fragment {
     private View view;
+    private String agrs1=null;
+
+    public static UserFragment newInstance(String param1) {
+        UserFragment fragment = new UserFragment();
+        Bundle args = new Bundle();
+        args.putString("agrs1", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -29,6 +39,7 @@ public class UserFragment extends Fragment {
             view = inflater.inflate(R.layout.user_fragment, container, false);
 
             Bundle bundle = getArguments();
+            agrs1 = bundle.getString("agrs1");
 
         }
         return view;
