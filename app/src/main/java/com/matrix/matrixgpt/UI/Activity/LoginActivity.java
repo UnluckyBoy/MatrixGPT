@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,17 +45,25 @@ public class LoginActivity extends Activity {
     }
 
     private void InitRun() {
-        Button login,cacel,register;
+        Button login,cancel,register;
+        ImageButton biliBtn,qqBtn,wechatBtn;
         TextView mOther_login_title;
         mOther_login_title=findViewById(R.id.other_login_title);
         mOther_login_title.setText(Html.fromHtml(TGA.getString(R.string.other_login),FROM_HTML_MODE_COMPACT));
 
         login=findViewById(R.id.login);
-        cacel=findViewById(R.id.cancel);
+        cancel=findViewById(R.id.cancel);
         register=findViewById(R.id.register);
+        biliBtn=findViewById(R.id.bili_Btn);
+        qqBtn=findViewById(R.id.qq_Btn);
+        wechatBtn=findViewById(R.id.wechat_Btn);
+
         login.setOnClickListener(new BtnClickListener());
-        cacel.setOnClickListener(new BtnClickListener());
+        cancel.setOnClickListener(new BtnClickListener());
         register.setOnClickListener(new BtnClickListener());
+        biliBtn.setOnClickListener(new BtnClickListener());
+        qqBtn.setOnClickListener(new BtnClickListener());
+        wechatBtn.setOnClickListener(new BtnClickListener());
     }
 
     private class BtnClickListener implements View.OnClickListener {
@@ -71,6 +80,15 @@ public class LoginActivity extends Activity {
                     Intent register=new Intent(LoginActivity.this,RegisterActivity.class);
                     startActivity(register);
                     finish();
+                    break;
+                case R.id.bili_Btn:
+                    Toast.makeText(TGA,"功能尚未实现,敬请期待!",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.qq_Btn:
+                    Toast.makeText(TGA,"功能尚未实现,敬请期待!",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.wechat_Btn:_Btn:
+                    Toast.makeText(TGA,"功能尚未实现,敬请期待!",Toast.LENGTH_SHORT).show();
                     break;
             }
         }

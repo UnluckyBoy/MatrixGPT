@@ -13,7 +13,7 @@
         android:background="@drawable/main_bg">
 
         <com.matrix.matrixgpt.UITool.CircleImageView
-            android:id="@+id/user"
+            android:id="@+id/user_head"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_alignParentTop="true"
@@ -25,7 +25,7 @@
             android:id="@+id/userName"
             android:layout_width="135dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/user"
+            android:layout_below="@+id/user_head"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:textSize="25sp"

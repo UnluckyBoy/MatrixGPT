@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,10 +24,9 @@ public class UserFragment extends Fragment {
     private View view;
     private String args=null;
 
-    private CircleImageView imageButton=null;
-    private Button editBt;
+    private CircleImageView imageButton;
+    //private ImageView test;
     private TextView userName;
-    private EditText A_Name;
 
     public static UserFragment newInstance(String param1) {
         UserFragment fragment = new UserFragment();
@@ -70,6 +70,7 @@ public class UserFragment extends Fragment {
         //String test_name=args_Intent.getStringExtra("U_name");
         userName=view.findViewById(R.id.userName);
         userName.setText(args_Intent.getStringExtra("U_name"));
+        imageButton=view.findViewById(R.id.user_head);
         SetHead(test_head);
     }
 

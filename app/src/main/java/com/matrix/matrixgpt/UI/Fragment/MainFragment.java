@@ -160,10 +160,6 @@ public class MainFragment extends Fragment {
                         public void onResponse(Call<CreateImageBean> call, Response<CreateImageBean> response) {
                             if(!(response.body().equals(null))){
                                 mAi_info_View.setText("");
-                                //mShow_View.setText(response.body().getData().get(0).getUrl());
-                                //mEditTextView.setText(response.body().getData().get(0).getUrl());
-                                //Picasso.get().load(response.body().getData().get(0).getUrl()).into(mImage_View);
-
                                 /**
                                  * 自定义工具类将url资源显示
                                  */
