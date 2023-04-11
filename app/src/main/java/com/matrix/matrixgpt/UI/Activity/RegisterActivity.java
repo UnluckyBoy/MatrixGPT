@@ -61,11 +61,11 @@ public class RegisterActivity extends Activity {
         EditText name = (EditText) findViewById(R.id.use_register);
         EditText account = (EditText) findViewById(R.id.account_register);
         EditText pwd = (EditText) findViewById(R.id.pwd_register);
-        EditText Ispwd = (EditText) findViewById(R.id.pwd_confirm);
+        EditText confirmPwd = (EditText) findViewById(R.id.pwd_confirm);
         final String user_name = name.getText().toString();
         final String user_account = account.getText().toString();
         final String user_pwd = pwd.getText().toString();
-        final String ispwd=Ispwd.getText().toString();
+        final String ispwd=confirmPwd.getText().toString();
         if (!(ispwd.equals(user_pwd))) {
             Toast.makeText(RegisterActivity.this,TGA.getString(R.string.pwdConfirmError),Toast.LENGTH_SHORT).show();
         }
@@ -84,7 +84,7 @@ public class RegisterActivity extends Activity {
                         startActivity(main_intent);
                         finish();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "此号已注册！",
+                        Toast.makeText(RegisterActivity.this, TGA.getString(R.string.accountIsRegis),
                                 Toast.LENGTH_SHORT).show();
                     }
                 }

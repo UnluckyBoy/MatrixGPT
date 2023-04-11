@@ -96,9 +96,6 @@ public class MainActivity extends AppCompatActivity {
             mChatFragment= ChatFragment.newInstance(id);
             mUserFragment=UserFragment.newInstance(id);
         }
-        //mMainFragment = new MainFragment();
-        //mChatFragment = new ChatFragment();
-        //mUserFragment = new UserFragment();
         mFragmentContainer = new Fragment[]{mMainFragment, mChatFragment, mUserFragment};
         mainFrame = (FrameLayout) findViewById(R.id.fragment_container);
         //设置fragment到布局
