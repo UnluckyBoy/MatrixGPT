@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void ShowDialog(final Context mContext) {
         String[] names = {mContext.getString(R.string.SystemTitle),
-                mContext.getString(R.string.loginTitle), "确定", "取消" };
+                mContext.getString(R.string.loginTitle),
+                mContext.getString(R.string.Confirm),mContext.getString(R.string.Cancel) };
         /**MatrixDialog中最后两个按钮的顺序与names的文本顺序相反**/
         MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
         mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
