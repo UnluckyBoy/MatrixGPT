@@ -24,7 +24,7 @@ import com.matrix.matrixgpt.R;
  * @Author Create By Administrator
  * @Date 2023/4/11 0011 14:13
  */
-public class CirecleImageView extends AppCompatImageView {
+public class CircleImageView extends AppCompatImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
@@ -54,15 +54,15 @@ public class CirecleImageView extends AppCompatImageView {
     private boolean mReady;
     private boolean mSetupPending;
 
-    public CirecleImageView(Context context) {
+    public CircleImageView(Context context) {
         super(context);
     }
 
-    public CirecleImageView(Context context, AttributeSet attrs) {
+    public CircleImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CirecleImageView(Context context, AttributeSet attrs, int defStyle) {
+    public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         super.setScaleType(SCALE_TYPE);
 

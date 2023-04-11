@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrixgpt.R;
 
 public class ChatFragment extends Fragment {

@@ -20,6 +20,7 @@ import com.matrix.matrixgpt.Network.API.ChatApi;
 import com.matrix.matrixgpt.Network.API.CreateImageApi;
 import com.matrix.matrixgpt.Network.GptRequestBody.ChatRequestBody;
 import com.matrix.matrixgpt.Network.GptRequestBody.CreImgRequestBody;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrixgpt.Network.ResponseBean.Gpt.ChatBean;
 import com.matrix.matrixgpt.Network.ResponseBean.Gpt.CreateImageBean;
 import com.matrix.matrixgpt.Network.Service.ChatService;
@@ -52,7 +53,7 @@ public class MainFragment extends Fragment {
     public static MainFragment newInstance(String param1) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString("agrs1", param1);
+        args.putString("agrs1",param1);
         fragment.setArguments(args);
         return fragment;
     }

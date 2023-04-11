@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Fragment.ChatFragment;
 import com.matrix.matrixgpt.UI.Fragment.MainFragment;
@@ -31,6 +32,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private final Context TGA=MainActivity.this;
+    private Intent intent_MainActivity;
 
     private BottomNavigationView bottomNavigation;
     private FrameLayout mainFrame;
@@ -82,19 +84,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         /**获取用户信息**/
-        Intent intent=getIntent();
-        String id=intent.getStringExtra("U_id");
+        intent_MainActivity=getIntent();
+//        UserBean mUser_MainActivity=new UserBean();
+//        mUser_MainActivity.setId(Integer.parseInt(intent_MainActivity.getStringExtra("U_id")));
+//        mUser_MainActivity.setImage(intent_MainActivity.getStringExtra("U_image"));
+//        mUser_MainActivity.setName(intent_MainActivity.getStringExtra("U_name"));
+//        mUser_MainActivity.setPassword(intent_MainActivity.getStringExtra("U_pwd"));
+//        mUser_MainActivity.setSex(intent_MainActivity.getStringExtra("U_sex"));
+//        mUser_MainActivity.setAccount(intent_MainActivity.getStringExtra("U_account"));
+//        mUser_MainActivity.setPhone(intent_MainActivity.getStringExtra("U_phone"));
+//        mUser_MainActivity.setEmail(intent_MainActivity.getStringExtra("U_email"));
+//        mUser_MainActivity.setGptNum(Integer.parseInt(intent_MainActivity.getStringExtra("U_gptNum")));
+        String account_id=intent_MainActivity.getStringExtra("U_account");
 
-        if(id==null){
+        if(account_id==null){
             ShowDialog(TGA);
 
             mMainFragment = MainFragment.newInstance("");
             mChatFragment= ChatFragment.newInstance("");
             mUserFragment=UserFragment.newInstance("");
         }else{
-            mMainFragment = MainFragment.newInstance(id);
-            mChatFragment= ChatFragment.newInstance(id);
-            mUserFragment=UserFragment.newInstance(id);
+            mMainFragment = MainFragment.newInstance(account_id);
+            mChatFragment= ChatFragment.newInstance(account_id);
+            mUserFragment=UserFragment.newInstance(account_id);
         }
         mFragmentContainer = new Fragment[]{mMainFragment, mChatFragment, mUserFragment};
         mainFrame = (FrameLayout) findViewById(R.id.fragment_container);

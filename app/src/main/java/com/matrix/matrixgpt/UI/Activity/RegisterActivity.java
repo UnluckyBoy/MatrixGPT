@@ -80,7 +80,15 @@ public class RegisterActivity extends Activity {
                         Toast.makeText(RegisterActivity.this,
                                 "恭喜注册成功！", Toast.LENGTH_SHORT).show();
                         Intent main_intent = new Intent(TGA, MainActivity.class);
-                        main_intent.putExtra("U_id", user_name);
+                        main_intent.putExtra("U_id",response.body().getId());
+                        main_intent.putExtra("U_image",response.body().getImage());
+                        main_intent.putExtra("U_name",response.body().getName());
+                        main_intent.putExtra("U_pwd",response.body().getPassword());
+                        main_intent.putExtra("U_sex",response.body().getSex());
+                        main_intent.putExtra("U_account",response.body().getAccount());
+                        main_intent.putExtra("U_phone",response.body().getPhone());
+                        main_intent.putExtra("U_email",response.body().getEmail());
+                        main_intent.putExtra("U_gptNum",response.body().getGptNum());
                         startActivity(main_intent);
                         finish();
                     } else {

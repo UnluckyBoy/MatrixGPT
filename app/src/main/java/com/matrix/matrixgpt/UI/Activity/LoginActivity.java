@@ -21,6 +21,7 @@ import com.matrix.matrixgpt.Network.Service.LoginService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
 import com.matrix.matrixgpt.UITool.MatrixDialogManager;
+import com.matrix.matrixgpt.UITool.PwdEditView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,13 +35,11 @@ import retrofit2.Response;
 public class LoginActivity extends Activity {
     private final LoginActivity TGA=LoginActivity.this;
 
-    private static boolean mBackKeyPressed = false;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
+
         InitRun();
     }
 
@@ -79,8 +78,8 @@ public class LoginActivity extends Activity {
 
     /**登录**/
     private void LoginTrans(){
-        EditText Uid=findViewById(R.id.uId_edit);
-        EditText Upwd=findViewById(R.id.uPwd_edit);
+        PwdEditView Uid=findViewById(R.id.uId_edit);
+        PwdEditView Upwd=findViewById(R.id.uPwd_edit);
         final String name=Uid.getText().toString();
         final String pwd=Upwd.getText().toString();
         LoginApi loginApi=new LoginApi();
@@ -91,8 +90,15 @@ public class LoginActivity extends Activity {
             public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
                 if(response.body().getResult().equals("success")){
                     Intent intent=new Intent(TGA,MainActivity.class);
-                    intent.putExtra("U_id",name);
-                    intent.putExtra("U_pwd",pwd);
+                    intent.putExtra("U_id",response.body().getId());
+                    intent.putExtra("U_image",response.body().getImage());
+                    intent.putExtra("U_name",response.body().getName());
+                    intent.putExtra("U_pwd",response.body().getPassword());
+                    intent.putExtra("U_sex",response.body().getSex());
+                    intent.putExtra("U_account",response.body().getAccount());
+                    intent.putExtra("U_phone",response.body().getPhone());
+                    intent.putExtra("U_email",response.body().getEmail());
+                    intent.putExtra("U_gptNum",response.body().getGptNum());
                     startActivity(intent);
                     finish();
                 }
