@@ -1,15 +1,10 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +18,10 @@ import androidx.fragment.app.Fragment;
 
 import com.matrix.matrixgpt.Network.API.ChatApi;
 import com.matrix.matrixgpt.Network.API.CreateImageApi;
-import com.matrix.matrixgpt.Network.CustomRequestModel.ChatRequestBody;
-import com.matrix.matrixgpt.Network.CustomRequestModel.CreImgRequestBody;
-import com.matrix.matrixgpt.Network.ReplyBean.ChatBean;
-import com.matrix.matrixgpt.Network.ReplyBean.CreateImageBean;
+import com.matrix.matrixgpt.Network.GptRequestBody.ChatRequestBody;
+import com.matrix.matrixgpt.Network.GptRequestBody.CreImgRequestBody;
+import com.matrix.matrixgpt.Network.ResponseBean.Gpt.ChatBean;
+import com.matrix.matrixgpt.Network.ResponseBean.Gpt.CreateImageBean;
 import com.matrix.matrixgpt.Network.Service.ChatService;
 import com.matrix.matrixgpt.Network.Service.CreateImageService;
 import com.matrix.matrixgpt.R;
@@ -35,7 +30,6 @@ import com.matrix.matrixgpt.UtilTool.ImageTool;
 import com.matrix.matrixgpt.UtilTool.TimeTool;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

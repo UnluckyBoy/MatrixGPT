@@ -1,4 +1,4 @@
-package com.matrix.matrixgpt.Network.CustomRequestModel;
+package com.matrix.matrixgpt.Network.GptRequestBody;
 
 import java.util.List;
 import java.util.Map;

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_indigo_100"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="用户注册"
+            android:textColor="@color/md_orange_700" />
+
+        <EditText
+            android:id="@+id/use_register"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="180dp"
+            android:hint="请输入用户名"
+            android:singleLine="true" />
+        <EditText
+            android:id="@+id/account_register"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/use_register"
+            android:layout_alignStart="@+id/use_register"
+            android:layout_below="@+id/use_register"
+            android:layout_marginTop="5dp"
+            android:hint="请输入注册账户"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/pwd_register"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/account_register"
+            android:layout_alignStart="@+id/account_register"
+            android:layout_below="@+id/account_register"
+            android:layout_marginTop="5dp"
+            android:hint="请输入用户密码"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/pwd_confirm"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/pwd_register"
+            android:layout_alignStart="@+id/pwd_register"
+            android:layout_below="@+id/pwd_register"
+            android:layout_marginTop="5dp"
+            android:hint="请确认用户密码"
+            android:inputType="textPassword"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/OK"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignLeft="@id/pwd_confirm"
+            android:layout_below="@id/pwd_confirm"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/longin_ok_btn"
+            android:text="注册" />
+
+        <Button
+            android:id="@+id/Cacel"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:layout_alignRight="@id/pwd_confirm"
+            android:layout_below="@id/pwd_confirm"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/cancel_btn"
+            android:text="取消" />
+
+    </RelativeLayout>
+
+</LinearLayout>

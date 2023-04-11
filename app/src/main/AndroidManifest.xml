@@ -34,6 +34,7 @@
         </activity>
         <!--添加Activity-->
         <activity android:name=".UI.Activity.LoginActivity"/>
+        <activity android:name=".UI.Activity.RegisterActivity"/>
 
     </application>
 

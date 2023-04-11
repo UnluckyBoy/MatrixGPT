@@ -1,0 +1,99 @@
+package com.matrix.matrixgpt.Network.ResponseBean.BackService;
+
+/**
+ * @ClassName LoginBean
+ * @Author Create By Administrator
+ * @Date 2023/4/11 0011 14:51
+ */
+public class LoginBean {
+    private String result;
+    private int id;
+    private String image;
+    private String name;
+    private String password;
+    private String sex;
+    private String account;
+    private String phone;
+    private String email;
+    private int gptNum;
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getGptNum() {
+        return gptNum;
+    }
+
+    public void setGptNum(int gptNum) {
+        this.gptNum = gptNum;
+    }
+}
