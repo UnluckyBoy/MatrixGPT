@@ -219,35 +219,27 @@ public class MainFragment extends Fragment {
      * @param mContext
      */
     public void ShowDialog(Bitmap bitmap,final Context mContext) {
-        String[] names = { "系统提示", "是否保存?", "确定", "取消" };
-        /**
-         * MatrixDialog中最后两个按钮的顺序与names的文本顺序相反
-         */
+        String[] names = { mContext.getString(R.string.SystemTitle),
+                mContext.getString(R.string.saveTitle),
+                mContext.getString(R.string.Confirm),
+                mContext.getString(R.string.Cancel) };
+        /**MatrixDialog中最后两个按钮的顺序与names的文本顺序相反**/
         MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
         mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
-            /**
-             * 取消按钮
-             */
+            /**取消按钮**/
             @Override
             public void onClickListener2LastItem() {
                 Toast.makeText(mContext, "取消保存", Toast.LENGTH_SHORT).show();
                 mDialog.dismiss();
             }
-
-            /**
-             * 确定按钮
-             */
+            /**确定按钮**/
             @Override
             public void onClickListener2SecondLastItem() {
                 //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
-                //String title = new Date(System.currentTimeMillis()).toString(); //获取当前时间
                 ImageTool.saveBitmap(bitmap,mImagePath,mContext, TimeTool.GetSystemTime());
-                //ImageTool.saveBitmap(bitmap,mImagePath,mContext, "test");
                 mDialog.dismiss();
             }
         });
         mDialog.show();
     }
-
-
 }

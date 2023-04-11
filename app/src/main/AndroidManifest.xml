@@ -32,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--添加Activity-->
+        <activity android:name=".UI.Activity.LoginActivity"/>
+
     </application>
 
 </manifest>

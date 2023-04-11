@@ -4,4 +4,11 @@
     <string name="chatIcon">论坛</string>
     <string name="userIcon">我的</string>
     <string name="NetworkFailure">网络错误!请检查!!!</string>
+    <string name="Confirm">确定</string>
+    <string name="Cancel">取消</string>
+    <string name="other_login">第三方登录</string>
+    <string name="SystemTitle">系统提示</string>
+    <string name="saveTitle">是否保存?</string>
+    <string name="loginTitle">尚未登录,是否登录?</string>
+    <string name="cancelLogin">是否放弃登录?</string>
 </resources>

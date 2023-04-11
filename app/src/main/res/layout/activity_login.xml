@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/md_indigo_100"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/uId"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="65dp"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="180dp"
+            android:text="账号" />
+
+        <TextView
+            android:id="@+id/uPwd"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="65dp"
+            android:layout_marginTop="265dp"
+            android:text="密码" />
+
+        <EditText
+            android:id="@+id/uId_edit"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_alignBaseline="@+id/uId"
+            android:layout_alignBottom="@+id/uId"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/register"
+            android:layout_toStartOf="@+id/register" />
+
+        <EditText
+            android:id="@+id/uPwd_edit"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_alignBaseline="@+id/uPwd"
+            android:layout_alignBottom="@+id/uPwd"
+            android:layout_alignLeft="@+id/uId_edit"
+            android:layout_alignStart="@+id/uId_edit"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="85dp"
+            android:layout_height="40dp"
+            android:layout_alignLeft="@id/uPwd"
+            android:layout_below="@id/uPwd_edit"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/longin_ok_btn"
+            android:text="登录" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="85dp"
+            android:layout_height="40dp"
+            android:layout_alignRight="@id/uPwd_edit"
+            android:layout_below="@id/uPwd_edit"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/cancel_btn"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="52dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/register_btn"
+            android:text="注册" />
+
+        <TextView
+            android:id="@+id/other_login_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:textColor="@color/md_light_blue_300"
+            />
+
+        <ImageButton
+            android:id="@+id/bili_Btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/other_login_title"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/icon_bilibili" />
+
+        <ImageButton
+            android:id="@+id/wechat_Btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/other_login_title"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/icon_wechat" />
+
+        <ImageButton
+            android:id="@+id/qq_Btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/other_login_title"
+            android:layout_marginStart="230dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/icon_qq" />
+
+    </RelativeLayout>
+
+</LinearLayout>

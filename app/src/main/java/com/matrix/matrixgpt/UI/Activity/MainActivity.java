@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,11 +24,13 @@ import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Fragment.ChatFragment;
 import com.matrix.matrixgpt.UI.Fragment.MainFragment;
 import com.matrix.matrixgpt.UI.Fragment.UserFragment;
+import com.matrix.matrixgpt.UITool.MatrixDialog;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    private final Context TGA=MainActivity.this;
 
     private BottomNavigationView bottomNavigation;
     private FrameLayout mainFrame;
@@ -77,9 +81,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        /**获取用户信息**/
         Intent intent=getIntent();
         String id=intent.getStringExtra("U_id");
+
         if(id==null){
+            ShowDialog(TGA);
+
             mMainFragment = MainFragment.newInstance("");
             mChatFragment= ChatFragment.newInstance("");
             mUserFragment=UserFragment.newInstance("");
@@ -189,5 +197,29 @@ public class MainActivity extends AppCompatActivity {
             this.finish();
             System.exit(0);
         }
+    }
+
+    public void ShowDialog(final Context mContext) {
+        String[] names = {mContext.getString(R.string.SystemTitle),
+                mContext.getString(R.string.loginTitle), "确定", "取消" };
+        /**MatrixDialog中最后两个按钮的顺序与names的文本顺序相反**/
+        MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
+        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
+            /**取消按钮**/
+            @Override
+            public void onClickListener2LastItem() {
+                mDialog.dismiss();
+            }
+            /**确定按钮**/
+            @Override
+            public void onClickListener2SecondLastItem() {
+                //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
+                Intent login_Intent=new Intent(TGA,LoginActivity.class);
+                startActivity(login_Intent);
+                finish();
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
     }
 }
