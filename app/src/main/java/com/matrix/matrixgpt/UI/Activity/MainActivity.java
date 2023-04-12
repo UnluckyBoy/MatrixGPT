@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getPermission();
+        ConfirmFirstStart();
         initView();
     }
 
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         String account_id=intent_MainActivity.getStringExtra("U_account");
 
         if(account_id==null){
-            ShowDialog(TGA);//提示登录
+            //ShowDialog(TGA);//提示登录
 
             mMainFragment = MainFragment.newInstance("");
             mChatFragment= ChatFragment.newInstance("");
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-        //这里是bottomnavigationview的点击事件
+        //bottomnavigationview的点击事件
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
@@ -183,6 +185,26 @@ public class MainActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //虚拟键盘也透明
             // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+    }
+
+    private void ConfirmFirstStart(){
+        SharedPreferences sharedPreferences = getSharedPreferences("share", MODE_PRIVATE);
+        //默认false
+        boolean isFirstRun = sharedPreferences.getBoolean("isFirstRun", false);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //如果是true就表示已经不是第一次运行app，跳转相应界面就可以
+
+        if (isFirstRun) {
+            //不是第一次运行
+
+        } else {
+            //第一次运行
+
+            editor.putBoolean("isFirstRun", true);
+            editor.commit();
+
+            ShowDialog(TGA);//提示登录
         }
     }
 

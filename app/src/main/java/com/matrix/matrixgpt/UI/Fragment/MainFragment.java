@@ -141,26 +141,8 @@ public class MainFragment extends Fragment {
                 /**调用窗口方法**/
                 //new MatrixDialogManager().ShowMatrixDialog(names,getActivity(), MainActivity.class);
             }else{
-                BackChatApi mBackChatApi=new BackChatApi();
-                BackChatService mBackChatService=mBackChatApi.getService();
-                Call<BackChatBean> callBackChat=mBackChatService.getState(content);
-                callBackChat.enqueue(new Callback<BackChatBean>() {
-                    @Override
-                    public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                        if(!(response.body().equals(null))){
-                            mShow_View.setText(response.body().getResult());
-                            visitor_Num--;
-                        }else{
-                            Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<BackChatBean> call, Throwable t) {
-                        SetFailure_ShowView("网络错误!请检查!!!");
-                        //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                mShow_View.setText("请稍后。。。");
+                //HandBackChat(content);
             }
         }else{
             //用户登录
@@ -168,6 +150,30 @@ public class MainFragment extends Fragment {
 
 
         }
+    }
+
+    /**调用后台API握手获取数据**/
+    private void HandBackChat(String content){
+        BackChatApi mBackChatApi=new BackChatApi();
+        BackChatService mBackChatService=mBackChatApi.getService();
+        Call<BackChatBean> callBackChat=mBackChatService.getState(content);
+        callBackChat.enqueue(new Callback<BackChatBean>() {
+            @Override
+            public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
+                if(!(response.body().equals(null))){
+                    mShow_View.setText(response.body().getResult());
+                    visitor_Num--;
+                }else{
+                    Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BackChatBean> call, Throwable t) {
+                SetFailure_ShowView("网络错误!请检查!!!");
+                //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**直接获取OpenAi数据**/
