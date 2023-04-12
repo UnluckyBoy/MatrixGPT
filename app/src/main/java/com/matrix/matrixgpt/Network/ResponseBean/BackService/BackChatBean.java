@@ -7,6 +7,15 @@ package com.matrix.matrixgpt.Network.ResponseBean.BackService;
  */
 public class BackChatBean {
     private String result;
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getResult() {
         return result;

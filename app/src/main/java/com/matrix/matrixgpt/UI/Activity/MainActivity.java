@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         String account_id=intent_MainActivity.getStringExtra("U_account");
 
         if(account_id==null){
-            //ShowDialog(TGA);//提示登录
+            ShowDialog(TGA);//提示登录
 
             mMainFragment = MainFragment.newInstance("");
             mChatFragment= ChatFragment.newInstance("");
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("isFirstRun", true);
             editor.commit();
 
-            ShowDialog(TGA);//提示登录
+            //ShowDialog(TGA);//提示登录
         }
     }
 

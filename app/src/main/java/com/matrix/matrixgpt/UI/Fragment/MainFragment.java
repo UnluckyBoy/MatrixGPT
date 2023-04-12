@@ -23,8 +23,8 @@ import com.matrix.matrixgpt.Network.API.GPT.CreateImageApi;
 import com.matrix.matrixgpt.Network.GptRequestBody.ChatRequestBody;
 import com.matrix.matrixgpt.Network.GptRequestBody.CreImgRequestBody;
 import com.matrix.matrixgpt.Network.ResponseBean.BackService.BackChatBean;
-import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.ChatBean;
-import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.CreateImageBean;
+import com.matrix.matrixgpt.Network.ResponseBean.GPT.ChatBean;
+import com.matrix.matrixgpt.Network.ResponseBean.GPT.CreateImageBean;
 import com.matrix.matrixgpt.Network.Service.Back.BackChatService;
 import com.matrix.matrixgpt.Network.Service.GPT.ChatService;
 import com.matrix.matrixgpt.Network.Service.GPT.CreateImageService;
@@ -110,13 +110,6 @@ public class MainFragment extends Fragment {
                     String content=mEditText.getText().toString();//获取输入内容
                     //OnAndroidGetChat(content);
                     GetBackChatData(content);
-//                    if(content!=null||content!=""){
-//                        //OnAndroidGetChat(content);
-//                        GetBackChatData(content);
-//                    }else{
-//                        Toast.makeText(view.getContext(),"请输入内容",Toast.LENGTH_SHORT).show();
-//                    }
-
                     break;
                 case R.id.paint_btn:
                     String prompt=mEditText.getText().toString();//获取输入内容
@@ -142,7 +135,7 @@ public class MainFragment extends Fragment {
                 //new MatrixDialogManager().ShowMatrixDialog(names,getActivity(), MainActivity.class);
             }else{
                 mShow_View.setText("请稍后。。。");
-                //HandBackChat(content);
+                HandBackChat(content);
             }
         }else{
             //用户登录
@@ -160,14 +153,14 @@ public class MainFragment extends Fragment {
         callBackChat.enqueue(new Callback<BackChatBean>() {
             @Override
             public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                if(!(response.body().equals(null))){
+                if(response.body().getContent().equals("success")){
                     mShow_View.setText(response.body().getResult());
                     visitor_Num--;
                 }else{
-                    Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                    mShow_View.setText("意料之外的错误,请稍后技术人员排查!!!");
                 }
             }
-
             @Override
             public void onFailure(Call<BackChatBean> call, Throwable t) {
                 SetFailure_ShowView("网络错误!请检查!!!");
