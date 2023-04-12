@@ -7,3 +7,5 @@ queryinfo:
 https://5841dcdd.r5.cpolar.top/UserInfo/queryinfo?account=xxxxx
 gethead:
 https://5841dcdd.r5.cpolar.top/getImage+(/backserver/userImage/admin.jpg)
+Chat:
+https://628945ad.r5.cpolar.top/MatrixGPT/chat?content=xxxxxxx

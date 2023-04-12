@@ -1,6 +1,7 @@
-package com.matrix.matrixgpt.Network.API;
+package com.matrix.matrixgpt.Network.API.GPT;
 
-import com.matrix.matrixgpt.Network.Service.CreateImageService;
+import com.matrix.matrixgpt.Network.API.WebApi;
+import com.matrix.matrixgpt.Network.Service.GPT.CreateImageService;
 
 import retrofit2.Retrofit;
 
@@ -9,7 +10,7 @@ import retrofit2.Retrofit;
  * @Author Create By Administrator
  * @Date 2023/4/8 0008 22:52
  */
-public class CreateImageApi extends WebApi{
+public class CreateImageApi extends WebApi {
     String url="https://api.openai.com/v1/images/";//绘画API
     Retrofit retrofit=getApi(url);
 

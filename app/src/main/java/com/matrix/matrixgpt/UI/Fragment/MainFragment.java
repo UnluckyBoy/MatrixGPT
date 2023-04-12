@@ -1,6 +1,7 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -16,15 +17,17 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.matrix.matrixgpt.Network.API.ChatApi;
-import com.matrix.matrixgpt.Network.API.CreateImageApi;
+import com.matrix.matrixgpt.Network.API.Back.BackChatApi;
+import com.matrix.matrixgpt.Network.API.GPT.ChatApi;
+import com.matrix.matrixgpt.Network.API.GPT.CreateImageApi;
 import com.matrix.matrixgpt.Network.GptRequestBody.ChatRequestBody;
 import com.matrix.matrixgpt.Network.GptRequestBody.CreImgRequestBody;
-import com.matrix.matrixgpt.Network.ResponseBean.BackService.UserBean;
-import com.matrix.matrixgpt.Network.ResponseBean.Gpt.ChatBean;
-import com.matrix.matrixgpt.Network.ResponseBean.Gpt.CreateImageBean;
-import com.matrix.matrixgpt.Network.Service.ChatService;
-import com.matrix.matrixgpt.Network.Service.CreateImageService;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.BackChatBean;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.ChatBean;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.CreateImageBean;
+import com.matrix.matrixgpt.Network.Service.Back.BackChatService;
+import com.matrix.matrixgpt.Network.Service.GPT.ChatService;
+import com.matrix.matrixgpt.Network.Service.GPT.CreateImageService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
@@ -41,19 +44,22 @@ import retrofit2.Response;
 
 public class MainFragment extends Fragment {
     private final String mImagePath="/sdcard/Download";
+    private final Context TGA=getContext();
 
+    private Intent intent_MainFragment;
     private View view;
 
     private EditText mEditText;
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
-    private TextView mShow_View,mAi_info_View;
+    private TextView mShow_View;
     private ImageView mImage_View;
-    private String agrs1=null;
+
+    private int visitor_Num=2;
 
     public static MainFragment newInstance(String param1) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString("agrs1",param1);
+        args.putString("args_account",param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,9 +67,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        view = inflater.inflate(R.layout.main_fragment,container,false);
-//        // Inflate the layout for this fragment
-//        return view;
+
         if(view!=null){
             ViewGroup parent=(ViewGroup) view.getParent();
             if(parent!=null){
@@ -73,20 +77,19 @@ public class MainFragment extends Fragment {
             view = inflater.inflate(R.layout.main_fragment, container, false);
 
             Bundle bundle = getArguments();
-            agrs1 = bundle.getString("agrs1");
-            Init_Component(view);
+            String args_account = bundle.getString("args_account");
+            Init_Component(view,args_account);
         }
+
         return view;
     }
 
-    private void Init_Component(View view) {
+    private void Init_Component(View view,String account) {
         Button mChatBtn,mPaintBtn;
         mChatBtn=view.findViewById(R.id.chat_btn);
         mPaintBtn=view.findViewById(R.id.paint_btn);
-        //mSaveImgBtn=view.findViewById(R.id.saveImg_btn);
         mShow_View=view.findViewById(R.id.show_View);
         mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
-        mAi_info_View=view.findViewById(R.id.ai_info_View);
 
         mEditText=view.findViewById(R.id.edit_text);
         mImage_View=view.findViewById(R.id.image_View);
@@ -95,7 +98,6 @@ public class MainFragment extends Fragment {
 
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
-        //mSaveImgBtn.setOnClickListener(new ClickListener());
     }
 
     private class ClickListener implements View.OnClickListener {
@@ -106,89 +108,140 @@ public class MainFragment extends Fragment {
             switch(mBtnId){
                 case R.id.chat_btn:
                     String content=mEditText.getText().toString();//获取输入内容
-                    SetShowViewNull();
-
-                    //Toast.makeText(view.getContext(),"点击了聊天按钮",Toast.LENGTH_SHORT).show();
-                    SetLoad_ShowView();
-
-                    List<Map<String, String>> dataList = new ArrayList<>();
-                    Map<String,String> temp=new HashMap<>();
-                    temp.put("role","user");
-                    temp.put("content",content);
-                    dataList.add(temp);
-
-                    ChatRequestBody param=new ChatRequestBody();
-                    param.setModel("gpt-3.5-turbo");
-                    param.setMessages(dataList);
-
-                    ChatApi mChatApi=new ChatApi();
-                    ChatService mChatService=mChatApi.getService();
-                    Call<ChatBean> callChat=mChatService.getState(param);
-                    callChat.enqueue(new Callback<ChatBean>() {
-                        @Override
-                        public void onResponse(Call<ChatBean> call, Response<ChatBean> response) {
-                            if(!(response.body().equals(null))){
-                                mAi_info_View.setText("AI模型:"+response.body().getModel());
-                                mShow_View.setText(response.body().getChoices().get(0).getMessage().getContent());
-                            }else{
-                                Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ChatBean> call, Throwable t) {
-                            SetFailure_ShowView("网络错误!请检查!!!");
-                            //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    //OnAndroidGetChat(content);
+                    GetBackChatData(content);
+//                    if(content!=null||content!=""){
+//                        //OnAndroidGetChat(content);
+//                        GetBackChatData(content);
+//                    }else{
+//                        Toast.makeText(view.getContext(),"请输入内容",Toast.LENGTH_SHORT).show();
+//                    }
 
                     break;
                 case R.id.paint_btn:
                     String prompt=mEditText.getText().toString();//获取输入内容
-                    SetShowViewNull();
-
-                    SetLoad_ShowView();
-                    CreImgRequestBody mCreateImg=new CreImgRequestBody();
-                    mCreateImg.setPrompt(prompt);
-                    mCreateImg.setSize("1024x1024");
-
-                    CreateImageApi mCreateImageApi=new CreateImageApi();
-                    CreateImageService mCreateImageService=mCreateImageApi.getService();
-                    Call<CreateImageBean> callCreateImg=mCreateImageService.getState(mCreateImg);
-                    callCreateImg.enqueue(new Callback<CreateImageBean>() {
-                        @Override
-                        public void onResponse(Call<CreateImageBean> call, Response<CreateImageBean> response) {
-                            if(!(response.body().equals(null))){
-                                mAi_info_View.setText("");
-                                /**
-                                 * 自定义工具类将url资源显示
-                                 */
-                                ImageTool.SetImageView(mImage_View,response.body().getData().get(0).getUrl());
-
-                            }else{
-                                Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<CreateImageBean> call, Throwable t) {
-                            SetFailure_ShowView("网络错误!请检查!!!");
-                        }
-                    });
+                    //OnAndroidGetCreateImage(prompt);
                     break;
             }
         }
     }
 
-    private void SetLoad_ShowView(){
-        mAi_info_View.setText("请稍后...");
+    private void GetBackChatData(String content){
+        intent_MainFragment=getActivity().getIntent();
+        if(intent_MainFragment.getStringExtra("U_account").equals(null)||
+                intent_MainFragment.getStringExtra("U_account").equals("")){
+            //游客登录
+            //Toast.makeText(view.getContext(),"游客登录",Toast.LENGTH_SHORT).show();
+            if(visitor_Num<=0){
+                Toast.makeText(view.getContext(),"次数使用完",Toast.LENGTH_SHORT).show();
+                String[] names = {TGA.getString(R.string.SystemTitle),
+                        TGA.getString(R.string.visitor_NumAdd),
+                        TGA.getString(R.string.Confirm), TGA.getString(R.string.Cancel)};
+
+                /**调用窗口方法**/
+                //new MatrixDialogManager().ShowMatrixDialog(names,getActivity(), MainActivity.class);
+            }else{
+                BackChatApi mBackChatApi=new BackChatApi();
+                BackChatService mBackChatService=mBackChatApi.getService();
+                Call<BackChatBean> callBackChat=mBackChatService.getState(content);
+                callBackChat.enqueue(new Callback<BackChatBean>() {
+                    @Override
+                    public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
+                        if(!(response.body().equals(null))){
+                            mShow_View.setText(response.body().getResult());
+                            visitor_Num--;
+                        }else{
+                            Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BackChatBean> call, Throwable t) {
+                        SetFailure_ShowView("网络错误!请检查!!!");
+                        //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }else{
+            //用户登录
+            //Toast.makeText(view.getContext(),"用户登录"+intent_MainFragment.getStringExtra("U_account"),Toast.LENGTH_SHORT).show();
+
+
+        }
     }
+
+    /**直接获取OpenAi数据**/
+    private void OnAndroidGetChat(String content){
+        SetShowViewNull();
+        //Toast.makeText(view.getContext(),"点击了聊天按钮",Toast.LENGTH_SHORT).show();
+        List<Map<String, String>> dataList = new ArrayList<>();
+        Map<String,String> temp=new HashMap<>();
+        temp.put("role","user");
+        temp.put("content",content);
+        dataList.add(temp);
+
+        ChatRequestBody param=new ChatRequestBody();
+        param.setModel("gpt-3.5-turbo");
+        param.setMessages(dataList);
+
+        ChatApi mChatApi=new ChatApi();
+        ChatService mChatService=mChatApi.getService();
+        Call<ChatBean> callChat=mChatService.getState(param);
+        callChat.enqueue(new Callback<ChatBean>() {
+            @Override
+            public void onResponse(Call<ChatBean> call, Response<ChatBean> response) {
+                if(!(response.body().equals(null))){
+                    mShow_View.setText(response.body().getChoices().get(0).getMessage().getContent());
+                }else{
+                    Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChatBean> call, Throwable t) {
+                SetFailure_ShowView("网络错误!请检查!!!");
+                //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**直接获取OpenAi数据**/
+    private void OnAndroidGetCreateImage(String prompt){
+        SetShowViewNull();
+
+        CreImgRequestBody mCreateImg=new CreImgRequestBody();
+        mCreateImg.setPrompt(prompt);
+        mCreateImg.setSize("1024x1024");
+
+        CreateImageApi mCreateImageApi=new CreateImageApi();
+        CreateImageService mCreateImageService=mCreateImageApi.getService();
+        Call<CreateImageBean> callCreateImg=mCreateImageService.getState(mCreateImg);
+        callCreateImg.enqueue(new Callback<CreateImageBean>() {
+            @Override
+            public void onResponse(Call<CreateImageBean> call, Response<CreateImageBean> response) {
+                if(!(response.body().equals(null))){
+                    /**
+                     * 自定义工具类将url资源显示
+                     */
+                    ImageTool.SetImageView(mImage_View,response.body().getData().get(0).getUrl());
+
+                }else{
+                    Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreateImageBean> call, Throwable t) {
+                SetFailure_ShowView("网络错误!请检查!!!");
+            }
+        });
+    }
+
     private void SetShowViewNull(){
         mShow_View.setText("");
     }
 
     private void SetFailure_ShowView(String failure){
-        mAi_info_View.setText("");
         mShow_View.setText(failure);
     }
 

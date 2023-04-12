@@ -1,4 +1,4 @@
-package com.matrix.matrixgpt.Network.ResponseBean.Gpt;
+package com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt;
 
 import java.util.List;
 

@@ -10,9 +10,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.matrix.matrixgpt.Network.API.RegisterApi;
+import com.matrix.matrixgpt.Network.API.Back.RegisterApi;
 import com.matrix.matrixgpt.Network.ResponseBean.BackService.LoginBean;
-import com.matrix.matrixgpt.Network.Service.RegisterService;
+import com.matrix.matrixgpt.Network.Service.Back.RegisterService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UITool.MatrixDialogManager;
 
@@ -89,6 +89,7 @@ public class RegisterActivity extends Activity {
                         main_intent.putExtra("U_phone",response.body().getPhone());
                         main_intent.putExtra("U_email",response.body().getEmail());
                         main_intent.putExtra("U_gptNum",response.body().getGptNum());
+                        main_intent.putExtra("U_level",response.body().getLevel());
                         startActivity(main_intent);
                         finish();
                     } else {

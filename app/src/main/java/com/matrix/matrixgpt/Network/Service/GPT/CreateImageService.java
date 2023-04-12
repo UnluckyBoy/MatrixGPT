@@ -1,7 +1,7 @@
-package com.matrix.matrixgpt.Network.Service;
+package com.matrix.matrixgpt.Network.Service.GPT;
 
-import com.matrix.matrixgpt.Network.CustomRequestModel.CreImgRequestBody;
-import com.matrix.matrixgpt.Network.ReplyBean.CreateImageBean;
+import com.matrix.matrixgpt.Network.GptRequestBody.CreImgRequestBody;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.CreateImageBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

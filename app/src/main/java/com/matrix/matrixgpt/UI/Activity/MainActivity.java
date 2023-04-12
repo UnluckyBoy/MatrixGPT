@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         String account_id=intent_MainActivity.getStringExtra("U_account");
 
         if(account_id==null){
-            ShowDialog(TGA);
+            ShowDialog(TGA);//提示登录
 
             mMainFragment = MainFragment.newInstance("");
             mChatFragment= ChatFragment.newInstance("");
@@ -212,12 +212,14 @@ public class MainActivity extends AppCompatActivity {
         String[] names = {mContext.getString(R.string.SystemTitle),
                 mContext.getString(R.string.loginTitle),
                 mContext.getString(R.string.Confirm),mContext.getString(R.string.Cancel) };
+
         /**MatrixDialog中最后两个按钮的顺序与names的文本顺序相反**/
         MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
         mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
             /**取消按钮**/
             @Override
             public void onClickListener2LastItem() {
+                intent_MainActivity.putExtra("U_account","");
                 mDialog.dismiss();
             }
             /**确定按钮**/

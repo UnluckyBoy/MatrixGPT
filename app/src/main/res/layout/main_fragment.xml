@@ -67,26 +67,16 @@
             android:layout_height="26dp"
             android:layout_below="@id/chat_btn"
             android:layout_marginTop="5dp"
-            android:text="提示:由于网络原因，AI可能没有快速响应"
+            android:text="提示:由于网络原因，AI或许无法快速响应"
             android:gravity="center"
             android:textColor="@color/LavaRed"
             android:textSize="14dp" />
 
         <TextView
-            android:id="@+id/ai_info_View"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@id/prompt_View"
-            android:layout_marginTop="5dp"
-            android:scrollbars="vertical"
-            android:singleLine="false"
-            android:textSize="24dp" />
-
-        <TextView
             android:id="@+id/show_View"
             android:layout_width="match_parent"
             android:layout_height="480dp"
-            android:layout_below="@id/ai_info_View"
+            android:layout_below="@id/prompt_View"
             android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             android:singleLine="false"
@@ -97,7 +87,7 @@
             android:id="@+id/image_View"
             android:layout_width="match_parent"
             android:layout_height="480dp"
-            android:layout_below="@id/ai_info_View"
+            android:layout_below="@id/prompt_View"
             android:layout_marginTop="5dp" />
     </RelativeLayout>
 

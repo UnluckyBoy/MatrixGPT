@@ -1,6 +1,7 @@
-package com.matrix.matrixgpt.Network.API;
+package com.matrix.matrixgpt.Network.API.Back;
 
-import com.matrix.matrixgpt.Network.Service.RegisterService;
+import com.matrix.matrixgpt.Network.API.WebApi;
+import com.matrix.matrixgpt.Network.Service.Back.RegisterService;
 
 import retrofit2.Retrofit;
 
@@ -9,8 +10,8 @@ import retrofit2.Retrofit;
  * @Author Create By Administrator
  * @Date 2023/4/11 0011 16:34
  */
-public class RegisterApi extends WebApi{
-    String url="https://5841dcdd.r5.cpolar.top/UserInfo/";
+public class RegisterApi extends WebApi {
+    String url="https://628945ad.r5.cpolar.top/UserInfo/";
     Retrofit retrofit=getApi(url);
 
     @Override

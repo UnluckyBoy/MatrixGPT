@@ -16,6 +16,15 @@ public class LoginBean {
     private String phone;
     private String email;
     private int gptNum;
+    private int level;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
     public String getResult() {
         return result;

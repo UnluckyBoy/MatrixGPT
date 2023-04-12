@@ -1,7 +1,7 @@
-package com.matrix.matrixgpt.Network.Service;
+package com.matrix.matrixgpt.Network.Service.GPT;
 
-import com.matrix.matrixgpt.Network.CustomRequestModel.ChatRequestBody;
-import com.matrix.matrixgpt.Network.ReplyBean.ChatBean;
+import com.matrix.matrixgpt.Network.GptRequestBody.ChatRequestBody;
+import com.matrix.matrixgpt.Network.ResponseBean.BackService.Gpt.ChatBean;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

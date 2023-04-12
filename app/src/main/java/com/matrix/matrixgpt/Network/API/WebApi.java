@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class WebApi {
-    Retrofit getApi(String url) {
+    protected Retrofit getApi(String url) {
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
         // 设置超时，超过 300s 视为超时
         OkHttpClient client = httpBuilder.readTimeout(300, TimeUnit.SECONDS)

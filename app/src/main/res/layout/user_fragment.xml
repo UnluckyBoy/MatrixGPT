@@ -34,12 +34,23 @@
 
         <Button
             android:id="@+id/userEdit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignBottom="@+id/userName"
             android:layout_alignEnd="@+id/userName"
             android:layout_alignRight="@+id/userName"
-            android:background="@drawable/icon_edit" />
+            android:background="@drawable/icon_edit"/>
+
+        <TextView
+            android:id="@+id/userLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="游客"
+            android:textSize="14dp"
+            android:layout_below="@+id/userName"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/md_amber_400"/>
 
     </RelativeLayout>
 
