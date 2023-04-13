@@ -165,7 +165,7 @@ public class MainFragment extends Fragment {
             //Toast.makeText(view.getContext(),"用户登录"+intent_MainFragment.getStringExtra("U_account"),Toast.LENGTH_SHORT).show();
             int mLevel=intent_MainFragment.getIntExtra("U_level",0);
             int mGptNum=intent_MainFragment.getIntExtra("U_gptNum",0);
-            UserHandBackChat(content,openAi_type,mLevel,mGptNum);
+            UserHandBackChat(content,openAi_type,mLevel,mGptNum,intent_MainFragment.getStringExtra("U_account"));
         }
     }
 
@@ -231,17 +231,17 @@ public class MainFragment extends Fragment {
     }
 
     /**用户调用后台API获取Chat数据**/
-    private void UserHandBackChat(String content,String openAi_type,int level,int gptnum){
+    private void UserHandBackChat(String content,String openAi_type,int level,int gptnum,String account){
         switch (openAi_type){
             case "chat":
                 switch (level){
                     case 1:
                         //Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
                         SetShowViewLoad();
-                        BackChatApi mBackChatApi=new BackChatApi();
-                        BackChatService mBackChatService=mBackChatApi.getService();
-                        Call<BackChatBean> callBackChat=mBackChatService.getState(content);
-                        callBackChat.enqueue(new Callback<BackChatBean>() {
+                        BackChatApi mAdimnChatApi=new BackChatApi();
+                        BackChatService mAdminChatService=mAdimnChatApi.getService();
+                        Call<BackChatBean> callAdminChat=mAdminChatService.getState(content);
+                        callAdminChat.enqueue(new Callback<BackChatBean>() {
                             @Override
                             public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
                                 if(response.body()==null){
@@ -265,36 +265,61 @@ public class MainFragment extends Fragment {
                         /**普通用户使用Chat**/
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         if(gptnum>0){
-                            DoGptTransApi mDoGptTransApi=new DoGptTransApi();
-                            DoGptTransService mDoGptTransService=mDoGptTransApi.getService();
-                            Call<LoginBean> callDoGpt=mDoGptTransService.getState(content);
-                            callDoGpt.enqueue(new Callback<LoginBean>() {
+                            SetShowViewLoad();
+                            BackChatApi mUserChatApi=new BackChatApi();
+                            BackChatService mUserChatService=mUserChatApi.getService();
+                            Call<BackChatBean> callUserChat=mUserChatService.getState(content);
+                            callUserChat.enqueue(new Callback<BackChatBean>() {
                                 @Override
-                                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                                public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
                                     if(response.body()==null){
                                         mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
                                     }else {
-                                        switch (response.body().getResult()){
-                                            case "Permission":
-
-                                                break;
-                                            case "NullPermission":
-                                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                break;
-                                            case "error":
-                                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                                break;
+                                        if(response.body().getResult().equals("success")){
+                                            mShow_View.setText(response.body().getContent());
+                                            DoGptTransApi mDoGptTransApi=new DoGptTransApi();
+                                            DoGptTransService mDoGptTransService=mDoGptTransApi.getService();
+                                            Call<LoginBean> callDoGpt=mDoGptTransService.getState(account);
+                                            callDoGpt.enqueue(new Callback<LoginBean>() {
+                                                @Override
+                                                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                                                    if(response.body()==null){
+                                                        mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
+                                                    }else {
+                                                        switch (response.body().getResult()){
+                                                            case "Permission":
+                                                                intent_MainFragment.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
+                                                                break;
+                                                            case "NullPermission":
+                                                                //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
+                                                                ShowAdvertise(view.getContext());
+                                                                break;
+                                                            case "error":
+                                                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+                                                                break;
+                                                        }
+                                                    }
+                                                }
+                                                @Override
+                                                public void onFailure(Call<LoginBean> call, Throwable t) {
+                                                    SetFailure_ShowView();
+                                                    //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }else{
+                                            mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
                                         }
                                     }
                                 }
                                 @Override
-                                public void onFailure(Call<LoginBean> call, Throwable t) {
+                                public void onFailure(Call<BackChatBean> call, Throwable t) {
                                     SetFailure_ShowView();
                                     //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }else{
-                            Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
+                            ShowAdvertise(view.getContext());
                         }
                         break;
                 }
@@ -314,7 +339,39 @@ public class MainFragment extends Fragment {
                                     if(response.body().getResult().equals("success")){
                                         /** 自定义工具类将url资源显示**/
                                         ImageTool.SetImageView(mImage_View,response.body().getContent());
-                                    }else {
+
+                                        /**更改用户使用次数**/
+                                        DoGptTransApi mDoGptTransApi=new DoGptTransApi();
+                                        DoGptTransService mDoGptTransService=mDoGptTransApi.getService();
+                                        Call<LoginBean> callDoGpt=mDoGptTransService.getState(account);
+                                        callDoGpt.enqueue(new Callback<LoginBean>() {
+                                            @Override
+                                            public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                                                if(response.body()==null){
+                                                    mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
+                                                }else {
+                                                    switch (response.body().getResult()){
+                                                        case "Permission":
+                                                            intent_MainFragment.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
+                                                            break;
+                                                        case "NullPermission":
+                                                            //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
+                                                            ShowAdvertise(view.getContext());
+                                                            break;
+                                                        case "error":
+                                                            Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                            @Override
+                                            public void onFailure(Call<LoginBean> call, Throwable t) {
+                                                SetFailure_ShowView();
+                                                //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                    }else{
                                         Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
                                     }
                                 }else{
@@ -329,7 +386,39 @@ public class MainFragment extends Fragment {
                         });
                         break;
                     case 0:
-                        Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
+                        /**普通用户使用createImage**/
+
+                        if(gptnum>0){
+                            SetShowViewLoad();
+                            BackCreateImageApi mUserBackCreateImage=new BackCreateImageApi();
+                            BackCreateImageService mUserBackCreateImageService=mUserBackCreateImage.getService();
+                            Call<BackChatBean> callUserCreate=mUserBackCreateImageService.getState(content);
+                            callUserCreate.enqueue(new Callback<BackChatBean>() {
+                                @Override
+                                public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
+                                    if(!(response.body().equals(null))){
+                                        if(response.body().getResult().equals("success")){
+                                            /** 自定义工具类将url资源显示**/
+                                            ImageTool.SetImageView(mImage_View,response.body().getContent());
+                                        }else {
+                                            Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<BackChatBean> call, Throwable t) {
+                                    SetFailure_ShowView();
+                                }
+                            });
+                        }else{
+                            //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
+                            ShowAdvertise(view.getContext());
+                        }
+
                         break;
                 }
                 break;
@@ -451,6 +540,31 @@ public class MainFragment extends Fragment {
             public void onClickListener2SecondLastItem() {
                 //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
                 ImageTool.saveBitmap(bitmap,mImagePath,mContext, TimeTool.GetSystemTime());
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
+    }
+
+    /**显示广告弹窗**/
+    public void ShowAdvertise(final Context mContext){
+        String[] names = { mContext.getString(R.string.SystemTitle),
+                mContext.getString(R.string.ShowAdvertise),
+                mContext.getString(R.string.Confirm),
+                mContext.getString(R.string.Cancel) };
+        MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
+        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
+            /**取消按钮**/
+            @Override
+            public void onClickListener2LastItem() {
+
+                mDialog.dismiss();
+            }
+            /**确定按钮**/
+            @Override
+            public void onClickListener2SecondLastItem() {
+                //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
+
                 mDialog.dismiss();
             }
         });
