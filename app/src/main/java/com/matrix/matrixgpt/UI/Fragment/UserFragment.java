@@ -89,7 +89,7 @@ public class UserFragment extends Fragment {
 
     private void SetHead(String headUrl) {
         Picasso.get()
-                .load("https://628945ad.r5.cpolar.top//getImage"+headUrl)
+                .load("https://60fb829.r10.cpolar.top/getImage"+headUrl)
                 .error(R.drawable.no_user)
                 .into(imageButton);
     }

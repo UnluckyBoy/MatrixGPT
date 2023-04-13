@@ -4,7 +4,8 @@
     <string name="mainIcon">主页</string>
     <string name="chatIcon">论坛</string>
     <string name="userIcon">我的</string>
-    <string name="NetworkFailure">网络错误,请检查当前网络!</string>
+    <string name="NetworkFailure">404!网络错误,请检查当前网络!</string>
+    <string name="ResponseBodyNull">403!意料之外的错误,稍后技术人员将进行排查!!!</string>
     <string name="userInfoError">账户或密码错误,请检查！</string>
     <string name="Confirm">确定</string>
     <string name="Cancel">取消</string>
@@ -17,6 +18,7 @@
     <string name="accountIsRegis">此号已注册！</string>
     <string name="pwdConfirmError">前后输入密码错误,请检查！</string>
     <string name="visitor_NumAdd">是否观看广告获取次数?</string>
+    <string name="Onload">请稍后。。。</string>
 
     <string name="user_info">账户信息</string>
     <string name="help">帮助</string>
