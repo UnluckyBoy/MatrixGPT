@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
  * @Date 2023/4/11 0011 16:34
  */
 public class RegisterApi extends WebApi {
-    String url="https://60fb829.r10.cpolar.top/UserInfo/";
+    String url="https://4b301a04.r10.cpolar.top/UserInfo/";
     Retrofit retrofit=getApi(url);
 
     @Override

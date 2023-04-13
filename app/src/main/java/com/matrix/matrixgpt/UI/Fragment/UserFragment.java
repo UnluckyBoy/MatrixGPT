@@ -84,12 +84,12 @@ public class UserFragment extends Fragment {
         }
 
         imageButton=view.findViewById(R.id.user_head);
-        SetHead(args.getStringExtra("U_image"));
+        SetHead(args.getStringExtra("U_head"));
     }
 
     private void SetHead(String headUrl) {
         Picasso.get()
-                .load("https://60fb829.r10.cpolar.top/getImage"+headUrl)
+                .load("https://4b301a04.r10.cpolar.top/getImage"+headUrl)
                 .error(R.drawable.no_user)
                 .into(imageButton);
     }

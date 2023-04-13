@@ -81,7 +81,7 @@ public class RegisterActivity extends Activity {
                                 "恭喜注册成功！", Toast.LENGTH_SHORT).show();
                         Intent main_intent = new Intent(TGA, MainActivity.class);
                         main_intent.putExtra("U_id",response.body().getId());
-                        main_intent.putExtra("U_image",response.body().getImage());
+                        main_intent.putExtra("U_head",response.body().getHead());
                         main_intent.putExtra("U_name",response.body().getName());
                         main_intent.putExtra("U_pwd",response.body().getPassword());
                         main_intent.putExtra("U_sex",response.body().getSex());

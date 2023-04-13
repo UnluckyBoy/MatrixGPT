@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
  * @Date 2023/4/11 0011 14:48
  */
 public class LoginApi extends WebApi {
-    String url="https://60fb829.r10.cpolar.top/UserInfo/";//login
+    String url="https://4b301a04.r10.cpolar.top/UserInfo/";//login
     Retrofit retrofit=getApi(url);
 
     @Override

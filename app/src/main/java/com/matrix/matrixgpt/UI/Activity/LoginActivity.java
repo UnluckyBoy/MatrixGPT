@@ -106,7 +106,7 @@ public class LoginActivity extends Activity {
                 if(response.body().getResult().equals("success")){
                     Intent intent=new Intent(TGA,MainActivity.class);
                     intent.putExtra("U_id",response.body().getId());
-                    intent.putExtra("U_image",response.body().getImage());
+                    intent.putExtra("U_head",response.body().getHead());
                     intent.putExtra("U_name",response.body().getName());
                     intent.putExtra("U_pwd",response.body().getPassword());
                     intent.putExtra("U_sex",response.body().getSex());

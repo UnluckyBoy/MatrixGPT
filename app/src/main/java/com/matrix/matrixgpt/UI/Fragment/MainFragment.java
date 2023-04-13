@@ -108,8 +108,12 @@ public class MainFragment extends Fragment {
             switch(mBtnId){
                 case R.id.chat_btn:
                     String content=mEditText.getText().toString();//获取输入内容
-                    //OnAndroidGetChat(content);
-                    GetBackChatData(content);
+                    if(content.equals(null)||content.equals("")){
+                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.EditIsNull),Toast.LENGTH_SHORT).show();
+                    }else{
+                        //OnAndroidGetChat(content);
+                        GetBackChatData(content);
+                    }
                     break;
                 case R.id.paint_btn:
                     String prompt=mEditText.getText().toString();//获取输入内容
@@ -127,25 +131,29 @@ public class MainFragment extends Fragment {
             //Toast.makeText(view.getContext(),"游客登录",Toast.LENGTH_SHORT).show();
             if(visitor_Num<=0){
                 Toast.makeText(view.getContext(),"次数使用完",Toast.LENGTH_SHORT).show();
-                String[] names = {TGA.getString(R.string.SystemTitle),
-                        TGA.getString(R.string.visitor_NumAdd),
-                        TGA.getString(R.string.Confirm), TGA.getString(R.string.Cancel)};
-
-                /**调用窗口方法**/
-                //new MatrixDialogManager().ShowMatrixDialog(names,getActivity(), MainActivity.class);
+//                String[] names = {TGA.getString(R.string.SystemTitle),
+//                        TGA.getString(R.string.visitor_NumAdd),
+//                        TGA.getString(R.string.Confirm), TGA.getString(R.string.Cancel)};
+//                /**调用窗口方法**/
+//                new MatrixDialogManager().ShowMatrixDialog(names,getActivity(), MainActivity.class);
             }else{
-                mShow_View.setText(view.getContext().getString(R.string.Onload));
-                HandBackChat(content);
+                visitor_Num--;//测试
+
+                //mShow_View.setText(view.getContext().getString(R.string.Onload));
+                //VisitorHandBackChat(content);
             }
         }else{
             //用户登录
             //Toast.makeText(view.getContext(),"用户登录"+intent_MainFragment.getStringExtra("U_account"),Toast.LENGTH_SHORT).show();
 
+            int mLevel=intent_MainFragment.getIntExtra("U_level",0);
+            int mGptNum=intent_MainFragment.getIntExtra("U_gptNum",0);
+            UserHandBackChat(content,mLevel,mGptNum);
         }
     }
 
-    /**调用后台API握手获取数据**/
-    private void HandBackChat(String content){
+    /**游客调用后台API获取Chat数据**/
+    private void VisitorHandBackChat(String content){
         BackChatApi mBackChatApi=new BackChatApi();
         BackChatService mBackChatService=mBackChatApi.getService();
         Call<BackChatBean> callBackChat=mBackChatService.getState(content);
@@ -167,10 +175,45 @@ public class MainFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<BackChatBean> call, Throwable t) {
-                SetFailure_ShowView(view.getContext().getString(R.string.NetworkFailure));
+                SetFailure_ShowView();
                 //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**用户调用后台API获取Chat数据**/
+    private void UserHandBackChat(String content,int level,int gptnum){
+        switch (level){
+            case 1:
+                Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
+                SetShowViewLoad();
+                BackChatApi mBackChatApi=new BackChatApi();
+                BackChatService mBackChatService=mBackChatApi.getService();
+                Call<BackChatBean> callBackChat=mBackChatService.getState(content);
+                callBackChat.enqueue(new Callback<BackChatBean>() {
+                    @Override
+                    public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
+                        if(response.body()==null){
+                            mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
+                        }else {
+                            if(response.body().getContent().equals("success")){
+                                mShow_View.setText(response.body().getResult());
+                            }else{
+                                mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<BackChatBean> call, Throwable t) {
+                        SetFailure_ShowView();
+                        //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case 0:
+                Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     /**直接获取OpenAi数据**/
@@ -202,7 +245,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ChatBean> call, Throwable t) {
-                SetFailure_ShowView("网络错误!请检查!!!");
+                SetFailure_ShowView();
                 //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
             }
         });
@@ -235,17 +278,21 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onFailure(Call<CreateImageBean> call, Throwable t) {
-                SetFailure_ShowView("网络错误!请检查!!!");
+                SetFailure_ShowView();
             }
         });
+    }
+
+    private void SetShowViewLoad(){
+        mShow_View.setText(view.getContext().getString(R.string.Onload));
     }
 
     private void SetShowViewNull(){
         mShow_View.setText("");
     }
 
-    private void SetFailure_ShowView(String failure){
-        mShow_View.setText(failure);
+    private void SetFailure_ShowView(){
+        mShow_View.setText(view.getContext().getString(R.string.NetworkFailure));
     }
 
     /**

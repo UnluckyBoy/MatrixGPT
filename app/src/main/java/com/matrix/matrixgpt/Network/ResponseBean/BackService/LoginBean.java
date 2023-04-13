@@ -8,7 +8,7 @@ package com.matrix.matrixgpt.Network.ResponseBean.BackService;
 public class LoginBean {
     private String result;
     private int id;
-    private String image;
+    private String head;
     private String name;
     private String password;
     private String sex;
@@ -42,12 +42,12 @@ public class LoginBean {
         this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public String getHead() {
+        return head;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setHead(String head) {
+        this.head = head;
     }
 
     public String getName() {
