@@ -20,6 +20,7 @@
     <string name="visitor_NumAdd">是否观看广告获取次数?</string>
     <string name="Onload">请稍后。。。</string>
     <string name="EditIsNull">输入内容为空!请检查!!!</string>
+    <string name="NullPermission">已没有使用次数,请知悉!!!</string>
 
     <string name="user_info">账户信息</string>
     <string name="help">帮助</string>
