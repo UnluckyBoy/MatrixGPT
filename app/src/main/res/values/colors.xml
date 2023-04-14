@@ -8,7 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="sunYellow">#FFE87C</color>
     <color name="LavaRed">#E42217</color>
-    <color name="transparent">#E5E4E2</color>
+    <!--透明-->
+    <color name="transparent">#00000000</color>
+    <!--半透明-->
+    <color name="translucent">#22050505</color>
 
     <color name="read_dialog_bg">#2C2C2C</color>
     <color name="colorPrimary">#3F51B5</color>

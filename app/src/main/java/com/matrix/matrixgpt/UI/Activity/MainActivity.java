@@ -26,6 +26,7 @@ import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Fragment.ChatFragment;
 import com.matrix.matrixgpt.UI.Fragment.MainFragment;
 import com.matrix.matrixgpt.UI.Fragment.UserFragment;
+import com.matrix.matrixgpt.UITool.BarState;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
 
 import java.util.Timer;
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        BarState mBarState=new BarState(MainActivity.this);
+//        mBarState.setColor(R.color.translucent);
+
         setContentView(R.layout.activity_main);
 
         getPermission();
@@ -87,16 +92,6 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         /**获取用户信息**/
         intent_MainActivity=getIntent();
-//        UserBean mUser_MainActivity=new UserBean();
-//        mUser_MainActivity.setId(Integer.parseInt(intent_MainActivity.getStringExtra("U_id")));
-//        mUser_MainActivity.setImage(intent_MainActivity.getStringExtra("U_image"));
-//        mUser_MainActivity.setName(intent_MainActivity.getStringExtra("U_name"));
-//        mUser_MainActivity.setPassword(intent_MainActivity.getStringExtra("U_pwd"));
-//        mUser_MainActivity.setSex(intent_MainActivity.getStringExtra("U_sex"));
-//        mUser_MainActivity.setAccount(intent_MainActivity.getStringExtra("U_account"));
-//        mUser_MainActivity.setPhone(intent_MainActivity.getStringExtra("U_phone"));
-//        mUser_MainActivity.setEmail(intent_MainActivity.getStringExtra("U_email"));
-//        mUser_MainActivity.setGptNum(Integer.parseInt(intent_MainActivity.getStringExtra("U_gptNum")));
         String account_id=intent_MainActivity.getStringExtra("U_account");
 
         if(account_id==null){
@@ -120,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-        //bottomnavigationview的点击事件
+        //bottomNavigation的点击事件
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
@@ -174,20 +169,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.show(mFragmentContainer[index]).commitAllowingStateLoss();
     }
 
-    /** 半透明状态栏*/
-    protected void setHalfTransparent() {
-        if (Build.VERSION.SDK_INT >= 21) {//21表示5.0
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else if (Build.VERSION.SDK_INT >= 19) {//19表示4.4
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //虚拟键盘也透明
-            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-    }
-
     private void ConfirmFirstStart(){
         SharedPreferences sharedPreferences = getSharedPreferences("share", MODE_PRIVATE);
         //默认false
@@ -200,11 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             //第一次运行
-
             editor.putBoolean("isFirstRun", true);
             editor.commit();
-
-            //ShowDialog(TGA);//提示登录
         }
     }
 
