@@ -98,6 +98,7 @@ public class LoginActivity extends Activity {
         final String name=Uid.getText().toString();
         final String pwd=Upwd.getText().toString();
         LoginApi loginApi=new LoginApi();
+        loginApi.SetUrl(TGA.getString(R.string.BackUrl)+TGA.getString(R.string.Url_UserInfo));
         LoginService loginService=loginApi.getService();
         Call<LoginBean> call_login=loginService.getState(name,pwd);
         call_login.enqueue(new Callback<LoginBean>() {

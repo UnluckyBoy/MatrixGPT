@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MatrixGPT</string>
-    <string name="BackUrl">https://628945ad.r5.cpolar.top</string>
+    <string name="BackUrl">https://3671d84e.r8.cpolar.top</string>
+    <string name="Url_UserInfo">/UserInfo/</string>
+    <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="mainIcon">主页</string>
     <string name="chatIcon">论坛</string>
     <string name="userIcon">我的</string>

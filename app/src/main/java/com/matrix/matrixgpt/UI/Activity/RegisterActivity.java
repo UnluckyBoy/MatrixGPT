@@ -71,6 +71,7 @@ public class RegisterActivity extends Activity {
         }
         else {
             RegisterApi userApi = new RegisterApi();
+            userApi.SetUrl(TGA.getString(R.string.BackUrl)+TGA.getString(R.string.Url_UserInfo));
             RegisterService registerService = userApi.getService();
             Call<LoginBean> call_Register = registerService.getState(user_name,user_account,user_pwd);
             call_Register.enqueue(new Callback<LoginBean>() {

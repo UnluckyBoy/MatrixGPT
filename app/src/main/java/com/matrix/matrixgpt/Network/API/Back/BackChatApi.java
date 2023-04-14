@@ -11,8 +11,12 @@ import retrofit2.Retrofit;
  * @Date 2023/4/12 0012 14:06
  */
 public class BackChatApi extends WebApi {
-    String url="https://4b301a04.r10.cpolar.top/MatrixGPT/";//chat
-    Retrofit retrofit=getApi(url);
+    Retrofit retrofit;
+    public void SetUrl(String url){
+        retrofit=getApi(url);
+    }
+//    String url="https://3671d84e.r8.cpolar.top/MatrixGPT/";//chat
+//    Retrofit retrofit=getApi(url);
 
     @Override
     public <T> T getService() {
