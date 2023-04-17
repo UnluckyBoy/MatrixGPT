@@ -19,10 +19,7 @@ import com.bytedance.sdk.openadsdk.TTAdSdk;
  */
 public class TTAdManagerHolder {
     private static final String TAG = "TTAdManagerHolder";
-
     private static boolean sInit;
-
-
 
     public static TTAdManager get() {
 
