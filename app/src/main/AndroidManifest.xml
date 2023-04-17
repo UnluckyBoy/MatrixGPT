@@ -45,9 +45,10 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!--androidx.core.app.CoreComponentFactory,android.support.v4.app.CoreComponentFactory-->
     <application
         android:allowBackup="true"
-        android:appComponentFactory="android.support.v4.app.CoreComponentFactory"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -81,6 +82,10 @@
         <meta-data
             android:name="Channel_app"
             android:value="three" />
+
+        <activity android:name=".UI.Activity.testActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"

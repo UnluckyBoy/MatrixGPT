@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.matrix.matrixgpt.UI.Fragment.MainFragment;
 import com.matrix.matrixgpt.UI.Fragment.UserFragment;
 import com.matrix.matrixgpt.UITool.BarState;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
+import com.matrix.matrixgpt.UtilTool.AdverUtil.config.TTAdManagerHolder;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
 //        BarState mBarState=new BarState(MainActivity.this);
 //        mBarState.setColor(R.color.translucent);
+
+        WebView.setWebContentsDebuggingEnabled(true);
 
         setContentView(R.layout.activity_main);
 
