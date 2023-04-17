@@ -6,11 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import com.matrix.matrixgpt.Network.Service.Back.BackCreateImageService;
 import com.matrix.matrixgpt.Network.Service.Back.DoGptTransService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
+import com.matrix.matrixgpt.UtilTool.AdverUtil.AdvCommon;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
 import com.matrix.matrixgpt.UtilTool.TimeTool;
 
@@ -44,6 +47,7 @@ public class MainFragment extends Fragment {
 
     private Intent intent_MainFragment;
     private View view;
+    private Context mContext;
 
     private EditText mEditText;
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
@@ -51,6 +55,8 @@ public class MainFragment extends Fragment {
     private ImageView mImage_View;
 
     private int visitor_Num=2;
+
+    private FrameLayout mBanner;//广告视图
 
 
     public static MainFragment newInstance(String param1) {
@@ -65,6 +71,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //mContext = this.getContext();
         if(view!=null){
             ViewGroup parent=(ViewGroup) view.getParent();
             if(parent!=null){
@@ -95,7 +102,37 @@ public class MainFragment extends Fragment {
 
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
+
+        mBanner=view.findViewById(R.id.banner_container);
+        mBanner.removeAllViews();
+        //showBanner();
     }
+
+//    private void showBanner() {
+//        OSETBanner.getInstance().setWHScale(0.15625);//只对穿山甲起作用
+//        OSETBanner.getInstance().show(getActivity(), AdvCommon.POS_ID_Banner, mBanner, new OSETListener() {
+//            @Override
+//            public void onShow() {
+//                Toast.makeText(view.getContext(), "onShow", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(String s, String s1) {
+//                Toast.makeText(view.getContext(), "onError", Toast.LENGTH_SHORT).show();
+//                Log.e("openseterror", "code:" + s + "----message:" + s1);
+//            }
+//
+//            @Override
+//            public void onClick() {
+//                Toast.makeText(view.getContext(), "onClick", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onClose() {
+//                Toast.makeText(view.getContext(), "onClose", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private class ClickListener implements View.OnClickListener {
         @Override

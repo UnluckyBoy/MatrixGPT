@@ -4,9 +4,20 @@
     android:layout_height="match_parent"
     android:background="@color/md_indigo_100">
 
+    <!--广告-->
+    <!--不可设置visibility=gone,高度设置成wrap_content-->
+    <!-- BannerView的Container -->
+    <FrameLayout
+        android:id="@+id/banner_container"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
     <!--输入模块-->
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/banner_container"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_layout"
         android:background="@drawable/lay_back_teal"
@@ -77,17 +88,6 @@
             android:textSize="14dp" />
     </RelativeLayout>
 
-    <!--广告-->
-    <!--不可设置visibility=gone,高度设置成wrap_content-->
-    <FrameLayout
-        android:id="@+id/Adv_banner"
-        android:layout_below="@id/edit_text_layout"
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp">
-    </FrameLayout>
-
     <!--显示模块-->
     <RelativeLayout
         android:id="@+id/Show_view"
@@ -95,7 +95,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
         android:background="@drawable/lay_back_gray"
-        android:layout_below="@id/Adv_banner">
+        android:layout_below="@id/edit_text_layout">
 
         <TextView
             android:id="@+id/show_View"

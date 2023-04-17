@@ -5,6 +5,11 @@
         <attr name="border_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="CustomImageView">
+        <attr name="scale_h" format="dimension" />
+        <attr name="scale_w" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="PwdEditTextView">
         <attr name="drawableLeft" format="reference|integer" />
         <attr name="needEye" format="boolean" />
