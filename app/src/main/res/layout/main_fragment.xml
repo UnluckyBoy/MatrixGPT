@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/md_indigo_100">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_layout"
+        android:background="@drawable/lay_back_teal"
         android:orientation="vertical">
         <EditText
             android:id="@+id/edit_text"
@@ -19,7 +21,7 @@
             android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_below="@id/edit_text"
-            android:background="@drawable/shape_btn"
+            android:background="@drawable/btn_back_blue"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="5dp"
@@ -35,7 +37,7 @@
             android:layout_marginStart="210dp"
             android:layout_marginLeft="210dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/shape_btn"
+            android:background="@drawable/btn_back_blue"
             android:text="保存" />
 
         <Button
@@ -43,7 +45,7 @@
             android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_below="@id/edit_text"
-            android:background="@drawable/shape_btn"
+            android:background="@drawable/btn_back_blue"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_marginStart="5dp"
@@ -54,7 +56,7 @@
             android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_below="@id/edit_text"
-            android:background="@drawable/shape_btn"
+            android:background="@drawable/btn_back_blue"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_marginStart="110dp"
@@ -70,13 +72,21 @@
             android:text="提示:由于网络原因，AI或许无法快速响应"
             android:gravity="center"
             android:textColor="@color/LavaRed"
+            android:layout_marginBottom="10dp"
             android:textSize="14dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Show_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/lay_back_gray"
+        android:layout_below="@id/edit_text_layout">
 
         <TextView
             android:id="@+id/show_View"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
-            android:layout_below="@id/prompt_View"
+            android:layout_height="540dp"
             android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             android:singleLine="false"
@@ -86,9 +96,8 @@
         <ImageView
             android:id="@+id/image_View"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
-            android:layout_below="@id/prompt_View"
+            android:layout_height="540dp"
             android:layout_marginTop="5dp" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

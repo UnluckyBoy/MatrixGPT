@@ -5,8 +5,13 @@
       <map>
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/bg_eye.xml" value="0.114" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/bottomnavigation_color_green_grey.xml" value="0.101" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_blue.xml" value="0.2285" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_gray.xml" value="0.2285" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_gresn.xml" value="0.2285" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/cancel_btn.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/circle.xml" value="0.244" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back.xml" value="0.212" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_teal.xml" value="0.212" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/rectangle_shape.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/redister_btn.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape.xml" value="0.244" />

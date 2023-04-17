@@ -11,17 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.matrix.matrixgpt.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Fragment.ChatFragment;
 import com.matrix.matrixgpt.UI.Fragment.MainFragment;
