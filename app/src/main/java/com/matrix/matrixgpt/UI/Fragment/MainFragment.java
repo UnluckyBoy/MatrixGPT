@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.matrix.matrixgpt.Network.API.Back.BackChatApi;
 import com.matrix.matrixgpt.Network.API.Back.BackCreateImageApi;
 import com.matrix.matrixgpt.Network.API.Back.DoGptTransApi;
@@ -29,19 +29,15 @@ import com.matrix.matrixgpt.Network.Service.Back.BackCreateImageService;
 import com.matrix.matrixgpt.Network.Service.Back.DoGptTransService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
-import com.matrix.matrixgpt.UtilTool.AdverUtil.AdvCommon;
+import com.matrix.matrixgpt.UtilTool.AdverUtil.config.TTAdManagerHolder;
 import com.matrix.matrixgpt.UtilTool.ImageTool;
 import com.matrix.matrixgpt.UtilTool.TimeTool;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@SuppressWarnings("EmptyMethod")
 public class MainFragment extends Fragment {
     private final String mImagePath="/sdcard/Download";
 
@@ -57,6 +53,7 @@ public class MainFragment extends Fragment {
     private int visitor_Num=2;
 
     private FrameLayout mBanner;//广告视图
+    private TTAdNative mTTAdNative;
 
 
     public static MainFragment newInstance(String param1) {
@@ -67,11 +64,13 @@ public class MainFragment extends Fragment {
         return fragment;
     }
 
+    @SuppressWarnings("RedundantCast")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         //mContext = this.getContext();
+
         if(view!=null){
             ViewGroup parent=(ViewGroup) view.getParent();
             if(parent!=null){
@@ -103,36 +102,9 @@ public class MainFragment extends Fragment {
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
 
-        mBanner=view.findViewById(R.id.banner_container);
-        mBanner.removeAllViews();
-        //showBanner();
+        //mBanner=view.findViewById(R.id.banner_container);
+        //mBanner.removeAllViews();
     }
-
-//    private void showBanner() {
-//        OSETBanner.getInstance().setWHScale(0.15625);//只对穿山甲起作用
-//        OSETBanner.getInstance().show(getActivity(), AdvCommon.POS_ID_Banner, mBanner, new OSETListener() {
-//            @Override
-//            public void onShow() {
-//                Toast.makeText(view.getContext(), "onShow", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onError(String s, String s1) {
-//                Toast.makeText(view.getContext(), "onError", Toast.LENGTH_SHORT).show();
-//                Log.e("openseterror", "code:" + s + "----message:" + s1);
-//            }
-//
-//            @Override
-//            public void onClick() {
-//                Toast.makeText(view.getContext(), "onClick", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onClose() {
-//                Toast.makeText(view.getContext(), "onClose", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
     private class ClickListener implements View.OnClickListener {
         @Override

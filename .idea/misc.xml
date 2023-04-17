@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/arror_foreground.xml" value="0.2015" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/bg_eye.xml" value="0.114" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/border_input_box.xml" value="0.2015" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/bottomnavigation_color_green_grey.xml" value="0.101" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_blue.xml" value="0.2285" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_gray.xml" value="0.2285" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_back_gresn.xml" value="0.2285" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/btn_bg_creative.xml" value="0.2015" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/cancel_btn.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/circle.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back.xml" value="0.212" />
@@ -19,6 +22,7 @@
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape3.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape4.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape_btn.xml" value="0.186" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_auth.xml" value="0.32447916666666665" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/anctivity_register.xml" value="0.32447916666666665" />

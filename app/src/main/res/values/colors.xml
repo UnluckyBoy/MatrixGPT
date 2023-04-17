@@ -321,4 +321,8 @@
     <color name="black_33">#333333</color>
     <color name="half_transparent_black">#BB000000</color>
     <color name="white">#ffffff</color>
+
+    <color name="title">#B22222</color>
+    <color name="tt_trans_half_black">#FF1A1A1A</color>
+    <color name="demo_draw_btn_back">#D33F57</color>
 </resources>
