@@ -154,6 +154,7 @@ public class MainFragment extends Fragment {
                         //OnAndroidGetCreateImage(prompt);
                         GetBackChatData(prompt,"createImage");
                     }
+                    mImage_View.setVisibility(View.VISIBLE);//图片显示
                     //mShow_View.setVisibility(View.GONE);//显示图片时，文本隐藏
                     break;
             }
@@ -257,12 +258,13 @@ public class MainFragment extends Fragment {
 
     /**用户调用后台API获取Chat数据**/
     private void UserHandBackChat(String content,String openAi_type,int level,int gptnum,String account){
+        SetShowViewLoad();
         switch (openAi_type){
             case "chat":
                 switch (level){
                     case 1:
                         //Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
-                        SetShowViewLoad();
+                        //SetShowViewLoad();
                         BackChatApi mAdimnChatApi=new BackChatApi();
                         mAdimnChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                 +view.getContext().getString(R.string.Url_Gpt));
@@ -292,7 +294,7 @@ public class MainFragment extends Fragment {
                         /**普通用户使用Chat**/
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         if(gptnum>0){
-                            SetShowViewLoad();
+                            //SetShowViewLoad();
                             BackChatApi mUserChatApi=new BackChatApi();
                             mUserChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                     +view.getContext().getString(R.string.Url_Gpt));
@@ -359,7 +361,7 @@ public class MainFragment extends Fragment {
                 switch (level){
                     case 1:
                         /**管理员**/
-                        SetShowViewLoad();
+                        //SetShowViewLoad();
                         BackCreateImageApi mBackCreateImageApi=new BackCreateImageApi();
                         mBackCreateImageApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                 +view.getContext().getString(R.string.Url_Gpt));
@@ -391,7 +393,7 @@ public class MainFragment extends Fragment {
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         /**普通用户使用createImage**/
                         if(gptnum>0){
-                            SetShowViewLoad();
+                            //SetShowViewLoad();
                             BackCreateImageApi mUserBackCreateImage=new BackCreateImageApi();
                             mUserBackCreateImage.SetUrl(view.getContext().getString(R.string.BackUrl)
                                     +view.getContext().getString(R.string.Url_Gpt));
