@@ -16,6 +16,7 @@
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back.xml" value="0.212" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_adv.xml" value="0.194" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_teal.xml" value="0.212" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_image_back.xml" value="0.194" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/rectangle_shape.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/redister_btn.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape.xml" value="0.244" />
@@ -24,6 +25,7 @@
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape4.xml" value="0.244" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/shape_btn.xml" value="0.186" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_auth.xml" value="0.32447916666666665" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_full_screen_view.xml" value="0.3234375" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_native_express_banner.xml" value="0.22" />

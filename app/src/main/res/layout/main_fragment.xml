@@ -103,7 +103,7 @@
     <RelativeLayout
         android:id="@+id/Show_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="2dp"
         android:background="@drawable/lay_back_gray"
         android:layout_below="@id/edit_text_layout">
@@ -111,7 +111,7 @@
         <TextView
             android:id="@+id/show_View"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:scrollbars="vertical"
             android:singleLine="false"
@@ -120,8 +120,8 @@
 
         <ImageView
             android:id="@+id/image_View"
-            android:layout_width="match_parent"
-            android:layout_height="480dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp" />
     </RelativeLayout>
 

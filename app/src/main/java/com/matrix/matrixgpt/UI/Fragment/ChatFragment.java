@@ -9,13 +9,18 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.matrix.matrixgpt.R;
-import com.matrix.matrixgpt.UI.Activity.testCustomBanner;
+import com.matrix.matrixgpt.UI.Activity.FullScreenAdvActivity;
 import com.matrix.matrixgpt.UI.Activity.testNativeActivity;
+import com.matrix.matrixgpt.UtilTool.AdverUtil.View.ShowFullScreeAdvClass;
 
 public class ChatFragment extends Fragment {
     private View view;
     private String agrs1=null;
+
+//    private TTAdNative mTTAdNative;
+//    private AdLoadListener mAdLoadListener;
 
 
     public static ChatFragment newInstance(String param1) {
@@ -61,9 +66,11 @@ public class ChatFragment extends Fragment {
         mCustomAdvBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(), testCustomBanner.class);
-                startActivity(intent);
+                //Intent intent=new Intent(getContext(), FullScreenAdvActivity.class);
+                //startActivity(intent);
                 //getActivity().finish();
+
+                ShowFullScreeAdvClass.loadAdv(getActivity());
             }
         });
     }

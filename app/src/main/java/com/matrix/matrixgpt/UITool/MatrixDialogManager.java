@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Activity.LoginActivity;
 import com.matrix.matrixgpt.UI.Activity.MainActivity;
+import com.matrix.matrixgpt.UtilTool.AdverUtil.View.ShowFullScreeAdvClass;
 
 /**
  * @ClassName MatrixDialogManager
@@ -62,6 +63,25 @@ public class MatrixDialogManager {
                 Intent login_Intent=new Intent(currentTGA, targetTGA);
                 currentTGA.startActivity(login_Intent);
                 currentTGA.finish();
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
+    }
+
+    /**显示视频窗口**/
+    public static void showVideoView(String[] names, Activity activity){
+        MatrixDialog mDialog = new MatrixDialog(activity, names, true);
+        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
+            /**取消按钮**/
+            @Override
+            public void onClickListener2LastItem() {
+                mDialog.dismiss();
+            }
+            /**确定按钮**/
+            @Override
+            public void onClickListener2SecondLastItem() {
+                ShowFullScreeAdvClass.loadAdv(activity);
                 mDialog.dismiss();
             }
         });

@@ -87,7 +87,7 @@
         <activity android:name=".UI.Activity.testNativeActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"/>
-        <activity android:name=".UI.Activity.testCustomBanner"
+        <activity android:name=".UI.Activity.FullScreenAdvActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"/>
 

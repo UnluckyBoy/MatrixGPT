@@ -1,5 +1,6 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -27,7 +27,6 @@ import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
-import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.matrix.matrixgpt.Network.API.Back.BackChatApi;
 import com.matrix.matrixgpt.Network.API.Back.BackCreateImageApi;
@@ -39,7 +38,6 @@ import com.matrix.matrixgpt.Network.Service.Back.BackCreateImageService;
 import com.matrix.matrixgpt.Network.Service.Back.DoGptTransService;
 import com.matrix.matrixgpt.R;
 import com.matrix.matrixgpt.UI.Activity.LoginActivity;
-import com.matrix.matrixgpt.UI.Activity.testCustomBanner;
 import com.matrix.matrixgpt.UITool.MatrixDialog;
 import com.matrix.matrixgpt.UITool.MatrixDialogManager;
 import com.matrix.matrixgpt.UtilTool.AdverUtil.Dialog.MatrixDislikeDialog;
@@ -65,8 +63,6 @@ public class MainFragment extends Fragment {
     //private Button mForecastBtn,mReadBtn,mChatBtn,mPaintBbtn;
     private TextView mShow_View;
     private ImageView mImage_View;
-
-    private int visitor_Num=2;
 
     private FrameLayout mBanner;//广告视图
     private TTNativeExpressAd mTTAd;
@@ -127,14 +123,6 @@ public class MainFragment extends Fragment {
 
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
-
-//        Button testBtn=view.findViewById(R.id.get_adv);
-//        testBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onClickShowBanner();
-//            }
-//        });
     }
 
     //按钮响应事件
@@ -181,7 +169,13 @@ public class MainFragment extends Fragment {
         if(intent_MainFragment.getStringExtra("U_account").equals(null)||
                 intent_MainFragment.getStringExtra("U_account").equals("")){
             //游客
-            MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(), LoginActivity.class);//提示登录
+            /*提示登录*/
+            MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(), LoginActivity.class);
+
+            //ShowAdvertise(getActivity());
+
+            //VisitorHandBackChat(content,openAi_type);
+
 //            if(visitor_Num<=0){
 //                //Toast.makeText(view.getContext(),"次数使用完",Toast.LENGTH_SHORT).show();
 //                ShowAdvertise(view.getContext());
@@ -216,7 +210,6 @@ public class MainFragment extends Fragment {
                         }else {
                             if(response.body().getResult().equals("success")){
                                 mShow_View.setText(response.body().getContent());
-                                visitor_Num--;
                             }else{
                                 //Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
                                 mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
@@ -245,7 +238,6 @@ public class MainFragment extends Fragment {
                                 /** 自定义工具类将url资源显示**/
                                 ImageTool.SetImageView(mImage_View,response.body().getContent());
                                 SetShowViewNull();
-                                visitor_Num--;
                             }else {
                                 Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
                             }
@@ -331,7 +323,7 @@ public class MainFragment extends Fragment {
                                                                 break;
                                                             case "NullPermission":
                                                                 //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(view.getContext());
+                                                                ShowAdvertise(getActivity());
                                                                 break;
                                                             case "error":
                                                                 Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
@@ -358,7 +350,7 @@ public class MainFragment extends Fragment {
                             });
                         }else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(view.getContext());
+                            ShowAdvertise(getActivity());
                         }
                         break;
                 }
@@ -431,7 +423,7 @@ public class MainFragment extends Fragment {
                                                                 break;
                                                             case "NullPermission":
                                                                 //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(view.getContext());
+                                                                ShowAdvertise(getActivity());
                                                                 break;
                                                             case "error":
                                                                 Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
@@ -460,7 +452,7 @@ public class MainFragment extends Fragment {
                             });
                         }else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(view.getContext());
+                            ShowAdvertise(getActivity());
                         }
 
                         break;
@@ -524,28 +516,12 @@ public class MainFragment extends Fragment {
     }
 
     /**显示广告弹窗**/
-    public void ShowAdvertise(final Context mContext){
-        String[] names = { mContext.getString(R.string.SystemTitle),
-                mContext.getString(R.string.ShowAdvertise),
-                mContext.getString(R.string.Confirm),
-                mContext.getString(R.string.Cancel) };
-        MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
-        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
-            /**取消按钮**/
-            @Override
-            public void onClickListener2LastItem() {
-
-                mDialog.dismiss();
-            }
-            /**确定按钮**/
-            @Override
-            public void onClickListener2SecondLastItem() {
-                //Toast.makeText(mContext, "点击了确定", Toast.LENGTH_SHORT).show();
-
-                mDialog.dismiss();
-            }
-        });
-        mDialog.show();
+    public void ShowAdvertise(final Activity activity){
+        String[] names = { activity.getString(R.string.SystemTitle),
+                activity.getString(R.string.ShowAdvertise),
+                activity.getString(R.string.Confirm),
+                activity.getString(R.string.Cancel) };
+        MatrixDialogManager.showVideoView(names,getActivity());
     }
 
 
@@ -702,9 +678,9 @@ public class MainFragment extends Fragment {
                 //MatrixToast.show(view.getContext(), "点击 " + value);
                 mBanner.removeAllViews();
                 //用户选择不喜欢原因后，移除广告展示
-//                if (enforce) {
-//                    MatrixToast.show(view.getContext(), "模版Banner 穿山甲sdk强制将view关闭了");
-//                }
+                //if (enforce) {
+                //    MatrixToast.show(view.getContext(), "模版Banner 穿山甲sdk强制将view关闭了");
+                //}
             }
             @Override
             public void onCancel() {
@@ -720,5 +696,6 @@ public class MainFragment extends Fragment {
         if (mTTAd != null) {
             mTTAd.destroy();
         }
+        getActivity().finish();
     }
 }
