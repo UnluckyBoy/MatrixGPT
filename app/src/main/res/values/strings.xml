@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MatrixGPT</string>
-    <string name="BackUrl">https://7296f746.r3.cpolar.top</string>
+    <string name="BackUrl">https://8c670fa.r2.cpolar.top</string>
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="mainIcon">主页</string>
@@ -14,7 +14,7 @@
     <string name="other_login">第三方登录</string>
     <string name="SystemTitle">系统提示</string>
     <string name="saveTitle">是否保存?</string>
-    <string name="loginTitle">尚未登录,是否登录?\n取消,则以游客身份使用</string>
+    <string name="loginTitle">尚未登录,是否登录?\n取消,则无法使用相关功能,请谨慎!!!</string>
     <string name="cancelLogin">是否放弃登录?</string>
     <string name="cancelRegister">是否放弃注册?</string>
     <string name="accountIsRegis">此号已注册！</string>

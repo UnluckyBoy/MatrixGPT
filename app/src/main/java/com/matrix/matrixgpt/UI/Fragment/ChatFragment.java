@@ -1,37 +1,17 @@
 package com.matrix.matrixgpt.UI.Fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.DislikeInfo;
-import com.bytedance.sdk.openadsdk.FilterWord;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
-import com.bytedance.sdk.openadsdk.TTAdDislike;
-import com.bytedance.sdk.openadsdk.TTAdNative;
-import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
-import com.bytedance.sdk.openadsdk.TTImage;
-import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.matrix.matrixgpt.R;
-import com.matrix.matrixgpt.UI.Activity.testActivity;
-import com.matrix.matrixgpt.UtilTool.AdverUtil.Dialog.MatrixDislikeDialog;
-import com.matrix.matrixgpt.UtilTool.AdverUtil.MatrixToast;
-import com.matrix.matrixgpt.UtilTool.AdverUtil.config.TTAdManagerHolder;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.matrix.matrixgpt.UI.Activity.testCustomBanner;
+import com.matrix.matrixgpt.UI.Activity.testNativeActivity;
 
 public class ChatFragment extends Fragment {
     private View view;
@@ -71,7 +51,17 @@ public class ChatFragment extends Fragment {
         mAdvBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(), testActivity.class);
+                Intent intent=new Intent(getContext(), testNativeActivity.class);
+                startActivity(intent);
+                //getActivity().finish();
+            }
+        });
+
+        Button mCustomAdvBtn=view.findViewById(R.id.adv_custom_btn);
+        mCustomAdvBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), testCustomBanner.class);
                 startActivity(intent);
                 //getActivity().finish();
             }

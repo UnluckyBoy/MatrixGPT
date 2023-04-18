@@ -38,7 +38,7 @@ import java.util.List;
  * @Author Create By Administrator
  * @Date 2023/4/17 0017 21:48
  */
-public class testActivity extends Activity {
+public class testNativeActivity extends Activity {
     private TTAdNative mTTAdNative;
     private FrameLayout mBannerContainer;
     private Context mContext;
@@ -96,13 +96,14 @@ public class testActivity extends Activity {
         public void onClick(View v) {
             if (v.getId() == R.id.btn_banner_download) {
                 Toast.makeText(getApplicationContext(),"点击显示广告按钮", Toast.LENGTH_SHORT).show();
-                loadBannerAd("901121423");
+                loadBannerAd("901121423");//个人:952047590,官方:901121423
             }
         }
     };
 
     /***
      * 加载广告数据
+     * 原生视图
      * @param codeId
      */
     @SuppressWarnings({"ALL", "SameParameterValue"})

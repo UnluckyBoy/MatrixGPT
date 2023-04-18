@@ -7,18 +7,29 @@
     <!--广告-->
     <!--不可设置visibility=gone,高度设置成wrap_content-->
     <!-- BannerView的Container -->
-    <FrameLayout
-        android:id="@+id/banner_container"
+    <RelativeLayout
+        android:id="@+id/adv_lay"
         android:layout_marginTop="2dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/lay_back_adv"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/banner_container"
+            android:layout_marginTop="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </FrameLayout>
+    </RelativeLayout>
 
     <!--输入模块-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_below="@+id/banner_container"
+        android:layout_below="@+id/adv_lay"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:id="@+id/edit_text_layout"
         android:background="@drawable/lay_back_teal"
         android:orientation="vertical">
@@ -29,7 +40,7 @@
             android:hint="请输入"/>
 
         <Button
-            android:id="@+id/forecast_btn"
+            android:id="@+id/get_adv"
             android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_below="@id/edit_text"
@@ -37,7 +48,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="5dp"
-            android:text="预测" />
+            android:text="测试"/>
 
         <Button
             android:id="@+id/saveImg_btn"
@@ -93,7 +104,7 @@
         android:id="@+id/Show_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/lay_back_gray"
         android:layout_below="@id/edit_text_layout">
 
