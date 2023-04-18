@@ -9,20 +9,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.matrix.matrixgpt.R;
+import com.matrix.matrixgpt.UI.Activity.LoginActivity;
 import com.matrix.matrixgpt.UITool.CircleImageView;
+import com.matrix.matrixgpt.UITool.MatrixDialogManager;
 import com.squareup.picasso.Picasso;
 
 public class UserFragment extends Fragment {
     private Intent intent_UserFragment;
     private View view;
-
+    private Button mInfoBtn;
     private CircleImageView imageButton;
 
     public static UserFragment newInstance(String param1) {
@@ -53,29 +57,22 @@ public class UserFragment extends Fragment {
         Bundle bundle = getArguments();
         String args = bundle.getString("args");
 
-        if(args.equals(null)||args.equals("")){
-            //游客方式登录
-
-        }else{
-            Log.i("MyFragment用户模块",args);
-            InitData(view,intent_UserFragment);
-        }
-
+        InitData(view);
         return view;
     }
 
-    private void InitData(View view,Intent args) {
+    private void InitData(View view) {
         TextView userName,userLevel;
 
         userName=view.findViewById(R.id.userName);
         userLevel=view.findViewById(R.id.userLevel);
 
-        userName.setText(args.getStringExtra("U_name"));
-        switch (args.getIntExtra("U_level",0)){
-            case 1:
+        userName.setText(intent_UserFragment.getStringExtra("U_name"));
+        switch (intent_UserFragment.getIntExtra("U_level",0)){
+            case 9:
                 userLevel.setText("管理员");
                 break;
-            case 0:
+            case 1:
                 userLevel.setText("普通用户");
                 break;
             default:
@@ -84,13 +81,34 @@ public class UserFragment extends Fragment {
         }
 
         imageButton=view.findViewById(R.id.user_head);
-        SetHead(args.getStringExtra("U_head"));
+        SetHead(intent_UserFragment.getStringExtra("U_head"));
+
+        mInfoBtn=view.findViewById(R.id.info_btn);
+        mInfoBtn.setOnClickListener(new UserFraClickListener());
     }
 
     private void SetHead(String headUrl) {
         Picasso.get()
-                .load("https://4b301a04.r10.cpolar.top/getImage"+headUrl)
+                .load(getResources().getText(R.string.BackUrl)+"/getImage"+headUrl)
                 .error(R.drawable.no_user)
                 .into(imageButton);
+    }
+
+    private class UserFraClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.info_btn:
+                    String account=intent_UserFragment.getStringExtra("U_account");
+                    if(account.equals(null)||account.equals("")){
+                        Intent intent=new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else{
+                        Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
+                    }
+                break;
+            }
+        }
     }
 }
