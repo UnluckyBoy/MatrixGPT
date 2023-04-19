@@ -104,23 +104,27 @@ public class LoginActivity extends Activity {
         call_login.enqueue(new Callback<LoginBean>() {
             @Override
             public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                if(response.body().getResult().equals("success")){
-                    Intent intent=new Intent(TGA,MainActivity.class);
-                    intent.putExtra("U_id",response.body().getId());
-                    intent.putExtra("U_head",response.body().getHead());
-                    intent.putExtra("U_name",response.body().getName());
-                    intent.putExtra("U_pwd",response.body().getPassword());
-                    intent.putExtra("U_sex",response.body().getSex());
-                    intent.putExtra("U_account",response.body().getAccount());
-                    intent.putExtra("U_phone",response.body().getPhone());
-                    intent.putExtra("U_email",response.body().getEmail());
-                    intent.putExtra("U_gptNum",response.body().getGptNum());
-                    intent.putExtra("U_level",response.body().getLevel());
-                    startActivity(intent);
-                    finish();
-                }
-                else{
-                    Toast.makeText(TGA, TGA.getString(R.string.userInfoError),Toast.LENGTH_SHORT).show();
+                if(response.body()!=null){
+                    if(response.body().getResult().equals("success")){
+                        Intent intent=new Intent(TGA,MainActivity.class);
+                        intent.putExtra("U_id",response.body().getId());
+                        intent.putExtra("U_head",response.body().getHead());
+                        intent.putExtra("U_name",response.body().getName());
+                        intent.putExtra("U_pwd",response.body().getPassword());
+                        intent.putExtra("U_sex",response.body().getSex());
+                        intent.putExtra("U_account",response.body().getAccount());
+                        intent.putExtra("U_phone",response.body().getPhone());
+                        intent.putExtra("U_email",response.body().getEmail());
+                        intent.putExtra("U_gptNum",response.body().getGptNum());
+                        intent.putExtra("U_level",response.body().getLevel());
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(TGA, TGA.getString(R.string.userInfoError),Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(TGA, TGA.getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

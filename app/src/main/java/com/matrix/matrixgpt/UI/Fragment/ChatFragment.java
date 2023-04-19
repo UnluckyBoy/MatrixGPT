@@ -52,6 +52,23 @@ public class ChatFragment extends Fragment {
     }
 
     private void InitView(){
+        //testView();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    /**测试**/
+    private void testView(){
         Button mAdvBtn=view.findViewById(R.id.adv_btn);
         mAdvBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,15 +90,5 @@ public class ChatFragment extends Fragment {
                 ShowFullScreeAdvClass.loadAdv(getActivity());
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

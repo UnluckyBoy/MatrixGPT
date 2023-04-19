@@ -2,23 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/Lay_main_back"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/adv_btn"
-        android:layout_width="80dp"
-        android:layout_height="38dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_back_blue"
-        android:text="获取广告" />
+<!--    &lt;!&ndash;测试&ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/adv_btn"-->
+<!--        android:layout_width="80dp"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="@drawable/btn_back_blue"-->
+<!--        android:text="获取广告" />-->
+<!--    <Button-->
+<!--        android:id="@+id/adv_custom_btn"-->
+<!--        android:layout_width="80dp"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:layout_below="@+id/adv_btn"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:background="@drawable/btn_back_blue"-->
+<!--        android:text="竖屏广告" />-->
+<!--    &lt;!&ndash;测试&ndash;&gt;-->
 
-    <Button
-        android:id="@+id/adv_custom_btn"
-        android:layout_width="80dp"
-        android:layout_height="38dp"
-        android:layout_below="@+id/adv_btn"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/btn_back_blue"
-        android:text="竖屏广告" />
+    <RelativeLayout
+        android:id="@+id/lay_listview_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/chat_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

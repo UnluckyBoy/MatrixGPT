@@ -77,25 +77,29 @@ public class RegisterActivity extends Activity {
             call_Register.enqueue(new Callback<LoginBean>() {
                 @Override
                 public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                    if (response.body().getResult().equals("success")) {
-                        Toast.makeText(RegisterActivity.this,
-                                "恭喜注册成功！", Toast.LENGTH_SHORT).show();
-                        Intent main_intent = new Intent(TGA, MainActivity.class);
-                        main_intent.putExtra("U_id",response.body().getId());
-                        main_intent.putExtra("U_head",response.body().getHead());
-                        main_intent.putExtra("U_name",response.body().getName());
-                        main_intent.putExtra("U_pwd",response.body().getPassword());
-                        main_intent.putExtra("U_sex",response.body().getSex());
-                        main_intent.putExtra("U_account",response.body().getAccount());
-                        main_intent.putExtra("U_phone",response.body().getPhone());
-                        main_intent.putExtra("U_email",response.body().getEmail());
-                        main_intent.putExtra("U_gptNum",response.body().getGptNum());
-                        main_intent.putExtra("U_level",response.body().getLevel());
-                        startActivity(main_intent);
-                        finish();
-                    } else {
-                        Toast.makeText(RegisterActivity.this, TGA.getString(R.string.accountIsRegis),
-                                Toast.LENGTH_SHORT).show();
+                    if(response.body()!=null){
+                        if (response.body().getResult().equals("success")) {
+                            Toast.makeText(RegisterActivity.this,
+                                    "恭喜注册成功！", Toast.LENGTH_SHORT).show();
+                            Intent main_intent = new Intent(TGA, MainActivity.class);
+                            main_intent.putExtra("U_id",response.body().getId());
+                            main_intent.putExtra("U_head",response.body().getHead());
+                            main_intent.putExtra("U_name",response.body().getName());
+                            main_intent.putExtra("U_pwd",response.body().getPassword());
+                            main_intent.putExtra("U_sex",response.body().getSex());
+                            main_intent.putExtra("U_account",response.body().getAccount());
+                            main_intent.putExtra("U_phone",response.body().getPhone());
+                            main_intent.putExtra("U_email",response.body().getEmail());
+                            main_intent.putExtra("U_gptNum",response.body().getGptNum());
+                            main_intent.putExtra("U_level",response.body().getLevel());
+                            startActivity(main_intent);
+                            finish();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, TGA.getString(R.string.accountIsRegis),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(RegisterActivity.this,TGA.getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
                     }
                 }
 
