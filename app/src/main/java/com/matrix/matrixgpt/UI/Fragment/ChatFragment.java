@@ -17,7 +17,7 @@ import com.matrix.matrixgpt.UtilTool.AdverUtil.View.ShowFullScreeAdvClass;
 
 public class ChatFragment extends Fragment {
     private View view;
-    private String agrs1=null;
+    private String args=null;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -26,7 +26,7 @@ public class ChatFragment extends Fragment {
     public static ChatFragment newInstance(String param1) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
-        args.putString("agrs1", param1);
+        args.putString("args", param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +44,7 @@ public class ChatFragment extends Fragment {
             view = inflater.inflate(R.layout.chat_fragment, container, false);
 
             Bundle bundle = getArguments();
-            agrs1 = bundle.getString("agrs1");
+            args = bundle.getString("args");
         }
 
         InitView();
@@ -68,27 +68,27 @@ public class ChatFragment extends Fragment {
     }
 
     /**测试**/
-    private void testView(){
-        Button mAdvBtn=view.findViewById(R.id.adv_btn);
-        mAdvBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getContext(), testNativeActivity.class);
-                startActivity(intent);
-                //getActivity().finish();
-            }
-        });
-
-        Button mCustomAdvBtn=view.findViewById(R.id.adv_custom_btn);
-        mCustomAdvBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent=new Intent(getContext(), FullScreenAdvActivity.class);
-                //startActivity(intent);
-                //getActivity().finish();
-
-                ShowFullScreeAdvClass.loadAdv(getActivity());
-            }
-        });
-    }
+//    private void testView(){
+//        Button mAdvBtn=view.findViewById(R.id.adv_btn);
+//        mAdvBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent=new Intent(getContext(), testNativeActivity.class);
+//                startActivity(intent);
+//                //getActivity().finish();
+//            }
+//        });
+//
+//        Button mCustomAdvBtn=view.findViewById(R.id.adv_custom_btn);
+//        mCustomAdvBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Intent intent=new Intent(getContext(), FullScreenAdvActivity.class);
+//                //startActivity(intent);
+//                //getActivity().finish();
+//
+//                ShowFullScreeAdvClass.loadAdv(getActivity());
+//            }
+//        });
+//    }
 }
