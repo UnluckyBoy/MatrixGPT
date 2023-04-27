@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.matrix.matrixgpt">
+    package="com.matrix.matrix_chat">
 
     <!-- minSdkVersion为9时的合并 -->
     <uses-sdk tools:overrideLibrary="android.support.v7.appcompat, android.support.v7.recyclerview,
@@ -47,7 +47,7 @@
 
     <!--androidx.core.app.CoreComponentFactory,android.support.v4.app.CoreComponentFactory-->
     <application
-        android:name=".UtilTool.MatrixApplication"
+        android:name="com.matrix.matrix_chat.UtilTool.MatrixApplication"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -61,7 +61,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:appComponentFactory,android:theme">
         <activity
-            android:name=".UI.Activity.MainActivity"
+            android:name="com.matrix.matrix_chat.UI.Activity.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:exported="true">
             <intent-filter>
@@ -71,8 +71,8 @@
             </intent-filter>
         </activity>
         <!--添加Activity-->
-        <activity android:name=".UI.Activity.LoginActivity"/>
-        <activity android:name=".UI.Activity.RegisterActivity"/>
+        <activity android:name="com.matrix.matrix_chat.UI.Activity.LoginActivity"/>
+        <activity android:name="com.matrix.matrix_chat.UI.Activity.RegisterActivity"/>
 
         <meta-data
             android:name="test"
@@ -84,10 +84,10 @@
             android:name="Channel_app"
             android:value="three" />
 
-        <activity android:name=".UI.Activity.testNativeActivity"
+        <activity android:name="com.matrix.matrix_chat.UI.Activity.testNativeActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"/>
-        <activity android:name=".UI.Activity.FullScreenAdvActivity"
+        <activity android:name="com.matrix.matrix_chat.UI.Activity.FullScreenAdvActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:screenOrientation="portrait"/>
 
