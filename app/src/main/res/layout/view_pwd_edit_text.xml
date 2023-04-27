@@ -36,6 +36,6 @@
         android:layout_marginLeft="@dimen/x10"
         android:background="@drawable/bg_eye"
         android:button="@null"
-        android:checked="false" />
+        android:checked="true" />
 
 </LinearLayout >
