@@ -97,6 +97,9 @@ public class LoginActivity extends Activity {
         PwdEditView Upwd=findViewById(R.id.uPwd_edit);
         final String name=Uid.getText().toString();
         final String pwd=Upwd.getText().toString();
+//        if(name==null||pwd==null||name==""||pwd==""){
+//            Toast.makeText(this,"请输入账户信息",Toast.LENGTH_SHORT).show();
+//        }
         LoginApi loginApi=new LoginApi();
         loginApi.SetUrl(TGA.getString(R.string.BackUrl)+TGA.getString(R.string.Url_UserInfo));
         LoginService loginService=loginApi.getService();
@@ -107,16 +110,19 @@ public class LoginActivity extends Activity {
                 if(response.body()!=null){
                     if(response.body().getResult().equals("success")){
                         Intent intent=new Intent(TGA,MainActivity.class);
-                        intent.putExtra("U_id",response.body().getId());
-                        intent.putExtra("U_head",response.body().getHead());
-                        intent.putExtra("U_name",response.body().getName());
-                        intent.putExtra("U_pwd",response.body().getPassword());
-                        intent.putExtra("U_sex",response.body().getSex());
-                        intent.putExtra("U_account",response.body().getAccount());
-                        intent.putExtra("U_phone",response.body().getPhone());
-                        intent.putExtra("U_email",response.body().getEmail());
-                        intent.putExtra("U_gptNum",response.body().getGptNum());
-                        intent.putExtra("U_level",response.body().getLevel());
+//                        intent.putExtra("U_id",response.body().getId());
+//                        intent.putExtra("U_head",response.body().getHead());
+//                        intent.putExtra("U_name",response.body().getName());
+//                        intent.putExtra("U_pwd",response.body().getPassword());
+//                        intent.putExtra("U_sex",response.body().getSex());
+//                        intent.putExtra("U_account",response.body().getAccount());
+//                        intent.putExtra("U_phone",response.body().getPhone());
+//                        intent.putExtra("U_email",response.body().getEmail());
+//                        intent.putExtra("U_gptNum",response.body().getGptNum());
+//                        intent.putExtra("U_level",response.body().getLevel());
+
+                        setExtra(response,intent);
+
                         startActivity(intent);
                         finish();
                     }
@@ -149,5 +155,18 @@ public class LoginActivity extends Activity {
 
         /**调用窗口方法**/
         new MatrixDialogManager().ShowMatrixDialog(names,TGA,MainActivity.class);
+    }
+
+    private void setExtra(Response<LoginBean> response,Intent intent){
+        intent.putExtra("U_id",response.body().getId());
+        intent.putExtra("U_head",response.body().getHead());
+        intent.putExtra("U_name",response.body().getName());
+        intent.putExtra("U_pwd",response.body().getPassword());
+        intent.putExtra("U_sex",response.body().getSex());
+        intent.putExtra("U_account",response.body().getAccount());
+        intent.putExtra("U_phone",response.body().getPhone());
+        intent.putExtra("U_email",response.body().getEmail());
+        intent.putExtra("U_gptNum",response.body().getGptNum());
+        intent.putExtra("U_level",response.body().getLevel());
     }
 }

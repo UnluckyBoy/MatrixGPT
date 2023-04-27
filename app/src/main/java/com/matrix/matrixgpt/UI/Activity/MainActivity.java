@@ -11,8 +11,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -58,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
         getPermission();
         ConfirmFirstStart();
         initView();
+        setActionBar();
+    }
+
+    /**设置状态栏**/
+    private void setActionBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.WHITE);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
     }
 
     /***

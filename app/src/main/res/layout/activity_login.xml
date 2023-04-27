@@ -63,7 +63,7 @@
             android:layout_alignLeft="@id/login_bg"
             android:layout_below="@id/login_bg"
             android:layout_marginTop="30dp"
-            android:background="@drawable/btn_back_blue"
+            android:background="@drawable/common_btn_back_effect"
             android:layout_alignParentStart="true"
             android:layout_marginStart="70dp"
             android:text="登录" />
@@ -75,7 +75,7 @@
             android:layout_alignRight="@id/login_bg"
             android:layout_below="@id/login_bg"
             android:layout_marginTop="30dp"
-            android:background="@drawable/btn_back_gray"
+            android:background="@drawable/cancel_btn_back_effect"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="70dp"
             android:text="取消" />
@@ -90,7 +90,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/btn_back_gresn"
+            android:background="@drawable/register_btn_back_effect"
             android:text="注册" />
 
         <TextView
