@@ -262,7 +262,7 @@ public class MainFragment extends Fragment {
         switch (openAi_type){
             case "chat":
                 switch (level){
-                    case 1:
+                    case 9:
                         //Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
                         //SetShowViewLoad();
                         BackChatApi mAdimnChatApi=new BackChatApi();
@@ -290,7 +290,7 @@ public class MainFragment extends Fragment {
                             }
                         });
                         break;
-                    case 0:
+                    case 1:
                         /**普通用户使用Chat**/
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         if(gptnum>0){
@@ -359,7 +359,7 @@ public class MainFragment extends Fragment {
                 break;
             case "createImage":
                 switch (level){
-                    case 1:
+                    case 9:
                         /**管理员**/
                         //SetShowViewLoad();
                         BackCreateImageApi mBackCreateImageApi=new BackCreateImageApi();
@@ -389,7 +389,7 @@ public class MainFragment extends Fragment {
                             }
                         });
                         break;
-                    case 0:
+                    case 1:
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         /**普通用户使用createImage**/
                         if(gptnum>0){

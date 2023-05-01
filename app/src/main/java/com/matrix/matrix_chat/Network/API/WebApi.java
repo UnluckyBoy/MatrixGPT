@@ -9,10 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class WebApi {
     protected Retrofit getApi(String url) {
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
-        // 设置超时，超过 300s 视为超时
-        OkHttpClient client = httpBuilder.readTimeout(300, TimeUnit.SECONDS)
-                .connectTimeout(300, TimeUnit.SECONDS)
-                .writeTimeout(300, TimeUnit.SECONDS)
+        // 设置超时，超过 120s 视为超时
+        OkHttpClient client = httpBuilder.readTimeout(120, TimeUnit.SECONDS)
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
                 .build();
 
         return new Retrofit.Builder()

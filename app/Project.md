@@ -6,7 +6,7 @@ https://5841dcdd.r5.cpolar.top/UserInfo/register?name=xxxxx8E&account=xxxxxxx&pa
 账号请求信息:
 https://5841dcdd.r5.cpolar.top/UserInfo/queryinfo?account=xxxxx
 头像获取:
-https://5841dcdd.r5.cpolar.top/getImage+(/backserver/userImage/admin.jpg)
+https://5841dcdd.r5.cpolar.top/getImage/backserver/userImage/admin.jpg
 AI回答:
 https://628945ad.r5.cpolar.top/MatrixGPT/chat?content=xxxxxxx
 昵称搜索:
