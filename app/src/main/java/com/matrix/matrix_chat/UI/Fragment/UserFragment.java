@@ -83,8 +83,9 @@ public class UserFragment extends Fragment {
     }
 
     private void SetHead(String headUrl) {
+        String path=getResources().getText(R.string.BackUrl)+"/getImage"+headUrl;
         Picasso.get()
-                .load(getResources().getText(R.string.BackUrl)+"/getImage"+headUrl)
+                .load(path)
                 .error(R.drawable.no_user)
                 .into(imageButton);
     }

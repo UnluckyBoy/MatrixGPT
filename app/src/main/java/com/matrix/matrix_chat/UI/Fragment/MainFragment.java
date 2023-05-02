@@ -611,7 +611,7 @@ public class MainFragment extends Fragment {
         ad.setDownloadListener(new TTAppDownloadListener() {
             @Override
             public void onIdle() {
-                MatrixToast.show(view.getContext(), "点击开始下载", Toast.LENGTH_LONG);
+                //MatrixToast.show(view.getContext(), "点击开始下载", Toast.LENGTH_LONG);
             }
 
             @Override
