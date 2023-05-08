@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">趣事</string>
-    <string name="BackUrl">https://5159c410.r5.cpolar.top</string>
+    <string name="BackUrl">https://64aee94c.r2.cpolar.cn</string>
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="mainIcon">主页</string>

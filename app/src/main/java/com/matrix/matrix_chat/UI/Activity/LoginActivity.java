@@ -125,6 +125,9 @@ public class LoginActivity extends Activity {
 
                         startActivity(intent);
                         finish();
+                    }else if(response.body().getResult().equals("login_lock")){
+                        //MatrixDialogManager.ShowSystemDialog(TGA);
+                        Toast.makeText(TGA, "账号已登录,请检查是否密码泄露",Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(TGA, TGA.getString(R.string.userInfoError),Toast.LENGTH_SHORT).show();

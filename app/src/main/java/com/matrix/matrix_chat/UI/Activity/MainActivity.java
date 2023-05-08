@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         getPermission();
         ConfirmFirstStart();
+        intent_MainActivity=getIntent();
         initView();
         setActionBar();
     }
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         /**获取用户信息**/
-        intent_MainActivity=getIntent();
         String account_id=intent_MainActivity.getStringExtra("U_account");
 
         if(account_id==null){

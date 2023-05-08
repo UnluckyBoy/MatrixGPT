@@ -85,4 +85,20 @@ public class MatrixDialogManager {
         });
         mDialog.show();
     }
+
+    public static void ShowSystemDialog(final Context mContext){
+        String[] names={"系统提示","账户已在他处登录\n详情请前往\"我的\"->\"帮助\"查看","确定","取消"};
+        MatrixDialog mDialog = new MatrixDialog(mContext, names, true);
+        mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
+            @Override
+            public void onClickListener2LastItem() {
+                mDialog.dismiss();
+            }
+
+            @Override
+            public void onClickListener2SecondLastItem() {
+                mDialog.dismiss();
+            }
+        });
+    }
 }
