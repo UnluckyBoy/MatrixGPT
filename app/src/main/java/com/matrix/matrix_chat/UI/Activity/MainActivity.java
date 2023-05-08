@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,18 +22,27 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.matrix.matrix_chat.Network.API.Back.LogoutApi;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.LogoutBean;
+import com.matrix.matrix_chat.Network.Service.Back.LogoutService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Fragment.ChatFragment;
 import com.matrix.matrix_chat.UI.Fragment.MainFragment;
 import com.matrix.matrix_chat.UI.Fragment.UserFragment;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
+import com.matrix.matrix_chat.UtilTool.Pwd3DESUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
     private final Context TGA=MainActivity.this;
     private Intent intent_MainActivity;
+    private static String PASSWORD_EncryKEY = "EncryptionKey_By-WuMing";//自定义密钥:EncryptionKey_By-WuMing
 
     private BottomNavigationView bottomNavigation;
     private FrameLayout mainFrame;
@@ -55,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        getPermission();
         ConfirmFirstStart();
         intent_MainActivity=getIntent();
         initView();
@@ -67,32 +76,6 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.WHITE);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-    }
-
-    /***
-     * 动态获取申请读写权限
-     */
-    private void getPermission(){
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-        //申请写权限
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-        //申请创建文件
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 1);
-        }
-
-        //网络权限
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
     }
 
@@ -187,10 +170,39 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             //第一次运行
+            getPermission();
+
             editor.putBoolean("isFirstRun", true);
             editor.commit();
         }
     }
+
+    /***
+     * 动态获取申请读写权限
+     */
+    private void getPermission(){
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+        //申请写权限
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+        //申请创建文件
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 1);
+        }
+
+        //网络权限
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
+        }
+    }
+
 
     /**
      * 退出检测
@@ -209,8 +221,42 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             //退出程序
+            //logoutTrans();
             this.finish();
             System.exit(0);
         }
+    }
+
+    private void logoutTrans(){
+        /**
+         * 登出
+         * 结果:success,error,unlogin
+         */
+        String account=intent_MainActivity.getStringExtra("U_account");
+        String password= Pwd3DESUtil.decode3Des(PASSWORD_EncryKEY,intent_MainActivity.getStringExtra("U_password"));
+        LogoutApi logoutApi=new LogoutApi();
+        logoutApi.SetUrl(TGA.getString(R.string.BackUrl)
+                +TGA.getString(R.string.Url_UserInfo));
+        LogoutService logoutService=logoutApi.getService();
+        Call<LogoutBean> callLogout=logoutService.getState(account,password);
+        callLogout.enqueue(new Callback<LogoutBean>() {
+            @Override
+            public void onResponse(Call<LogoutBean> call, Response<LogoutBean> response) {
+                if(response.body()!=null){
+                    if(response.body().getResult()=="success"){
+                        Toast.makeText(TGA,"登出",Toast.LENGTH_SHORT).show();
+                    }else if(response.body().getResult()=="unlogin"){
+                        Toast.makeText(TGA,"尚未登录",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(TGA,"登出异常",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LogoutBean> call, Throwable t) {
+                Toast.makeText(TGA,TGA.getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

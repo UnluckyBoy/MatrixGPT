@@ -116,12 +116,11 @@
 
         <TextView
             android:id="@+id/show_View"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:scrollbars="vertical"
-            android:textIsSelectable="true"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:textIsSelectable="true"/>
 
         <ImageView
             android:id="@+id/image_View"

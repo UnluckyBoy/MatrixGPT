@@ -164,7 +164,7 @@ public class LoginActivity extends Activity {
         intent.putExtra("U_id",response.body().getId());
         intent.putExtra("U_head",response.body().getHead());
         intent.putExtra("U_name",response.body().getName());
-        intent.putExtra("U_pwd",response.body().getPassword());
+        intent.putExtra("U_password",response.body().getPassword());
         intent.putExtra("U_sex",response.body().getSex());
         intent.putExtra("U_account",response.body().getAccount());
         intent.putExtra("U_phone",response.body().getPhone());

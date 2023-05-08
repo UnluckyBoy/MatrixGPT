@@ -92,6 +92,7 @@ dependencies {
     //相册Picker
     implementation 'cn.bingoogolapple:bga-photopicker:1.2.3@aar'
     implementation 'cn.bingoogolapple:bga-adapter:1.1.8@aar'
+    implementation 'commons-codec:commons-codec:1.8'
     //matrix
 
 

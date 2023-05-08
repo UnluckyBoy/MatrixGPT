@@ -1,6 +1,7 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -114,7 +115,6 @@ public class MainFragment extends Fragment {
         mChatBtn=view.findViewById(R.id.chat_btn);
         mPaintBtn=view.findViewById(R.id.paint_btn);
         mShow_View=view.findViewById(R.id.show_View);
-        //mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
 
         mEditText=view.findViewById(R.id.edit_text);
         mImage_View=view.findViewById(R.id.image_View);
@@ -141,7 +141,7 @@ public class MainFragment extends Fragment {
                         //OnAndroidGetChat(content);
                         GetBackChatData(content,"chat");
                     }
-                    mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
+                    //mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
                     mImage_View.setVisibility(View.GONE);//显示文本时，图片隐藏
                     //mImage_View.setVisibility(View.VISIBLE);//图片显示
                     break;

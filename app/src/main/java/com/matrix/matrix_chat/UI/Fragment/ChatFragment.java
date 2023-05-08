@@ -46,7 +46,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void InitView(){
-        //testView();
+        testView();
 
 
     }
@@ -62,27 +62,6 @@ public class ChatFragment extends Fragment {
     }
 
     /**测试**/
-//    private void testView(){
-//        Button mAdvBtn=view.findViewById(R.id.adv_btn);
-//        mAdvBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent=new Intent(getContext(), testNativeActivity.class);
-//                startActivity(intent);
-//                //getActivity().finish();
-//            }
-//        });
-//
-//        Button mCustomAdvBtn=view.findViewById(R.id.adv_custom_btn);
-//        mCustomAdvBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Intent intent=new Intent(getContext(), FullScreenAdvActivity.class);
-//                //startActivity(intent);
-//                //getActivity().finish();
-//
-//                ShowFullScreeAdvClass.loadAdv(getActivity());
-//            }
-//        });
-//    }
+    private void testView(){
+    }
 }

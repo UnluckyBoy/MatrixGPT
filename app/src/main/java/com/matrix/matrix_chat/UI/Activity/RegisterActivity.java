@@ -85,7 +85,7 @@ public class RegisterActivity extends Activity {
                             main_intent.putExtra("U_id",response.body().getId());
                             main_intent.putExtra("U_head",response.body().getHead());
                             main_intent.putExtra("U_name",response.body().getName());
-                            main_intent.putExtra("U_pwd",response.body().getPassword());
+                            main_intent.putExtra("U_password",response.body().getPassword());
                             main_intent.putExtra("U_sex",response.body().getSex());
                             main_intent.putExtra("U_account",response.body().getAccount());
                             main_intent.putExtra("U_phone",response.body().getPhone());
