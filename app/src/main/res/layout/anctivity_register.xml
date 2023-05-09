@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,50 +19,54 @@
             android:text="用户注册"
             android:textColor="@color/md_orange_700" />
 
-        <EditText
+        <com.matrix.matrix_chat.UITool.PwdEditView
             android:id="@+id/use_register"
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="180dp"
-            android:hint="请输入用户名"
-            android:singleLine="true" />
-        <EditText
+            app:hint="请输入用户名"
+            app:inputType="text" />
+        <com.matrix.matrix_chat.UITool.PwdEditView
             android:id="@+id/account_register"
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/use_register"
             android:layout_alignStart="@+id/use_register"
             android:layout_below="@+id/use_register"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:hint="请输入注册账户"
-            android:inputType="text"
-            android:singleLine="true" />
+            app:hint="请输入账号"
+            app:inputType="text" />
 
-        <EditText
+        <com.matrix.matrix_chat.UITool.PwdEditView
             android:id="@+id/pwd_register"
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/account_register"
             android:layout_alignStart="@+id/account_register"
             android:layout_below="@+id/account_register"
             android:layout_marginTop="5dp"
-            android:hint="请输入用户密码"
-            android:inputType="textPassword"
-            android:singleLine="true" />
+            android:layout_centerHorizontal="true"
+            app:drawableLeft="@drawable/code"
+            app:hint="请输入密码"
+            app:inputType="textPassword"
+            app:needEye="true" />
 
-        <EditText
+        <com.matrix.matrix_chat.UITool.PwdEditView
             android:id="@+id/pwd_confirm"
-            android:layout_width="190dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/pwd_register"
             android:layout_alignStart="@+id/pwd_register"
             android:layout_below="@+id/pwd_register"
             android:layout_marginTop="5dp"
-            android:hint="请确认用户密码"
-            android:inputType="textPassword"
-            android:singleLine="true" />
+            android:layout_centerHorizontal="true"
+            app:drawableLeft="@drawable/code"
+            app:hint="请确认密码"
+            app:inputType="textPassword"
+            app:needEye="true" />
 
         <Button
             android:id="@+id/OK"

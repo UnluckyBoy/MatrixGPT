@@ -15,6 +15,7 @@ import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
 import com.matrix.matrix_chat.Network.Service.Back.RegisterService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
+import com.matrix.matrix_chat.UITool.PwdEditView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,10 +59,10 @@ public class RegisterActivity extends Activity {
     }
 
     private void RegisterTrans(){
-        EditText name = (EditText) findViewById(R.id.use_register);
-        EditText account = (EditText) findViewById(R.id.account_register);
-        EditText pwd = (EditText) findViewById(R.id.pwd_register);
-        EditText confirmPwd = (EditText) findViewById(R.id.pwd_confirm);
+        PwdEditView name = (PwdEditView) findViewById(R.id.use_register);
+        PwdEditView account = (PwdEditView) findViewById(R.id.account_register);
+        PwdEditView pwd = (PwdEditView) findViewById(R.id.pwd_register);
+        PwdEditView confirmPwd = (PwdEditView) findViewById(R.id.pwd_confirm);
         final String user_name = name.getText().toString();
         final String user_account = account.getText().toString();
         final String user_pwd = pwd.getText().toString();
