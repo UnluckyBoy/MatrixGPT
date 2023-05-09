@@ -111,6 +111,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="58dp"
+        android:orientation="vertical"
         android:background="@drawable/lay_back_gray"
         android:layout_below="@id/edit_text_layout">
 
