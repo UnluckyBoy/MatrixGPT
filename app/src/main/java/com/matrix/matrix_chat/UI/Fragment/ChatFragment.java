@@ -35,7 +35,7 @@ public class ChatFragment extends Fragment {
                 parent.removeView(view);
             }
         }else{
-            view = inflater.inflate(R.layout.chat_fragment, container, false);
+            view = inflater.inflate(R.layout.fragment_chat, container, false);
 
             Bundle bundle = getArguments();
             args = bundle.getString("args");

@@ -48,7 +48,7 @@ public class UserFragment extends Fragment {
 //        }
 
         intent_UserFragment=getActivity().getIntent();
-        view = inflater.inflate(R.layout.user_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_user, container, false);
         Bundle bundle = getArguments();
         String args = bundle.getString("args");
 

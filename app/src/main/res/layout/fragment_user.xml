@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/user_ms"
+        android:id="@+id/user_info_lay"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_alignParentLeft="true"
@@ -55,36 +55,46 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/info_btn"
+    <RelativeLayout
+        android:id="@+id/user_control_lay"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/user_ms"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_btn"
-        android:text="@string/user_info" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="58dp"
+        android:background="@drawable/lay_back_gray"
+        android:layout_below="@id/user_info_lay">
 
-    <Button
-        android:id="@+id/help_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/info_btn"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/shape_btn"
-        android:text="@string/help" />
+        <Button
+            android:id="@+id/info_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_btn"
+            android:text="@string/user_info" />
 
-    <Button
-        android:id="@+id/about_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/help_btn"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/shape_btn"
-        android:text="@string/about" />
+        <Button
+            android:id="@+id/help_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/info_btn"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_btn"
+            android:text="@string/help" />
+
+        <Button
+            android:id="@+id/about_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/help_btn"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/shape_btn"
+            android:text="@string/about" />
+
+    </RelativeLayout>
 </RelativeLayout>

@@ -1,13 +1,11 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import android.app.Activity;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +91,7 @@ public class MainFragment extends Fragment {
                 parent.removeView(view);
             }
         }else{
-            view = inflater.inflate(R.layout.main_fragment, container, false);
+            view = inflater.inflate(R.layout.fragment_main, container, false);
             Bundle bundle = getArguments();
             String args_account = bundle.getString("args_account");
             Init_Component(view,args_account);
