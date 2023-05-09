@@ -155,7 +155,7 @@ public class testNativeActivity extends Activity {
 
     //广告展示和数据绑定
     private void showAd(TTNativeAd ad) {
-        View bannerView = LayoutInflater.from(this).inflate(R.layout.native_ad_view, mBannerContainer, false);
+        View bannerView = LayoutInflater.from(this).inflate(R.layout.view_native_ad, mBannerContainer, false);
         if (bannerView == null) {
             return;
         }

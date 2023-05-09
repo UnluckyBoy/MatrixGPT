@@ -1,11 +1,15 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,10 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.CircleImageView;
 import com.squareup.picasso.Picasso;
+
+import retrofit2.Response;
 
 public class UserFragment extends Fragment {
     private Intent intent_UserFragment;
@@ -68,7 +76,7 @@ public class UserFragment extends Fragment {
                 userLevel.setText("管理员");
                 break;
             case 1:
-                userLevel.setText("普通用户");
+                userLevel.setText("用户");
                 break;
             default:
                 userLevel.setText("游客");
@@ -101,10 +109,44 @@ public class UserFragment extends Fragment {
                         startActivity(intent);
                         getActivity().finish();
                     }else{
-                        Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
+                        popUpWindow(v);
                     }
+                    //popUpWindow(v);
                 break;
             }
         }
+    }
+
+    private void popUpWindow(View view){
+        //创建窗口
+        PopupWindow popupWindow=new PopupWindow(view);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_info_window, null);
+        popupWindow.setContentView(popUpView);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent)));
+
+        //popupWindow.showAsDropDown(view);//弹出创建显示在按钮下面
+        popupWindow.showAsDropDown(view,100,0, Gravity.CENTER);//显示在view控件的正左上方
+        //popupWindow.showAsDropDown(view,100,100, Gravity.BOTTOM);//显示在view控件的正左下方
+
+        TextView accountText,nameText,emailText,phoneText,genderText,gpt_numText;
+        accountText=popUpView.findViewById(R.id.info_account);
+        nameText=popUpView.findViewById(R.id.info_name);
+        emailText=popUpView.findViewById(R.id.info_email);
+        phoneText=popUpView.findViewById(R.id.info_phone);
+        genderText=popUpView.findViewById(R.id.info_gender);
+        gpt_numText=popUpView.findViewById(R.id.info_gpt_num);
+
+        accountText.setText(intent_UserFragment.getStringExtra("U_account"));
+        nameText.setText(intent_UserFragment.getStringExtra("U_name"));
+        emailText.setText(intent_UserFragment.getStringExtra("U_email"));
+        phoneText.setText(intent_UserFragment.getStringExtra("U_phone"));
+        genderText.setText(intent_UserFragment.getStringExtra("U_sex"));
+        gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra("U_gptNum",0)));
     }
 }

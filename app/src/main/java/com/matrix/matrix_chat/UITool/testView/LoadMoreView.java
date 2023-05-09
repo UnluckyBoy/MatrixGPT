@@ -37,7 +37,7 @@ public class LoadMoreView extends FrameLayout {
 
     @SuppressWarnings("RedundantCast")
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.load_more_view, this, true);
+        LayoutInflater.from(context).inflate(R.layout.view_load_more, this, true);
 
         mProgressBar = (ProgressBar) findViewById(R.id.pb_load_more_progress);
         mTextView = (TextView) findViewById(R.id.tv_load_more_tip);

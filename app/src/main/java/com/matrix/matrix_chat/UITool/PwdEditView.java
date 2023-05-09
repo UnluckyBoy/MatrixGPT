@@ -32,14 +32,14 @@ public class PwdEditView extends LinearLayout {
     public PwdEditView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.view_pwd_edit_text, this, true);
-        ImageView mImLeft = findViewById(R.id.im_left);
+        //ImageView mImLeft = findViewById(R.id.im_left);
         mEtData = findViewById(R.id.et_data);
         CheckBox mImEye = findViewById(R.id.im_eye);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.PwdEditTextView);
         if (attributes != null) {
             int drawableLeft = attributes.getResourceId(R.styleable.PwdEditTextView_drawableLeft, Color.WHITE);
-            mImLeft.setImageDrawable(context.getDrawable(drawableLeft));
+            //mImLeft.setImageDrawable(context.getDrawable(drawableLeft));
 
             String hint = attributes.getString(R.styleable.PwdEditTextView_hint);
             mEtData.setHint(hint);

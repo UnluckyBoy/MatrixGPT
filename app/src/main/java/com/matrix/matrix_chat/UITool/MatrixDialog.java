@@ -75,7 +75,7 @@ public class MatrixDialog extends Dialog {
         TextView contentView, dividerView;
         // 定义根部局控件
         LinearLayout mView = new LinearLayout(context);
-        mView.setBackgroundResource(R.drawable.rectangle_shape);
+        mView.setBackgroundResource(R.drawable.rectangle_teal_a100);
         mView.setOrientation(LinearLayout.VERTICAL);
         // 向根部局文件中添加子控件
         for (int i = 0; i < names.length; i++) {
