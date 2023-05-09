@@ -8,6 +8,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * @Author Create By Administrator
  * @Date 2023/4/18 0018 13:23
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     ArrayList<Activity> activities = new ArrayList<Activity>();
     /**屏幕宽*/

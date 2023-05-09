@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +34,7 @@ import com.matrix.matrix_chat.UI.Fragment.UserFragment;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UtilTool.Pwd3DESUtil;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -221,10 +224,15 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             //退出程序
-            //logoutTrans();
+            logoutTrans();
             this.finish();
-            System.exit(0);
+            //System.exit(0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void logoutTrans(){
@@ -245,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                 if(response.body()!=null){
                     if(response.body().getResult()=="success"){
                         Toast.makeText(TGA,"登出",Toast.LENGTH_SHORT).show();
+                        getSystemExit();
                     }else if(response.body().getResult()=="unlogin"){
                         Toast.makeText(TGA,"尚未登录",Toast.LENGTH_SHORT).show();
                     }
@@ -252,11 +261,34 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(TGA,"登出异常",Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<LogoutBean> call, Throwable t) {
                 Toast.makeText(TGA,TGA.getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getSystemExit(){
+        System.exit(0);
+    }
+
+    /**
+     * 判断app是否处于前台
+     * @param context
+     * @return
+     */
+    public static boolean isAppForeground(Context context){
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Service.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcessInfoList = activityManager.getRunningAppProcesses();
+        if (runningAppProcessInfoList==null){
+            return false;
+        }
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcessInfoList) {
+            if (processInfo.processName.equals(context.getPackageName()) &&
+                    processInfo.importance==ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND){
+                return true;
+            }
+        }
+        return false;
     }
 }
