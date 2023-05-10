@@ -172,6 +172,7 @@ public class ShowFullScreeAdvClass {
             Log.d(mContext.toString(), "Callback --> FullVideoAd close");
             /*关闭*/
             //MatrixToast.show(mContextRef.get(), "FullVideoAd close");
+            onVideoComplete();
         }
 
         @Override

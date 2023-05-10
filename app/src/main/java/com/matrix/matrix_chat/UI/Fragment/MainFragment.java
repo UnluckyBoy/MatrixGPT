@@ -635,28 +635,11 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Toast.makeText(view.getContext(),"重新启动_MainFragment",Toast.LENGTH_SHORT).show();
-//        queryUserApi queryUserApi=new queryUserApi();
-//        queryUserApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_UserInfo));
-//        queryUserService queryUserService=queryUserApi.getService();
-//        Call<UserBean> call_queryUser=queryUserService.getState(intent_MainFragment.getStringExtra("U_account"));
-//        call_queryUser.enqueue(new Callback<UserBean>() {
-//            @Override
-//            public void onResponse(Call<UserBean> call, Response<UserBean> response) {
-//                if(response.body()!=null){
-//                    if(response.body().getAccount()!=null){
-//                        DataSharaPreferenceManager.setExtra(response,intent_MainFragment);
-//                    }else{
-//                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-//                    }
-//                }else{
-//                    Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//            @Override
-//            public void onFailure(Call<UserBean> call, Throwable t) {
-//                Toast.makeText(view.getContext(),view.getContext().getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        SetShowViewNull();
     }
 }
