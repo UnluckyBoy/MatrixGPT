@@ -146,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
-                android:text="次数:"
+                android:text="权限:"
                 android:textStyle="bold"
                 android:layout_below="@+id/view_phone"
                 android:layout_toRightOf="@+id/info_gender"

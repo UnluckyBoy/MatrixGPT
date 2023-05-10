@@ -3,7 +3,9 @@ package com.matrix.matrix_chat.UI.Activity;
 import static android.text.Html.FROM_HTML_MODE_COMPACT;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -20,6 +22,8 @@ import com.matrix.matrix_chat.Network.Service.Back.LoginService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UITool.PwdEditView;
+import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
+import com.matrix.matrix_chat.UtilTool.Pwd3DESUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +37,8 @@ import retrofit2.Response;
 public class LoginActivity extends Activity {
     private final LoginActivity TGA=LoginActivity.this;
 
+    private PwdEditView Uid,Upwd;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +48,16 @@ public class LoginActivity extends Activity {
     }
 
     private void InitRun() {
+        SharedPreferences sharedPreferences =
+                LoginActivity.this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        String account = sharedPreferences.getString("account", null);
+        String password = sharedPreferences.getString("password", null);
+
+        Uid=findViewById(R.id.uId_edit);
+        Upwd=findViewById(R.id.uPwd_edit);
+        Uid.setText(account);
+        Upwd.setText(Pwd3DESUtil.decode3Des(this.getResources().getString(R.string.encryptionkey),password));
+
         Button login,cancel,register;
         ImageButton biliBtn,qqBtn,wechatBtn;
         TextView mOther_login_title;
@@ -69,6 +85,7 @@ public class LoginActivity extends Activity {
             switch (v.getId()){
                 case R.id.login:
                     LoginTrans();
+                    //testlogin();
                     break;
                 case R.id.cancel:
                     CancelLoginDialog();
@@ -93,54 +110,44 @@ public class LoginActivity extends Activity {
 
     /**登录**/
     private void LoginTrans(){
-        PwdEditView Uid=findViewById(R.id.uId_edit);
-        PwdEditView Upwd=findViewById(R.id.uPwd_edit);
+
         final String name=Uid.getText().toString();
         final String pwd=Upwd.getText().toString();
-//        if(name==null||pwd==null||name==""||pwd==""){
-//            Toast.makeText(this,"请输入账户信息",Toast.LENGTH_SHORT).show();
-//        }
-        LoginApi loginApi=new LoginApi();
-        loginApi.SetUrl(TGA.getString(R.string.BackUrl)+TGA.getString(R.string.Url_UserInfo));
-        LoginService loginService=loginApi.getService();
-        Call<LoginBean> call_login=loginService.getState(name,pwd);
-        call_login.enqueue(new Callback<LoginBean>() {
-            @Override
-            public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                if(response.body()!=null){
-                    if(response.body().getResult().equals("success")){
-                        Intent intent=new Intent(TGA,MainActivity.class);
-//                        intent.putExtra("U_id",response.body().getId());
-//                        intent.putExtra("U_head",response.body().getHead());
-//                        intent.putExtra("U_name",response.body().getName());
-//                        intent.putExtra("U_pwd",response.body().getPassword());
-//                        intent.putExtra("U_sex",response.body().getSex());
-//                        intent.putExtra("U_account",response.body().getAccount());
-//                        intent.putExtra("U_phone",response.body().getPhone());
-//                        intent.putExtra("U_email",response.body().getEmail());
-//                        intent.putExtra("U_gptNum",response.body().getGptNum());
-//                        intent.putExtra("U_level",response.body().getLevel());
+        if(name==null||pwd==null||name==""||pwd==""){
+            Toast.makeText(this,"请输入账号信息",Toast.LENGTH_SHORT).show();
+        }else{
+            LoginApi loginApi=new LoginApi();
+            loginApi.SetUrl(TGA.getString(R.string.BackUrl)+TGA.getString(R.string.Url_UserInfo));
+            LoginService loginService=loginApi.getService();
+            Call<LoginBean> call_login=loginService.getState(name,pwd);
+            call_login.enqueue(new Callback<LoginBean>() {
+                @Override
+                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                    if(response.body()!=null){
+                        if(response.body().getResult().equals("success")){
+                            DataSharaPreferenceManager.setSharaPreferenceData(LoginActivity.this,response);
 
-                        setExtra(response,intent);
-
-                        startActivity(intent);
-                        finish();
-                    }else if(response.body().getResult().equals("login_lock")){
-                        //MatrixDialogManager.ShowSystemDialog(TGA);
-                        Toast.makeText(TGA, "账号已登录,请检查是否密码泄露",Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(TGA,MainActivity.class);
+                            setExtra(response,intent);
+                            startActivity(intent);
+                            finish();
+                        }else if(response.body().getResult().equals("login_lock")){
+                            //MatrixDialogManager.ShowSystemDialog(TGA);
+                            Toast.makeText(TGA, "账号已登录,请检查是否密码泄露",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(TGA, TGA.getString(R.string.userInfoError),Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(TGA, TGA.getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
                     }
-                    else{
-                        Toast.makeText(TGA, TGA.getString(R.string.userInfoError),Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    Toast.makeText(TGA, TGA.getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
                 }
-            }
-            @Override
-            public void onFailure(Call<LoginBean> call, Throwable t) {
-                Toast.makeText(TGA, TGA.getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<LoginBean> call, Throwable t) {
+                    Toast.makeText(TGA, TGA.getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
@@ -172,4 +179,25 @@ public class LoginActivity extends Activity {
         intent.putExtra("U_gptNum",response.body().getGptNum());
         intent.putExtra("U_level",response.body().getLevel());
     }
+
+//    /**
+//     * 将数据储存
+//     * @param response
+//     */
+//    public void setSharaPreferenceData(Response<LoginBean> response){
+//        SharedPreferences sharedPreferences =
+//                LoginActivity.this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString("account", response.body().getAccount());
+//        editor.putString("password", response.body().getPassword());
+//        editor.commit();
+//    }
+//
+//    public void getSharaPreferenceData(){
+//        SharedPreferences sharedPreferences =
+//                LoginActivity.this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
+//        String account = sharedPreferences.getString("account", null);
+//        String password = sharedPreferences.getString("password", null);
+//        Toast.makeText(this,"记录的账号信息:"+account+"___"+password,Toast.LENGTH_SHORT).show();
+//    }
 }

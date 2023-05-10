@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">趣事</string>
-    <string name="BackUrl">https://34e8d953.r2.cpolar.cn</string>
+    <string name="BackUrl">https://6c565c1c.r2.cpolar.cn</string>
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="mainIcon">主页</string>
@@ -24,8 +24,8 @@
     <string name="EditIsNull">输入内容为空!请检查!!!</string>
     <string name="NullPermission">已没有使用次数,请知悉!!!</string>
     <string name="ShowAdvertise">已没有使用权限,\n是否观看广告获取次数?</string>
-
     <string name="user_info">账户信息</string>
     <string name="help">帮助</string>
     <string name="about">应用相关</string>
+    <string name="encryptionkey">EncryptionKey_By-WuMing</string>
 </resources>

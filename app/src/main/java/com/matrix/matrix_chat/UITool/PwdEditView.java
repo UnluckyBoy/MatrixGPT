@@ -70,4 +70,8 @@ public class PwdEditView extends LinearLayout {
     public Editable getText() {
         return mEtData.getText();
     }
+
+    public void setText(String text){
+        mEtData.setText(text);
+    }
 }
