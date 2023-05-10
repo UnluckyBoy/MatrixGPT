@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //隐藏上个Fragment
         transaction.hide(mFragmentContainer[lastfragment]);
+        //transaction.replace();
         if (mFragmentContainer[index].isAdded() == false) {
             transaction.add(R.id.fragment_container, mFragmentContainer[index]);
         }

@@ -1,8 +1,10 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,24 +15,43 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.matrix.matrix_chat.Network.API.Back.upHeadApi;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.IsTrueBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
+import com.matrix.matrix_chat.Network.Service.Back.upHeadService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.CircleImageView;
+import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserFragment extends Fragment {
     private Intent intent_UserFragment;
     private View view;
     private Button mInfoBtn;
-    private CircleImageView imageButton;
+    private String args=null;
+    private CircleImageView imageButton=null;
+    private static int openPickCode=99;
 
     public static UserFragment newInstance(String param1) {
         UserFragment fragment = new UserFragment();
@@ -58,7 +79,7 @@ public class UserFragment extends Fragment {
         intent_UserFragment=getActivity().getIntent();
         view = inflater.inflate(R.layout.fragment_user, container, false);
         Bundle bundle = getArguments();
-        String args = bundle.getString("args");
+        args = bundle.getString("args");
 
         InitData(view);
         return view;
@@ -88,10 +109,64 @@ public class UserFragment extends Fragment {
 
         mInfoBtn=view.findViewById(R.id.info_btn);
         mInfoBtn.setOnClickListener(new UserFraClickListener());
+        if(args!=null||args!=""||!(args.equals(null))||!(args.equals(""))){
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivityForResult(BGAPhotoPickerActivity.newIntent(getActivity(), null,
+                            1, null, false), openPickCode);
+
+//                    Intent intent = new  Intent(Intent.ACTION_PICK);
+//                    intent.setType("image/*");//指定获取的是图片
+//                    startActivityForResult(intent, 55);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == getActivity().RESULT_OK && requestCode == openPickCode) {
+            final String localPicturePath = BGAPhotoPickerActivity.getSelectedImages(data).get(0);
+            upHead(localPicturePath);
+        }
+    }
+
+    private void upHead(String headPath) {
+        //Toast.makeText(view.getContext(),"图片地址"+headPath,Toast.LENGTH_SHORT).show();
+        upHeadApi mUpHeadApi=new upHeadApi();
+        mUpHeadApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_UserInfo));
+        upHeadService upHeadService=mUpHeadApi.getService();
+        File file=new File(headPath);
+        RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part body=MultipartBody.Part.createFormData("file",file.getName(),requestBody);
+        Call<LoginBean> call=upHeadService.getState(args,body);
+        call.enqueue(new Callback<LoginBean>() {
+            @Override
+            public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                if(response.body()!=null){
+                    if(response.body().getResult().equals("success")){
+                        Toast.makeText(view.getContext(),"头像更新成功",Toast.LENGTH_SHORT).show();
+                        //SetHead(response.body().getHead());
+                        DataSharaPreferenceManager.setExtra(response,intent_UserFragment);
+                    }else{
+                        SetHead(intent_UserFragment.getStringExtra("U_head"));
+                    }
+                }else{
+                    SetHead(intent_UserFragment.getStringExtra("U_head"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginBean> call, Throwable t) {
+                Toast.makeText(view.getContext(),view.getContext().getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void SetHead(String headUrl) {
-        String path=getResources().getText(R.string.BackUrl)+"/getImage"+headUrl;
+        String path=getResources().getText(R.string.BackUrl)+"/getImage/"+headUrl;
         Picasso.get()
                 .load(path)
                 .error(R.drawable.no_user)
@@ -135,6 +210,7 @@ public class UserFragment extends Fragment {
         //popupWindow.showAsDropDown(view,100,100, Gravity.BOTTOM);//显示在view控件的正左下方
 
         TextView accountText,nameText,emailText,phoneText,genderText,gpt_numText;
+        Button getNumBtn=popUpView.findViewById(R.id.top_up_btn);
         accountText=popUpView.findViewById(R.id.info_account);
         nameText=popUpView.findViewById(R.id.info_name);
         emailText=popUpView.findViewById(R.id.info_email);
@@ -148,5 +224,21 @@ public class UserFragment extends Fragment {
         phoneText.setText(intent_UserFragment.getStringExtra("U_phone"));
         genderText.setText(intent_UserFragment.getStringExtra("U_sex"));
         gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra("U_gptNum",0)));
+
+        getNumBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"充值功能未实装",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            Toast.makeText(getContext(),"UserFragment",Toast.LENGTH_SHORT).show();
+            SetHead(intent_UserFragment.getStringExtra("U_head"));
+        }
     }
 }
