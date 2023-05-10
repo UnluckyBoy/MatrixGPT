@@ -37,6 +37,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="1782328267@qq.com"
                 android:textIsSelectable="true"/>
 
@@ -58,6 +59,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="兰陵笑笑生"/>
 
             <TextView
@@ -78,6 +80,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="1782328267@qq.com"/>
 
             <TextView
@@ -98,6 +101,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="15792589527"/>
 
             <TextView
@@ -118,6 +122,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="男"/>
 
 <!--            <TextView-->
@@ -160,6 +165,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="10dp"
                 android:textSize="18dp"
+                android:background="@drawable/rectangle_teal_a100"
                 android:text="99999"/>
         </RelativeLayout>
 

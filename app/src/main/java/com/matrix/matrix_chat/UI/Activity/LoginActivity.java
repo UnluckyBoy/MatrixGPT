@@ -52,7 +52,6 @@ public class LoginActivity extends Activity {
                 LoginActivity.this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
         String account = sharedPreferences.getString("account", null);
         String password = sharedPreferences.getString("password", null);
-
         Uid=findViewById(R.id.uId_edit);
         Upwd=findViewById(R.id.uPwd_edit);
         Uid.setText(account);
@@ -125,6 +124,7 @@ public class LoginActivity extends Activity {
                 public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
                     if(response.body()!=null){
                         if(response.body().getResult().equals("success")){
+                            /**使用SharaPreference记录数据**/
                             DataSharaPreferenceManager.setSharaPreferenceData(LoginActivity.this,response);
 
                             Intent intent=new Intent(TGA,MainActivity.class);

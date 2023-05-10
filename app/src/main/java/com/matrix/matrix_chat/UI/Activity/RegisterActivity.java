@@ -1,7 +1,9 @@
 package com.matrix.matrix_chat.UI.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import com.matrix.matrix_chat.Network.Service.Back.RegisterService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UITool.PwdEditView;
+import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
+import com.matrix.matrix_chat.UtilTool.Pwd3DESUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,10 +63,12 @@ public class RegisterActivity extends Activity {
     }
 
     private void RegisterTrans(){
+
         PwdEditView name = (PwdEditView) findViewById(R.id.use_register);
         PwdEditView account = (PwdEditView) findViewById(R.id.account_register);
         PwdEditView pwd = (PwdEditView) findViewById(R.id.pwd_register);
         PwdEditView confirmPwd = (PwdEditView) findViewById(R.id.pwd_confirm);
+
         final String user_name = name.getText().toString();
         final String user_account = account.getText().toString();
         final String user_pwd = pwd.getText().toString();
@@ -82,17 +88,11 @@ public class RegisterActivity extends Activity {
                         if (response.body().getResult().equals("success")) {
                             Toast.makeText(RegisterActivity.this,
                                     "恭喜注册成功！", Toast.LENGTH_SHORT).show();
+
+                            DataSharaPreferenceManager.setSharaPreferenceData(RegisterActivity.this,response);
+
                             Intent main_intent = new Intent(TGA, MainActivity.class);
-                            main_intent.putExtra("U_id",response.body().getId());
-                            main_intent.putExtra("U_head",response.body().getHead());
-                            main_intent.putExtra("U_name",response.body().getName());
-                            main_intent.putExtra("U_password",response.body().getPassword());
-                            main_intent.putExtra("U_sex",response.body().getSex());
-                            main_intent.putExtra("U_account",response.body().getAccount());
-                            main_intent.putExtra("U_phone",response.body().getPhone());
-                            main_intent.putExtra("U_email",response.body().getEmail());
-                            main_intent.putExtra("U_gptNum",response.body().getGptNum());
-                            main_intent.putExtra("U_level",response.body().getLevel());
+                            setExtra(main_intent,response);
                             startActivity(main_intent);
                             finish();
                         } else {
@@ -123,5 +123,18 @@ public class RegisterActivity extends Activity {
                 TGA.getString(R.string.Confirm), TGA.getString(R.string.Cancel)};
 
         new MatrixDialogManager().ShowMatrixDialog(names,TGA,MainActivity.class);
+    }
+
+    private void setExtra(Intent intent,Response<LoginBean> response){
+        intent.putExtra("U_id",response.body().getId());
+        intent.putExtra("U_head",response.body().getHead());
+        intent.putExtra("U_name",response.body().getName());
+        intent.putExtra("U_password",response.body().getPassword());
+        intent.putExtra("U_sex",response.body().getSex());
+        intent.putExtra("U_account",response.body().getAccount());
+        intent.putExtra("U_phone",response.body().getPhone());
+        intent.putExtra("U_email",response.body().getEmail());
+        intent.putExtra("U_gptNum",response.body().getGptNum());
+        intent.putExtra("U_level",response.body().getLevel());
     }
 }

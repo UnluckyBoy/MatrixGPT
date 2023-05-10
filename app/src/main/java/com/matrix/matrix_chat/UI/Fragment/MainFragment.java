@@ -30,11 +30,16 @@ import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.matrix.matrix_chat.Network.API.Back.BackChatApi;
 import com.matrix.matrix_chat.Network.API.Back.BackCreateImageApi;
 import com.matrix.matrix_chat.Network.API.Back.DoGptTransApi;
+import com.matrix.matrix_chat.Network.API.Back.LoginApi;
+import com.matrix.matrix_chat.Network.API.Back.queryUserApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.BackChatBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
 import com.matrix.matrix_chat.Network.Service.Back.BackChatService;
 import com.matrix.matrix_chat.Network.Service.Back.BackCreateImageService;
 import com.matrix.matrix_chat.Network.Service.Back.DoGptTransService;
+import com.matrix.matrix_chat.Network.Service.Back.LoginService;
+import com.matrix.matrix_chat.Network.Service.Back.queryUserService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.MatrixDialog;
@@ -42,6 +47,7 @@ import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.Dialog.MatrixDislikeDialog;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.MatrixToast;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.config.TTAdManagerHolder;
+import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
 import com.matrix.matrix_chat.UtilTool.ImageTool;
 import com.matrix.matrix_chat.UtilTool.TimeTool;
 
@@ -170,18 +176,6 @@ public class MainFragment extends Fragment {
             //游客
             /*提示登录*/
             MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(), LoginActivity.class);
-
-            //ShowAdvertise(getActivity());
-
-            //VisitorHandBackChat(content,openAi_type);
-
-//            if(visitor_Num<=0){
-//                //Toast.makeText(view.getContext(),"次数使用完",Toast.LENGTH_SHORT).show();
-//                ShowAdvertise(view.getContext());
-//            }else{
-//                //visitor_Num--;//测试
-//                VisitorHandBackChat(content,openAi_type);
-//            }
         }else{
             //用户登录
             int mLevel=intent_MainFragment.getIntExtra("U_level",0);
@@ -190,79 +184,15 @@ public class MainFragment extends Fragment {
         }
     }
 
-    /**游客调用后台API获取Chat数据**/
-    private void VisitorHandBackChat(String content,String openAi_type){
-        SetShowViewLoad();
-        switch (openAi_type){
-            case "chat":
-                BackChatApi mBackChatApi=new BackChatApi();
-                mBackChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                        +view.getContext().getString(R.string.Url_Gpt));
-                BackChatService mBackChatService=mBackChatApi.getService();
-                Call<BackChatBean> callBackChat=mBackChatService.getState(content);
-                callBackChat.enqueue(new Callback<BackChatBean>() {
-                    @Override
-                    public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                        if(response.body()==null){
-                            //Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
-                            mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                        }else {
-                            if(response.body().getResult().equals("success")){
-                                mShow_View.setText(response.body().getContent());
-                            }else{
-                                //Toast.makeText(view.getContext(),"意料之外的错误!!!",Toast.LENGTH_SHORT).show();
-                                mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                            }
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<BackChatBean> call, Throwable t) {
-                        SetFailure_ShowView();
-                        //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                break;
-            case "createImage":
-                //Toast.makeText(view.getContext(),"绘画功能暂未实现",Toast.LENGTH_SHORT).show();
-                BackCreateImageApi mBackCreateImageApi=new BackCreateImageApi();
-                mBackCreateImageApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                        +view.getContext().getString(R.string.Url_Gpt));
-                BackCreateImageService mBackCreateImageService=mBackCreateImageApi.getService();
-                Call<BackChatBean> callCreateImg=mBackCreateImageService.getState(content);
-                callCreateImg.enqueue(new Callback<BackChatBean>() {
-                    @Override
-                    public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                        if(!(response.body().equals(null))){
-                            if(response.body().getResult().equals("success")){
-                                /** 自定义工具类将url资源显示**/
-                                ImageTool.SetImageView(mImage_View,response.body().getContent());
-                                SetShowViewNull();
-                            }else {
-                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                            }
-                        }else{
-                            Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<BackChatBean> call, Throwable t) {
-                        SetFailure_ShowView();
-                    }
-                });
-                break;
-        }
-    }
-
     /**用户调用后台API获取Chat数据**/
     private void UserHandBackChat(String content,String openAi_type,int level,int gptnum,String account){
-        SetShowViewLoad();
+        //SetShowViewLoad();
         switch (openAi_type){
             case "chat":
                 switch (level){
                     case 9:
                         //Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
-                        //SetShowViewLoad();
+                        SetShowViewLoad();
                         BackChatApi mAdimnChatApi=new BackChatApi();
                         mAdimnChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                 +view.getContext().getString(R.string.Url_Gpt));
@@ -292,7 +222,7 @@ public class MainFragment extends Fragment {
                         /**普通用户使用Chat**/
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         if(gptnum>0){
-                            //SetShowViewLoad();
+                            SetShowViewLoad();
                             BackChatApi mUserChatApi=new BackChatApi();
                             mUserChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                     +view.getContext().getString(R.string.Url_Gpt));
@@ -323,7 +253,7 @@ public class MainFragment extends Fragment {
                                                                 break;
                                                             case "NullPermission":
                                                                 //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(getActivity());
+                                                                ShowAdvertise(getActivity(),account);
                                                                 break;
                                                             case "error":
                                                                 Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
@@ -350,7 +280,7 @@ public class MainFragment extends Fragment {
                             });
                         }else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(getActivity());
+                            ShowAdvertise(getActivity(),account);
                         }
                         break;
                 }
@@ -359,7 +289,7 @@ public class MainFragment extends Fragment {
                 switch (level){
                     case 9:
                         /**管理员**/
-                        //SetShowViewLoad();
+                        SetShowViewLoad();
                         BackCreateImageApi mBackCreateImageApi=new BackCreateImageApi();
                         mBackCreateImageApi.SetUrl(view.getContext().getString(R.string.BackUrl)
                                 +view.getContext().getString(R.string.Url_Gpt));
@@ -391,7 +321,7 @@ public class MainFragment extends Fragment {
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         /**普通用户使用createImage**/
                         if(gptnum>0){
-                            //SetShowViewLoad();
+                            SetShowViewLoad();
                             BackCreateImageApi mUserBackCreateImage=new BackCreateImageApi();
                             mUserBackCreateImage.SetUrl(view.getContext().getString(R.string.BackUrl)
                                     +view.getContext().getString(R.string.Url_Gpt));
@@ -423,7 +353,7 @@ public class MainFragment extends Fragment {
                                                                 break;
                                                             case "NullPermission":
                                                                 //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(getActivity());
+                                                                ShowAdvertise(getActivity(),account);
                                                                 break;
                                                             case "error":
                                                                 Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
@@ -452,7 +382,7 @@ public class MainFragment extends Fragment {
                             });
                         }else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(getActivity());
+                            ShowAdvertise(getActivity(),account);
                         }
 
                         break;
@@ -516,12 +446,12 @@ public class MainFragment extends Fragment {
     }
 
     /**显示广告弹窗**/
-    public void ShowAdvertise(final Activity activity){
+    public void ShowAdvertise(final Activity activity,String account){
         String[] names = { activity.getString(R.string.SystemTitle),
                 activity.getString(R.string.ShowAdvertise),
                 activity.getString(R.string.Confirm),
                 activity.getString(R.string.Cancel) };
-        MatrixDialogManager.showVideoView(names,getActivity());
+        MatrixDialogManager.showVideoView(names,getActivity(),account,intent_MainFragment);
     }
 
 
@@ -616,28 +546,28 @@ public class MainFragment extends Fragment {
             public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
                 if (!mHasShowDownloadActive) {
                     mHasShowDownloadActive = true;
-                    MatrixToast.show(view.getContext(), "下载中，点击暂停", Toast.LENGTH_LONG);
+                    //MatrixToast.show(view.getContext(), "下载中，点击暂停", Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
-                MatrixToast.show(view.getContext(), "下载暂停，点击继续", Toast.LENGTH_LONG);
+                //MatrixToast.show(view.getContext(), "下载暂停，点击继续", Toast.LENGTH_LONG);
             }
 
             @Override
             public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
-                MatrixToast.show(view.getContext(), "下载失败，点击重新下载", Toast.LENGTH_LONG);
+                //MatrixToast.show(view.getContext(), "下载失败，点击重新下载", Toast.LENGTH_LONG);
             }
 
             @Override
             public void onInstalled(String fileName, String appName) {
-                MatrixToast.show(view.getContext(), "安装完成，点击图片打开", Toast.LENGTH_LONG);
+                //MatrixToast.show(view.getContext(), "安装完成，点击图片打开", Toast.LENGTH_LONG);
             }
 
             @Override
             public void onDownloadFinished(long totalBytes, String fileName, String appName) {
-                MatrixToast.show(view.getContext(), "点击安装", Toast.LENGTH_LONG);
+                //MatrixToast.show(view.getContext(), "点击安装", Toast.LENGTH_LONG);
             }
         });
     }
@@ -697,5 +627,36 @@ public class MainFragment extends Fragment {
             mTTAd.destroy();
         }
         getActivity().finish();
+    }
+
+    /**
+     * 每次重启MainFragment
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(view.getContext(),"重新启动_MainFragment",Toast.LENGTH_SHORT).show();
+//        queryUserApi queryUserApi=new queryUserApi();
+//        queryUserApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_UserInfo));
+//        queryUserService queryUserService=queryUserApi.getService();
+//        Call<UserBean> call_queryUser=queryUserService.getState(intent_MainFragment.getStringExtra("U_account"));
+//        call_queryUser.enqueue(new Callback<UserBean>() {
+//            @Override
+//            public void onResponse(Call<UserBean> call, Response<UserBean> response) {
+//                if(response.body()!=null){
+//                    if(response.body().getAccount()!=null){
+//                        DataSharaPreferenceManager.setExtra(response,intent_MainFragment);
+//                    }else{
+//                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+//                    }
+//                }else{
+//                    Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<UserBean> call, Throwable t) {
+//                Toast.makeText(view.getContext(),view.getContext().getString(R.string.NetworkFailure),Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

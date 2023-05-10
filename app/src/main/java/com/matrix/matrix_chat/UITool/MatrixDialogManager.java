@@ -68,7 +68,7 @@ public class MatrixDialogManager {
     }
 
     /**显示视频窗口**/
-    public static void showVideoView(String[] names, Activity activity){
+    public static void showVideoView(String[] names, Activity activity,String account,Intent intent){
         MatrixDialog mDialog = new MatrixDialog(activity, names, true);
         mDialog.setOnClickListener2LastTwoItems(new MatrixDialog.OnClickListener2LastTwoItem() {
             /**取消按钮**/
@@ -79,7 +79,7 @@ public class MatrixDialogManager {
             /**确定按钮**/
             @Override
             public void onClickListener2SecondLastItem() {
-                ShowFullScreeAdvClass.loadAdv(activity);
+                ShowFullScreeAdvClass.loadAdv(activity,account,intent);
                 mDialog.dismiss();
             }
         });

@@ -2,7 +2,9 @@ package com.matrix.matrix_chat.UtilTool.AdverUtil.View;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -11,9 +13,22 @@ import com.bytedance.sdk.openadsdk.TTAdManager;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
+import com.matrix.matrix_chat.Network.API.Back.LoginApi;
+import com.matrix.matrix_chat.Network.API.Back.upGptNumApi;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
+import com.matrix.matrix_chat.Network.Service.Back.LoginService;
+import com.matrix.matrix_chat.Network.Service.Back.upGptNumService;
+import com.matrix.matrix_chat.R;
+import com.matrix.matrix_chat.UI.Activity.LoginActivity;
+import com.matrix.matrix_chat.UtilTool.AdverUtil.MatrixToast;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.config.TTAdManagerHolder;
+import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
 
 import java.lang.ref.WeakReference;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @ClassName ShowFullScreeAdvClass
@@ -23,12 +38,12 @@ import java.lang.ref.WeakReference;
 public class ShowFullScreeAdvClass {
     private static TTAdNative mTTAdNative;
     private static AdLoadListener mAdLoadListener;
-//    private Activity activity;
-//
+    //private Activity activity;
+
     public ShowFullScreeAdvClass(){
     }
 
-    public static void loadAdv(Activity activity){
+    public static void loadAdv(Activity activity,String account,Intent intent){
         //step1:初始化sdk
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限
@@ -42,7 +57,7 @@ public class ShowFullScreeAdvClass {
                 .setAdLoadType(TTAdLoadType.LOAD) //本次广告用途:TTAdLoadType.LOAD实时;TTAdLoadType.PRELOAD预请求
                 .build();
         //step6:注册广告加载生命周期监听，请求广告
-        mAdLoadListener = new AdLoadListener(activity);
+        mAdLoadListener = new AdLoadListener(activity,account,intent);
         mTTAdNative.loadFullScreenVideoAd(adSlot, mAdLoadListener);
     }
 
@@ -52,11 +67,15 @@ public class ShowFullScreeAdvClass {
     private static class AdLoadListener implements TTAdNative.FullScreenVideoAdListener {
 
         private final Activity mActivity;
+        private final String current_account;
+        private final Intent current_intent;
 
         private TTFullScreenVideoAd mAd;
 
-        public AdLoadListener(Activity activity) {
+        public AdLoadListener(Activity activity,String account,Intent intent) {
             mActivity = activity;
+            current_account=account;
+            current_intent=intent;
         }
 
         @Override
@@ -93,7 +112,7 @@ public class ShowFullScreeAdvClass {
             }
             mAd = ad;
             //【必须】广告展示时的生命周期监听
-            mAd.setFullScreenVideoAdInteractionListener(new AdLifeListener(mActivity));
+            mAd.setFullScreenVideoAdInteractionListener(new AdLifeListener(mActivity,current_account,current_intent));
             //【可选】监听下载状态
             mAd.setDownloadListener(new DownloadStatusListener());
 
@@ -124,9 +143,13 @@ public class ShowFullScreeAdvClass {
     private static class AdLifeListener implements TTFullScreenVideoAd.FullScreenVideoAdInteractionListener {
         private final WeakReference<Context> mContextRef;
         private Context mContext;
-        public AdLifeListener(Context context) {
+        private String mAccount;
+        private Intent mIntent;
+        public AdLifeListener(Context context,String account,Intent intent) {
             mContextRef = new WeakReference<>(context);
             mContext=context;
+            mAccount=account;
+            mIntent=intent;
         }
 
         @Override
@@ -155,7 +178,32 @@ public class ShowFullScreeAdvClass {
         public void onVideoComplete() {
             Log.d(mContext.toString(), "Callback --> FullVideoAd complete");
 
+            /**完整关闭**/
             //MatrixToast.show(mContextRef.get(), "FullVideoAd complete");
+            upGptNumApi upGptNumApi=new upGptNumApi();
+            upGptNumApi.SetUrl(mContext.getString(R.string.BackUrl)+mContext.getString(R.string.Url_UserInfo));
+            upGptNumService upGptNumService=upGptNumApi.getService();
+            Call<LoginBean> call_upGptNum=upGptNumService.getState(mAccount);
+            call_upGptNum.enqueue(new Callback<LoginBean>() {
+                @Override
+                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
+                    if(response.body()!=null){
+                        if(response.body().getResult().equals("success")){
+                            Toast.makeText(mContext, "获取次数成功", Toast.LENGTH_SHORT).show();
+                            DataSharaPreferenceManager.setExtra(response,mIntent);
+                        }else{
+                            Toast.makeText(mContext, "获取次数失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(mContext,mContext.getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginBean> call, Throwable t) {
+                    Toast.makeText(mContext,mContext.getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         @Override
