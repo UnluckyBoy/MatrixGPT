@@ -13,3 +13,5 @@ https://628945ad.r5.cpolar.top/MatrixGPT/chat?content=xxxxxxx
 https://60fb829.r10.cpolar.top/UserInfo/fuzzyQuery/name?name=xxxxxx
 检测是否有GPT使用权限:
 https://4b301a04.r10.cpolar.top/UserInfo/doGptTrans?account=xxxxxxx
+查询所有:
+http://localhost:8080/article/get_all

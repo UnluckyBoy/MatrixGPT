@@ -25,7 +25,7 @@
             android:id="@+id/swipeRefreshLay"
             android:layout_marginTop="2dp"
             android:layout_width="match_parent"
-            android:layout_height="395dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/lay_back_teal">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -36,15 +36,15 @@
             </androidx.recyclerview.widget.RecyclerView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <Button
-            android:id="@+id/add_article"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dp"
-            android:layout_marginRight="6dp"
-            android:background="@drawable/btn_add_article"/>
+<!--        <Button-->
+<!--            android:id="@+id/add_article"-->
+<!--            android:layout_width="35dp"-->
+<!--            android:layout_height="35dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginBottom="6dp"-->
+<!--            android:layout_marginRight="6dp"-->
+<!--            android:background="@drawable/btn_add_article"/>-->
     </RelativeLayout>
 
 
