@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,8 @@ import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.CircleImageView;
 import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -48,7 +51,7 @@ import retrofit2.Response;
 public class UserFragment extends Fragment {
     private Intent intent_UserFragment;
     private View view;
-    private Button mInfoBtn;
+    private Button mInfoBtn,mEditInfoBtn;
     private String args=null;
     private CircleImageView imageButton=null;
     private static int openPickCode=99;
@@ -108,19 +111,18 @@ public class UserFragment extends Fragment {
         SetHead(intent_UserFragment.getStringExtra("U_head"));
 
         mInfoBtn=view.findViewById(R.id.info_btn);
-        mInfoBtn.setOnClickListener(new UserFraClickListener());
-        if(args!=null||args!=""||!(args.equals(null))||!(args.equals(""))){
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(BGAPhotoPickerActivity.newIntent(getActivity(), null,
-                            1, null, false), openPickCode);
-
-//                    Intent intent = new  Intent(Intent.ACTION_PICK);
-//                    intent.setType("image/*");//指定获取的是图片
-//                    startActivityForResult(intent, 55);
-                }
-            });
+        mEditInfoBtn=view.findViewById(R.id.btn_info_edit);
+        //mInfoBtn.setOnClickListener(new UserFraClickListener());
+        //imageButton.setOnClickListener(new UserFraClickListener());
+        //mEditInfoBtn.setOnClickListener(new UserFraClickListener());
+        if(args.equals(null)||args.equals("")||args==null||args==""){
+            Intent intent=new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }else{
+            mInfoBtn.setOnClickListener(new UserFraClickListener());
+            imageButton.setOnClickListener(new UserFraClickListener());
+            mEditInfoBtn.setOnClickListener(new UserFraClickListener());
         }
     }
 
@@ -147,9 +149,10 @@ public class UserFragment extends Fragment {
             public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
                 if(response.body()!=null){
                     if(response.body().getResult().equals("success")){
-                        Toast.makeText(view.getContext(),"头像更新成功",Toast.LENGTH_SHORT).show();
-                        //SetHead(response.body().getHead());
+                        SetHead(response.body().getHead());
+                        //freshData();
                         DataSharaPreferenceManager.setExtra(response,intent_UserFragment);
+                        Toast.makeText(view.getContext(),"头像更新成功",Toast.LENGTH_SHORT).show();
                     }else{
                         SetHead(intent_UserFragment.getStringExtra("U_head"));
                     }
@@ -169,26 +172,40 @@ public class UserFragment extends Fragment {
         String path=getResources().getText(R.string.BackUrl)+"/getImage/"+headUrl;
         Picasso.get()
                 .load(path)
+                .memoryPolicy(MemoryPolicy.NO_CACHE)//跳过缓存
+                .networkPolicy(NetworkPolicy.NO_CACHE)//跳过网络缓存
                 .error(R.drawable.no_user)
                 .into(imageButton);
     }
 
+    /**按钮响应逻辑**/
     private class UserFraClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.info_btn:
-                    String account=intent_UserFragment.getStringExtra("U_account");
-                    if(account.equals(null)||account.equals("")){
-                        Intent intent=new Intent(getActivity(), LoginActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }else{
-                        //Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
-                        popUpWindow(v);
-                    }
-                    //popUpWindow(v);
+//                    String account=intent_UserFragment.getStringExtra("U_account");
+//                    if(account.equals(null)||account.equals("")||account==null||account==""){
+//                        Intent intent=new Intent(getActivity(), LoginActivity.class);
+//                        startActivity(intent);
+//                        getActivity().finish();
+//                    }else{
+//                        //Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
+//                        popUpWindow(v);
+//                    }
+                    popUpWindow(v);
                 break;
+                case R.id.user_head:
+                    startActivityForResult(BGAPhotoPickerActivity.newIntent(getActivity(), null,
+                            1, null, false), openPickCode);
+
+                    //Intent intent = new  Intent(Intent.ACTION_PICK);
+                    //intent.setType("image/*");//指定获取的是图片
+                    //startActivityForResult(intent, 55);
+                    break;
+                case R.id.btn_info_edit:
+                    Toast.makeText(getContext(),"功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     }
@@ -228,17 +245,28 @@ public class UserFragment extends Fragment {
         getNumBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"充值功能未实装",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"充值功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**开启线程刷新数据**/
+    private void freshData(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SetHead(intent_UserFragment.getStringExtra("U_head"));
+            }
+        },1500);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if(!hidden){
-            Toast.makeText(getContext(),"UserFragment",Toast.LENGTH_SHORT).show();
-            SetHead(intent_UserFragment.getStringExtra("U_head"));
+            //Toast.makeText(getContext(),"UserFragment",Toast.LENGTH_SHORT).show();
+            //SetHead(intent_UserFragment.getStringExtra("U_head"));
+            //freshData();
         }
     }
 }
