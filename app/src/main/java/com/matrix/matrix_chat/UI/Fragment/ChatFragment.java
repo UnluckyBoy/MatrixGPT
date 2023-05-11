@@ -1,17 +1,24 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.matrix.matrix_chat.R;
 
 public class ChatFragment extends Fragment {
     private View view;
     private String args=null;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView mRecyclerView;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -41,14 +48,22 @@ public class ChatFragment extends Fragment {
             args = bundle.getString("args");
         }
 
-        InitView();
+        InitView(view);
         return view;
     }
 
-    private void InitView(){
-        testView();
+    private void InitView(View view){
+        bindDataView(view);
+        initRefresh(view);
+    }
 
+    private void bindDataView(View view){
+        mRecyclerView=view.findViewById(R.id.article_list_view);
+    }
 
+    private void initRefresh(View view){
+        mSwipeRefreshLayout=view.findViewById(R.id.swipeRefreshLay);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefresh());
     }
 
     @Override
@@ -61,7 +76,16 @@ public class ChatFragment extends Fragment {
         super.onDestroy();
     }
 
-    /**测试**/
-    private void testView(){
+    private class SwipeRefresh implements SwipeRefreshLayout.OnRefreshListener {
+        @Override
+        public void onRefresh() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(view.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
+                }
+            },1500);
+        }
     }
 }

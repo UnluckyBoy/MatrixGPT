@@ -4,7 +4,7 @@
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="mainIcon">主页</string>
-    <string name="chatIcon">论坛</string>
+    <string name="chatIcon">趣闻</string>
     <string name="userIcon">我的</string>
     <string name="NetworkFailure">404!网络错误,请检查当前网络!</string>
     <string name="ResponseBodyNull">403!意料之外的错误,稍后技术人员将进行排查!!!</string>
