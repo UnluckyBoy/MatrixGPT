@@ -29,4 +29,16 @@
     <string name="help">帮助</string>
     <string name="about">应用相关</string>
     <string name="encryptionkey">EncryptionKey_By-WuMing</string>
+
+    <!--文字定义-->
+    <string name="mId">id</string>
+    <string name="mTitle">title</string>
+    <string name="mCover">cover</string>
+    <string name="mDe">description</string>
+    <string name="mContent">content</string>
+    <string name="mAuthor">author</string>
+    <string name="mHot">hot</string>
+    <string name="mType">type</string>
+    <string name="mFileType">fileType</string>
+    <style name="mCreateTime">createTime</style>
 </resources>

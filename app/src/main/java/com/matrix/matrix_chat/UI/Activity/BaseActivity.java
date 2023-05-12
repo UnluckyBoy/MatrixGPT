@@ -235,4 +235,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onDestroy();
         ActivityUtil.getInstance().removeActivity(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

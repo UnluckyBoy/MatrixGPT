@@ -28,6 +28,7 @@ public class ArticlesBean {
         private int mHot;
         private String mType;
         private int mFiletype;
+        private String mCreateTime;
 
         public int getmId() {
             return mId;
@@ -101,6 +102,14 @@ public class ArticlesBean {
             this.mFiletype = mFiletype;
         }
 
+        public String getmCreateTime() {
+            return mCreateTime;
+        }
+
+        public void setmCreateTime(String mCreateTime) {
+            this.mCreateTime = mCreateTime;
+        }
+
         @Override
         public String toString() {
             return "ArticleBean{" +
@@ -113,6 +122,7 @@ public class ArticlesBean {
                     ", mHot=" + mHot +
                     ", mType='" + mType + '\'' +
                     ", mFiletype=" + mFiletype +
+                    ", mCreateTime='" + mCreateTime + '\'' +
                     '}';
         }
     }

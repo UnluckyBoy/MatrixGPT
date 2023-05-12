@@ -51,6 +51,7 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
             holder.article_writer.setText(articlesBeanList.get(position).getmAuthor());
             holder.article_type.setText(articlesBeanList.get(position).getmType());
             holder.article_des.setText(articlesBeanList.get(position).getmDescription());
+            holder.article_time.setText(articlesBeanList.get(position).getmCreateTime());
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +89,7 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView article_image;
-        private TextView article_hot,article_title,article_writer,article_type,article_des;
+        private TextView article_hot,article_title,article_writer,article_type,article_des,article_time;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +99,7 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
             article_writer=itemView.findViewById(R.id.article_writer);
             article_type=itemView.findViewById(R.id.article_type);
             article_des=itemView.findViewById(R.id.article_des);
+            article_time=itemView.findViewById(R.id.article_time);
         }
     }
 

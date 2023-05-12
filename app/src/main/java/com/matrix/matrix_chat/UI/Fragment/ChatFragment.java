@@ -108,10 +108,12 @@ public class ChatFragment extends Fragment {
         //Toast.makeText(view.getContext(),"获取的list:"+articles.get(0).toString(),Toast.LENGTH_SHORT).show();
         mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
 
+        /*
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
         AllArticlesAdapter articlesAdapter=new AllArticlesAdapter(getActivity(),articles);
         mRecyclerView.setAdapter(articlesAdapter);
+        */
 
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
@@ -125,8 +127,9 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         //Toast.makeText(view.getContext(),"点击了"+position,Toast.LENGTH_SHORT).show();
-                        Intent read=new Intent(getActivity(), ReadActivity.class);
-                        startActivity(read);
+                        Intent readIntent=new Intent(getActivity(), ReadActivity.class);
+                        setExtra(readIntent,articles,position);
+                        startActivity(readIntent);
 //                        if(args==null){
 //
 //                        }else{
@@ -171,5 +174,11 @@ public class ChatFragment extends Fragment {
                 }
             },1500);
         }
+    }
+
+    private void setExtra(Intent intent,List<ArticlesBean.ArticleBean> list,int index){
+        intent.putExtra(view.getContext().getString(R.string.mTitle),list.get(index).getmTitle());
+        intent.putExtra(view.getContext().getString(R.string.mAuthor),list.get(index).getmAuthor());
+        intent.putExtra(view.getContext().getString(R.string.mContent),list.get(index).getmContent());
     }
 }

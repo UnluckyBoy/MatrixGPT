@@ -39,6 +39,7 @@ public class DataSharaPreferenceManager {
         Toast.makeText(context,"记录的账号信息:"+account+"___"+password,Toast.LENGTH_SHORT).show();
     }
 
+    /**当前Activity刷新数据时调用**/
     public static void setExtra(Response<LoginBean> response, Intent intent){
         intent.putExtra("U_id",response.body().getId());
         intent.putExtra("U_head",response.body().getHead());

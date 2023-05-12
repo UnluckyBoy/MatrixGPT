@@ -20,6 +20,6 @@ public class ReadActivity extends BaseActivity{
 
     @Override
     protected String initTitle() {
-        return "测试Title";
+        return null;
     }
 }
