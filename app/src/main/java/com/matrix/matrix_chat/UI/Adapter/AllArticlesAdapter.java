@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,20 +34,24 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
     @NonNull
     @Override
     public AllArticlesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.view_article_list,null);//加载list视图
+        View view= LayoutInflater.from(mActivity).inflate(R.layout.view_article_list,parent,false);//加载list视图
         ViewHolder viewHolder=new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final AllArticlesAdapter.ViewHolder holder, int position) {
+        //Toast.makeText(mActivity,"获取的list:"+articlesBeanList.get(position).toString(),Toast.LENGTH_SHORT).show();
+
         if(articlesBeanList.get(position)!=null){
             SetPic(holder,mActivity.getResources().getText(R.string.BackUrl)+"/get_file/"+ articlesBeanList.get(position).getmCover());
+
+            holder.article_title.setText(articlesBeanList.get(position).getmTitle());
+            holder.article_hot.setText(String.valueOf(articlesBeanList.get(position).getmHot()));
+            holder.article_writer.setText(articlesBeanList.get(position).getmAuthor());
+            holder.article_type.setText(articlesBeanList.get(position).getmType());
+            holder.article_des.setText(articlesBeanList.get(position).getmDescription());
         }
-        holder.article_title.setText(articlesBeanList.get(position).getmTitle());
-        holder.article_hot.setText(articlesBeanList.get(position).getmHot());
-        holder.article_writer.setText(articlesBeanList.get(position).getmAuthor());
-        holder.article_type.setText(articlesBeanList.get(position).getmType());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +70,11 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
         });
     }
 
+    @Override
+    public int getItemCount() {
+        return articlesBeanList.size();
+    }
+
     /**设置封面**/
     private void SetPic(AllArticlesAdapter.ViewHolder viewHolder, String path){
         if(path!=null){
@@ -76,14 +86,9 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return articlesBeanList.size();
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView article_image;
-        private TextView article_hot,article_title,article_writer,article_type;
+        private TextView article_hot,article_title,article_writer,article_type,article_des;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,6 +97,7 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
             article_title=itemView.findViewById(R.id.article_title);
             article_writer=itemView.findViewById(R.id.article_writer);
             article_type=itemView.findViewById(R.id.article_type);
+            article_des=itemView.findViewById(R.id.article_des);
         }
     }
 
@@ -99,7 +105,6 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
         void  onItemClick(View view, int position);
         void  onItemLongClick(View view, int position);
     }
-
     private AllArticlesAdapter.OnItemClickListener OnItemClickListener;
     public void SetOnItemClickListener(AllArticlesAdapter.OnItemClickListener onItemClickListener){
         OnItemClickListener =onItemClickListener;

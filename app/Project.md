@@ -15,3 +15,5 @@ https://60fb829.r10.cpolar.top/UserInfo/fuzzyQuery/name?name=xxxxxx
 https://4b301a04.r10.cpolar.top/UserInfo/doGptTrans?account=xxxxxxx
 查询所有:
 http://localhost:8080/article/get_all
+获取内容:
+http://localhost:8080/article/get_file_content?title=xxxx&author=xxxxx

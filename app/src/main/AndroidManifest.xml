@@ -73,6 +73,7 @@
         <!--添加Activity-->
         <activity android:name="com.matrix.matrix_chat.UI.Activity.LoginActivity"/>
         <activity android:name="com.matrix.matrix_chat.UI.Activity.RegisterActivity"/>
+        <activity android:name=".UI.Activity.ReadActivity"/>
 
         <meta-data
             android:name="test"

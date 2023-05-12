@@ -1,5 +1,6 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.matrix.matrix_chat.Network.API.Back.getArticlesApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
 import com.matrix.matrix_chat.Network.Service.Back.getArticleService;
 import com.matrix.matrix_chat.R;
+import com.matrix.matrix_chat.UI.Activity.ReadActivity;
 import com.matrix.matrix_chat.UI.Adapter.AllArticlesAdapter;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class ChatFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<ArticlesBean.ArticleBean> articleList=new ArrayList<ArticlesBean.ArticleBean>();;
+    private List<ArticlesBean.ArticleBean> articleList;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -66,14 +68,14 @@ public class ChatFragment extends Fragment {
     }
 
     private void InitView(View view){
-        mRecyclerView=view.findViewById(R.id.article_list_view);
-
         InitArticlesData();
         initRefresh(view);
     }
 
     /**加载数据**/
     private void InitArticlesData(){
+        articleList=new ArrayList<ArticlesBean.ArticleBean>();
+
         getArticlesApi mgetArticlesApi=new getArticlesApi();
         mgetArticlesApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
         getArticleService mgetArticleService=mgetArticlesApi.getService();
@@ -83,11 +85,11 @@ public class ChatFragment extends Fragment {
             public void onResponse(Call<ArticlesBean> call, Response<ArticlesBean> response) {
                 if(response.body()!=null){
                     if(response.body().getArticles()!=null){
-                        Toast.makeText(view.getContext(),"获取数据成功:"+response.body().getArticles().get(0).getmTitle(),Toast.LENGTH_SHORT).show();
-//                        for(int i=0;i<response.body().getArticles().size();i++){
-//                            articleList.add(response.body().getArticles().get(i));
-//                        }
-//                        bindDataView(articleList);
+                        //Toast.makeText(view.getContext(),"获取数据成功:"+response.body().getArticles().get(0).getmTitle(),Toast.LENGTH_SHORT).show();
+                        for(int i=0;i<response.body().getArticles().size();i++){
+                            articleList.add(response.body().getArticles().get(i));
+                        }
+                        bindDataView(articleList);
                     }else{
                         Toast.makeText(view.getContext(),"获取数据失败",Toast.LENGTH_SHORT).show();
                     }
@@ -103,6 +105,14 @@ public class ChatFragment extends Fragment {
     }
     /**绑定数据到视图**/
     private void bindDataView(final List<ArticlesBean.ArticleBean> articles){
+        //Toast.makeText(view.getContext(),"获取的list:"+articles.get(0).toString(),Toast.LENGTH_SHORT).show();
+        mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
+
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        AllArticlesAdapter articlesAdapter=new AllArticlesAdapter(getActivity(),articles);
+        mRecyclerView.setAdapter(articlesAdapter);
+
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -110,10 +120,13 @@ public class ChatFragment extends Fragment {
                 LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(linearLayoutManager);
                 AllArticlesAdapter articlesAdapter=new AllArticlesAdapter(getActivity(),articles);
+                /**点击响应事件**/
                 articlesAdapter.SetOnItemClickListener(new AllArticlesAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Toast.makeText(view.getContext(),"点击了"+position,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(view.getContext(),"点击了"+position,Toast.LENGTH_SHORT).show();
+                        Intent read=new Intent(getActivity(), ReadActivity.class);
+                        startActivity(read);
 //                        if(args==null){
 //
 //                        }else{
@@ -126,12 +139,13 @@ public class ChatFragment extends Fragment {
 
                     }
                 });
+                mRecyclerView.setAdapter(articlesAdapter);
             }
         },1000);
     }
 
     private void initRefresh(View view){
-        mSwipeRefreshLayout=view.findViewById(R.id.swipeRefreshLay);
+        mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLay);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefresh());
     }
 
@@ -151,6 +165,7 @@ public class ChatFragment extends Fragment {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    InitArticlesData();
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(view.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
                 }

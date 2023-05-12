@@ -26,7 +26,8 @@ public class ArticlesBean {
         private String mContent;
         private String mAuthor;
         private int mHot;
-        private int mType;
+        private String mType;
+        private int mFiletype;
 
         public int getmId() {
             return mId;
@@ -84,12 +85,35 @@ public class ArticlesBean {
             this.mHot = mHot;
         }
 
-        public int getmType() {
+        public String getmType() {
             return mType;
         }
 
-        public void setmType(int mType) {
+        public void setmType(String mType) {
             this.mType = mType;
+        }
+
+        public int getmFiletype() {
+            return mFiletype;
+        }
+
+        public void setmFiletype(int mFiletype) {
+            this.mFiletype = mFiletype;
+        }
+
+        @Override
+        public String toString() {
+            return "ArticleBean{" +
+                    "mId=" + mId +
+                    ", mTitle='" + mTitle + '\'' +
+                    ", mCover='" + mCover + '\'' +
+                    ", mDescription='" + mDescription + '\'' +
+                    ", mContent='" + mContent + '\'' +
+                    ", mAuthor='" + mAuthor + '\'' +
+                    ", mHot=" + mHot +
+                    ", mType='" + mType + '\'' +
+                    ", mFiletype=" + mFiletype +
+                    '}';
         }
     }
 }
