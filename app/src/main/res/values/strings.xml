@@ -4,6 +4,7 @@
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="Url_Article">/article/</string>
+    <string name="Url_GetFile">/get_file/</string>
     <string name="mainIcon">主页</string>
     <string name="chatIcon">趣闻</string>
     <string name="userIcon">我的</string>
@@ -40,5 +41,5 @@
     <string name="mHot">hot</string>
     <string name="mType">type</string>
     <string name="mFileType">fileType</string>
-    <style name="mCreateTime">createTime</style>
+    <string name="mCreateTime">createTime</string>
 </resources>

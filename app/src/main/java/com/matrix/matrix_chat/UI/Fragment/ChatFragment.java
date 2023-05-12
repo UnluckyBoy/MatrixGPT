@@ -179,6 +179,8 @@ public class ChatFragment extends Fragment {
     private void setExtra(Intent intent,List<ArticlesBean.ArticleBean> list,int index){
         intent.putExtra(view.getContext().getString(R.string.mTitle),list.get(index).getmTitle());
         intent.putExtra(view.getContext().getString(R.string.mAuthor),list.get(index).getmAuthor());
+        intent.putExtra(view.getContext().getString(R.string.mCreateTime),list.get(index).getmCreateTime());
+        intent.putExtra(view.getContext().getString(R.string.mHot),list.get(index).getmHot());
         intent.putExtra(view.getContext().getString(R.string.mContent),list.get(index).getmContent());
     }
 }

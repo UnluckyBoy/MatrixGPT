@@ -30,6 +30,7 @@ import com.matrix.matrix_chat.UI.Activity.Tools.StringUtil;
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
     //获取TAG的activity名称
     protected final String TAG = this.getClass().getSimpleName();
+    protected static Intent TAG_Intent;
     //设置子activity布局
     FrameLayout frameLayout;
     //title 如果 return null 则隐藏
@@ -48,10 +49,32 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     //是否有返回键
     public boolean isHaveBack = true;
 
+    protected BaseActivity() {
+    }
+
+    /**
+     * 设置布局
+     * return 布局
+     */
+    @LayoutRes
+    protected abstract int setLayoutResourceID();
+    /**
+     * 初始化控件
+     */
+    protected abstract void initView();
+
+    /**
+     * 设置title
+     * @return title
+     */
+    protected abstract String initTitle();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        TAG_Intent=getIntent();
+
         //Activity管理
         ActivityUtil.getInstance().addActivity(this);
         //设置布局前处理一些逻辑
@@ -72,7 +95,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     /**
      * 设置布局前处理一些逻辑和设置
-     *
      * @param savedInstanceState bundle
      */
     protected void init(Bundle savedInstanceState) {
@@ -110,30 +132,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
-     * 设置布局
-     * return 布局
-     */
-    @LayoutRes
-    protected abstract int setLayoutResourceID();
-
-
-    /**
-     * 初始化控件
-     */
-    protected abstract void initView();
-
-    /**
-     * 设置title
-     * @return title
-     */
-    protected abstract String initTitle();
-
-    /**
      * 设置数据
      */
     protected void initData() {
     }
-
     /**
      * 设置监听
      */
@@ -151,8 +153,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      */
     public void setRightBtnResource(int resource) {
         if (resource != 0) {
-            //llRightBase.setVisibility(View.VISIBLE);
-            //btnRightBase.setBackground(ContextCompat.getDrawable(mContext, resource));
+            llRightBase.setVisibility(View.VISIBLE);
+            btnRightBase.setBackground(ContextCompat.getDrawable(mContext, resource));
         }
     }
 
@@ -167,7 +169,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
      * @param msg 提示内容
      */
     public void showToast(String msg) {
-        if (StringUtil.isEmpty(msg)) {
+        if (msg==null||msg=="") {
             return;
         }
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
@@ -197,11 +199,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     /**
      * 普通跳转
-     *
      * @param activity activity
      */
     protected void jumpToActivity(Class<?> activity) {
         startActivity(new Intent(mContext, activity));
+    }
+
+    /**获取组件**/
+    protected <T extends View> T findComponent(int resId){
+        return (T) findViewById(resId);
     }
 
     /**保证同一按钮在1秒内只会响应一次点击事件**/

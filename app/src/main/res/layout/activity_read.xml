@@ -6,14 +6,71 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/lay_read_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/lay_back_gray">
+        android:background="@drawable/lay_back_blue">
+
         <TextView
-            android:id="@+id/article_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textIsSelectable="true"/>
+            android:id="@+id/read_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:text="测试"
+            android:textSize="24dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/read_view_author"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_below="@+id/read_view_title"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="2dp"
+            android:text="测试"
+            android:textSize="16dp"/>
+        <TextView
+            android:id="@+id/read_view_time"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_below="@+id/read_view_title"
+            android:layout_centerHorizontal="true"
+            android:text="测试"
+            android:textSize="16dp"/>
+        <TextView
+            android:id="@+id/read_view_hot"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_below="@+id/read_view_title"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/md_yellow_800"
+            android:text="99"
+            android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/icon_hot"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_toLeftOf="@+id/read_view_hot"
+            android:layout_below="@+id/read_view_title"
+            android:background="@drawable/hot"/>
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/lay_read_content_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lay_read_info"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/lay_read_back">
+        <TextView
+            android:id="@+id/read_view_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试内容"
+            android:textSize="20dp"
+            android:textIsSelectable="true"/>
+    </FrameLayout>
 
 </RelativeLayout>

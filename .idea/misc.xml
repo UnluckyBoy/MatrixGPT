@@ -22,7 +22,9 @@
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back.xml" value="0.212" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_adv.xml" value="0.194" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_blue.xml" value="0.204" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_gray.xml" value="0.185" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_teal.xml" value="0.212" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_back_yellow.xml" value="0.185" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/lay_image_back.xml" value="0.194" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/rectangle_blue.xml" value="0.204" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/drawable/rectangle_shape.xml" value="0.244" />
@@ -42,7 +44,7 @@
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_login.xml" value="0.16666666666666666" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_native_express_banner.xml" value="0.22" />
-        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_read.xml" value="0.16666666666666666" />
+        <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/activity_read.xml" value="0.3333333333333333" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/anctivity_register.xml" value="0.22" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/chat_fragment.xml" value="0.14666666666666667" />
         <entry key="..\:/Android/AllProjects/MatrixGPT/app/src/main/res/layout/dlg_dislike_custom.xml" value="0.3234375" />

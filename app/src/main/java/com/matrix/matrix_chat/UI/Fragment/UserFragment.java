@@ -169,7 +169,7 @@ public class UserFragment extends Fragment {
     }
 
     private void SetHead(String headUrl) {
-        String path=getResources().getText(R.string.BackUrl)+"/get_file/"+headUrl;
+        String path=getResources().getText(R.string.BackUrl)+getResources().getString(R.string.Url_GetFile)+headUrl;
         Picasso.get()
                 .load(path)
                 .memoryPolicy(MemoryPolicy.NO_CACHE)//跳过缓存
