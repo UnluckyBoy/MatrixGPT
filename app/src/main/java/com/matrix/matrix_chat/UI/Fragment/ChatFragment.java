@@ -109,13 +109,6 @@ public class ChatFragment extends Fragment {
         //Toast.makeText(view.getContext(),"获取的list:"+articles.get(0).toString(),Toast.LENGTH_SHORT).show();
         mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
 
-        /*
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        AllArticlesAdapter articlesAdapter=new AllArticlesAdapter(getActivity(),articles);
-        mRecyclerView.setAdapter(articlesAdapter);
-        */
-
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override

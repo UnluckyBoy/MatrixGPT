@@ -1,6 +1,7 @@
 package com.matrix.matrix_chat.UI.Adapter;
 
 import android.app.Activity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,8 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
             holder.article_hot.setText(String.valueOf(articlesBeanList.get(position).getmHot()));
             holder.article_writer.setText(articlesBeanList.get(position).getmAuthor());
             holder.article_type.setText(articlesBeanList.get(position).getmType());
-            holder.article_des.setText(articlesBeanList.get(position).getmDescription());
+            holder.article_des.setText("\u3000\u3000"+articlesBeanList.get(position).getmDescription());//首行缩进2
+            //holder.article_des.setMovementMethod(ScrollingMovementMethod.getInstance());//实现滑动条
             holder.article_time.setText(articlesBeanList.get(position).getmCreateTime());
         }
 
@@ -101,6 +103,12 @@ public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.
             article_type=itemView.findViewById(R.id.article_type);
             article_des=itemView.findViewById(R.id.article_des);
             article_time=itemView.findViewById(R.id.article_time);
+
+            article_title.setText("");
+            article_writer.setText("");
+            article_type.setText("");
+            article_des.setText("");
+            article_time.setText("");
         }
     }
 
