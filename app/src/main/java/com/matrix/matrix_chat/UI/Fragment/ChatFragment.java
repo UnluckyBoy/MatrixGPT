@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.matrix.matrix_chat.Network.API.Back.getArticlesApi;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
 import com.matrix.matrix_chat.Network.Service.Back.getArticleService;
 import com.matrix.matrix_chat.R;
@@ -33,7 +34,7 @@ public class ChatFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private List<ArticlesBean.ArticleBean> articleList;
+    private List<ArticleBean> articleList;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -74,7 +75,7 @@ public class ChatFragment extends Fragment {
 
     /**加载数据**/
     private void InitArticlesData(){
-        articleList=new ArrayList<ArticlesBean.ArticleBean>();
+        articleList=new ArrayList<ArticleBean>();
 
         getArticlesApi mgetArticlesApi=new getArticlesApi();
         mgetArticlesApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
@@ -104,7 +105,7 @@ public class ChatFragment extends Fragment {
         });
     }
     /**绑定数据到视图**/
-    private void bindDataView(final List<ArticlesBean.ArticleBean> articles){
+    private void bindDataView(final List<ArticleBean> articles){
         //Toast.makeText(view.getContext(),"获取的list:"+articles.get(0).toString(),Toast.LENGTH_SHORT).show();
         mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
 
@@ -176,7 +177,7 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    private void setExtra(Intent intent,List<ArticlesBean.ArticleBean> list,int index){
+    private void setExtra(Intent intent, List<ArticleBean> list, int index){
         intent.putExtra(view.getContext().getString(R.string.mTitle),list.get(index).getmTitle());
         intent.putExtra(view.getContext().getString(R.string.mAuthor),list.get(index).getmAuthor());
         intent.putExtra(view.getContext().getString(R.string.mCreateTime),list.get(index).getmCreateTime());

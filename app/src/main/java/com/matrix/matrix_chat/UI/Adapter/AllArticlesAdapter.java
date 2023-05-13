@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
 import com.matrix.matrix_chat.R;
 import com.squareup.picasso.Picasso;
@@ -23,10 +24,10 @@ import java.util.List;
  * @Date 2023/5/11 0011 20:05
  */
 public class AllArticlesAdapter extends RecyclerView.Adapter<AllArticlesAdapter.ViewHolder>{
-    private List<ArticlesBean.ArticleBean> articlesBeanList;
+    private List<ArticleBean> articlesBeanList;
     private Activity mActivity;
 
-    public AllArticlesAdapter(Activity mActivity, List<ArticlesBean.ArticleBean> list){
+    public AllArticlesAdapter(Activity mActivity, List<ArticleBean> list){
         this.articlesBeanList =list;
         this.mActivity=mActivity;
     }
