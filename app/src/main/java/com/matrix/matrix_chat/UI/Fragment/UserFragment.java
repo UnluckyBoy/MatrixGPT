@@ -1,5 +1,7 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -56,12 +58,34 @@ public class UserFragment extends Fragment {
     private CircleImageView imageButton=null;
     private static int openPickCode=99;
 
+    private ActivityResultLauncher<Intent> launcher;
+
+
     public static UserFragment newInstance(String param1) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         args.putString("args", param1);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        /**launcher必须在onCreate初始化并处理结果**/
+        launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == RESULT_OK){
+                    /**处理成功,上传头像**/
+                    final String localPicturePath = BGAPhotoPickerActivity.getSelectedImages(result.getData()).get(0);
+                    upHead(localPicturePath);
+                }else{
+                    //失败处理
+                    Toast.makeText(getContext(),"打开失败",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Nullable
@@ -112,9 +136,6 @@ public class UserFragment extends Fragment {
 
         mInfoBtn=view.findViewById(R.id.info_btn);
         mEditInfoBtn=view.findViewById(R.id.btn_info_edit);
-        //mInfoBtn.setOnClickListener(new UserFraClickListener());
-        //imageButton.setOnClickListener(new UserFraClickListener());
-        //mEditInfoBtn.setOnClickListener(new UserFraClickListener());
         if(args.equals(null)||args.equals("")||args==null||args==""){
             Intent intent=new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
@@ -123,15 +144,6 @@ public class UserFragment extends Fragment {
             mInfoBtn.setOnClickListener(new UserFraClickListener());
             imageButton.setOnClickListener(new UserFraClickListener());
             mEditInfoBtn.setOnClickListener(new UserFraClickListener());
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == getActivity().RESULT_OK && requestCode == openPickCode) {
-            final String localPicturePath = BGAPhotoPickerActivity.getSelectedImages(data).get(0);
-            upHead(localPicturePath);
         }
     }
 
@@ -184,24 +196,12 @@ public class UserFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.info_btn:
-//                    String account=intent_UserFragment.getStringExtra("U_account");
-//                    if(account.equals(null)||account.equals("")||account==null||account==""){
-//                        Intent intent=new Intent(getActivity(), LoginActivity.class);
-//                        startActivity(intent);
-//                        getActivity().finish();
-//                    }else{
-//                        //Toast.makeText(view.getContext(),"已登录:"+account,Toast.LENGTH_SHORT).show();
-//                        popUpWindow(v);
-//                    }
                     popUpWindow(v);
                 break;
                 case R.id.user_head:
-                    startActivityForResult(BGAPhotoPickerActivity.newIntent(getActivity(), null,
-                            1, null, false), openPickCode);
-
-                    //Intent intent = new  Intent(Intent.ACTION_PICK);
-                    //intent.setType("image/*");//指定获取的是图片
-                    //startActivityForResult(intent, 55);
+                    /**使用launcher.launch()打开图库**/
+                    launcher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null,
+                            1, null, false));
                     break;
                 case R.id.btn_info_edit:
                     Toast.makeText(getContext(),"功能未实装,敬请期待",Toast.LENGTH_SHORT).show();

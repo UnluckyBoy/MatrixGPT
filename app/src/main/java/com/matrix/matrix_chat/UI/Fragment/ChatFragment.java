@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,7 @@ public class ChatFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private List<ArticleBean> articleList;
+    private Button add_article;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -69,6 +71,11 @@ public class ChatFragment extends Fragment {
     }
 
     private void InitView(View view){
+        mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLay);
+        mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
+        add_article=(Button)view.findViewById(R.id.add_article);
+
+        addTrans();
         InitArticlesData();
         initRefresh(view);
     }
@@ -104,11 +111,18 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+
+    /**创建文章**/
+    public void addTrans(){
+        add_article.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(view.getContext(),"功能未实装",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     /**绑定数据到视图**/
     private void bindDataView(final List<ArticleBean> articles){
-        //Toast.makeText(view.getContext(),"获取的list:"+articles.get(0).toString(),Toast.LENGTH_SHORT).show();
-        mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
-
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -142,7 +156,6 @@ public class ChatFragment extends Fragment {
     }
 
     private void initRefresh(View view){
-        mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLay);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefresh());
     }
 
@@ -164,7 +177,7 @@ public class ChatFragment extends Fragment {
                 public void run() {
                     InitArticlesData();
                     mSwipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(view.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
                 }
             },1500);
         }

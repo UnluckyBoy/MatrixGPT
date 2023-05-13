@@ -1,5 +1,7 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -33,6 +40,7 @@ import com.matrix.matrix_chat.Network.API.Back.DoGptTransApi;
 import com.matrix.matrix_chat.Network.API.Back.LoginApi;
 import com.matrix.matrix_chat.Network.API.Back.queryUserApi;
 import com.matrix.matrix_chat.Network.DataTrans.DataTransController;
+import com.matrix.matrix_chat.Network.RecognitionTool.SampleRecognition;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.BackChatBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
@@ -52,8 +60,12 @@ import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
 import com.matrix.matrix_chat.UtilTool.ImageTool;
 import com.matrix.matrix_chat.UtilTool.TimeTool;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
 
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +88,9 @@ public class MainFragment extends Fragment {
     private long startTime = 0;
     private boolean mHasShowDownloadActive = false;
 
+    private ActivityResultLauncher<Intent> mLauncher;//启动activity对象,必须要在onCreate中初始化
+    private static int RESULT_CODE=66;
+
 
     public static MainFragment newInstance(String param1) {
         MainFragment fragment = new MainFragment();
@@ -83,6 +98,29 @@ public class MainFragment extends Fragment {
         args.putString("args_account",param1);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        /**ActivityResultLauncher<Intent>必须要在onCreate中启动**/
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        // 处理Activity结果
+                        if (result.getResultCode() == RESULT_OK) {
+                            // 处理成功结果
+                            //Toast.makeText(view.getContext(),"打开成功"+result,Toast.LENGTH_SHORT).show();
+                            //mShow_View.setText(BGAPhotoPickerActivity.getSelectedImages(result.getData()).get(0));
+                            final String localPicturePath = BGAPhotoPickerActivity.getSelectedImages(result.getData()).get(0);
+                        } else {
+                            // 处理失败结果
+                            Toast.makeText(getContext(),"打开失败",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @SuppressWarnings("RedundantCast")
@@ -116,9 +154,10 @@ public class MainFragment extends Fragment {
         //加载广告
         loadExpressAd("952047590",300,150);
 
-        Button mChatBtn,mPaintBtn;
+        Button mChatBtn,mPaintBtn,recognition_btn;
         mChatBtn=view.findViewById(R.id.chat_btn);
         mPaintBtn=view.findViewById(R.id.paint_btn);
+        recognition_btn=view.findViewById(R.id.recognition_btn);
         mShow_View=view.findViewById(R.id.show_View);
 
         mEditText=view.findViewById(R.id.edit_text);
@@ -128,6 +167,7 @@ public class MainFragment extends Fragment {
 
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
+        recognition_btn.setOnClickListener(new ClickListener());
     }
 
     //按钮响应事件
@@ -162,9 +202,17 @@ public class MainFragment extends Fragment {
                     mImage_View.setVisibility(View.VISIBLE);//图片显示
                     //mShow_View.setVisibility(View.GONE);//显示图片时，文本隐藏
                     break;
+                case R.id.recognition_btn:
+                    /**打开识图activity**/
+                    //Intent intent = new Intent(this, MyActivity.class);
+                    //BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false);
+                    mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null,
+                            1, null, false));
+                    break;
             }
         }
     }
+
 
     /**
      * @param content 内容
