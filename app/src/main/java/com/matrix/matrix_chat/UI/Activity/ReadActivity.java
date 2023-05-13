@@ -67,7 +67,7 @@ public class ReadActivity extends BaseActivity{
             @Override
             public boolean onLongClick(View v) {
                 //showToast("长按");
-                read_view_content.setTextIsSelectable(true);
+                read_view_content.setTextIsSelectable(true);//长按复制
                 return false;
             }
         });

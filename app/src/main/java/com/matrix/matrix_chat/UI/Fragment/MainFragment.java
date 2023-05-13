@@ -32,6 +32,7 @@ import com.matrix.matrix_chat.Network.API.Back.BackCreateImageApi;
 import com.matrix.matrix_chat.Network.API.Back.DoGptTransApi;
 import com.matrix.matrix_chat.Network.API.Back.LoginApi;
 import com.matrix.matrix_chat.Network.API.Back.queryUserApi;
+import com.matrix.matrix_chat.Network.DataTrans.DataTransController;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.BackChatBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
@@ -193,94 +194,18 @@ public class MainFragment extends Fragment {
                     case 9:
                         //Toast.makeText(view.getContext(),"管理员,无限次使用",Toast.LENGTH_SHORT).show();
                         SetShowViewLoad();
-                        BackChatApi mAdimnChatApi=new BackChatApi();
-                        mAdimnChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                +view.getContext().getString(R.string.Url_Gpt));
-                        BackChatService mAdminChatService=mAdimnChatApi.getService();
-                        Call<BackChatBean> callAdminChat=mAdminChatService.getState(content);
-                        callAdminChat.enqueue(new Callback<BackChatBean>() {
-                            @Override
-                            public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                                if(response.body()==null){
-                                    mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                }else {
-                                    if(response.body().getResult().equals("success")){
-                                        mShow_View.setText(response.body().getContent());
-                                    }else{
-                                        mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                    }
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<BackChatBean> call, Throwable t) {
-                                SetFailure_ShowView();
-                                //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        DataTransController.adminGetChatData(view.getContext(),content,mShow_View);
                         break;
                     case 1:
                         /**普通用户使用Chat**/
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         if(gptnum>0){
                             SetShowViewLoad();
-                            BackChatApi mUserChatApi=new BackChatApi();
-                            mUserChatApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                    +view.getContext().getString(R.string.Url_Gpt));
-                            BackChatService mUserChatService=mUserChatApi.getService();
-                            Call<BackChatBean> callUserChat=mUserChatService.getState(content);
-                            callUserChat.enqueue(new Callback<BackChatBean>() {
-                                @Override
-                                public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                                    if(response.body()==null){
-                                        mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                    }else {
-                                        if(response.body().getResult().equals("success")){
-                                            mShow_View.setText(response.body().getContent());
-                                            DoGptTransApi mDoGptTransApi=new DoGptTransApi();
-                                            mDoGptTransApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                                    +view.getContext().getString(R.string.Url_UserInfo));
-                                            DoGptTransService mDoGptTransService=mDoGptTransApi.getService();
-                                            Call<LoginBean> callDoGpt=mDoGptTransService.getState(account);
-                                            callDoGpt.enqueue(new Callback<LoginBean>() {
-                                                @Override
-                                                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                                                    if(response.body()==null){
-                                                        mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                                    }else {
-                                                        switch (response.body().getResult()){
-                                                            case "Permission":
-                                                                intent_MainFragment.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
-                                                                break;
-                                                            case "NullPermission":
-                                                                //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(getActivity(),account);
-                                                                break;
-                                                            case "error":
-                                                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                                                break;
-                                                        }
-                                                    }
-                                                }
-                                                @Override
-                                                public void onFailure(Call<LoginBean> call, Throwable t) {
-                                                    SetFailure_ShowView();
-                                                    //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }else{
-                                            mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                        }
-                                    }
-                                }
-                                @Override
-                                public void onFailure(Call<BackChatBean> call, Throwable t) {
-                                    SetFailure_ShowView();
-                                    //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }else{
+                            DataTransController.getChatData(getActivity(),content,mShow_View,account,intent_MainFragment);
+                        }
+                        else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(getActivity(),account);
+                            MatrixDialogManager.ShowAdvertise(getActivity(),account,intent_MainFragment);
                         }
                         break;
                 }
@@ -290,99 +215,17 @@ public class MainFragment extends Fragment {
                     case 9:
                         /**管理员**/
                         SetShowViewLoad();
-                        BackCreateImageApi mBackCreateImageApi=new BackCreateImageApi();
-                        mBackCreateImageApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                +view.getContext().getString(R.string.Url_Gpt));
-                        BackCreateImageService mBackCreateImageService=mBackCreateImageApi.getService();
-                        Call<BackChatBean> callCreateImg=mBackCreateImageService.getState(content);
-                        callCreateImg.enqueue(new Callback<BackChatBean>() {
-                            @Override
-                            public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                                if(!(response.body().equals(null))){
-                                    if(response.body().getResult().equals("success")){
-                                        /** 自定义工具类将url资源显示**/
-                                        ImageTool.SetImageView(mImage_View,response.body().getContent());
-                                        SetShowViewNull();
-                                    }else{
-                                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                    }
-                                }else{
-                                    Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<BackChatBean> call, Throwable t) {
-                                SetFailure_ShowView();
-                            }
-                        });
+                        DataTransController.adminGetImage(getActivity(),content,mImage_View,mShow_View);
                         break;
                     case 1:
                         //Toast.makeText(view.getContext(),"普通用户,可用次数:"+gptnum,Toast.LENGTH_SHORT).show();
                         /**普通用户使用createImage**/
                         if(gptnum>0){
                             SetShowViewLoad();
-                            BackCreateImageApi mUserBackCreateImage=new BackCreateImageApi();
-                            mUserBackCreateImage.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                    +view.getContext().getString(R.string.Url_Gpt));
-                            BackCreateImageService mUserBackCreateImageService=mUserBackCreateImage.getService();
-                            Call<BackChatBean> callUserCreate=mUserBackCreateImageService.getState(content);
-                            callUserCreate.enqueue(new Callback<BackChatBean>() {
-                                @Override
-                                public void onResponse(Call<BackChatBean> call, Response<BackChatBean> response) {
-                                    if(!(response.body().equals(null))){
-                                        if(response.body().getResult().equals("success")){
-                                            /** 自定义工具类将url资源显示**/
-                                            ImageTool.SetImageView(mImage_View,response.body().getContent());
-                                            SetShowViewNull();
-                                            /**更改用户使用次数**/
-                                            DoGptTransApi mDoGptTransApi=new DoGptTransApi();
-                                            mDoGptTransApi.SetUrl(view.getContext().getString(R.string.BackUrl)
-                                                    +view.getContext().getString(R.string.Url_UserInfo));
-                                            DoGptTransService mDoGptTransService=mDoGptTransApi.getService();
-                                            Call<LoginBean> callDoGpt=mDoGptTransService.getState(account);
-                                            callDoGpt.enqueue(new Callback<LoginBean>() {
-                                                @Override
-                                                public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                                                    if(response.body()==null){
-                                                        mShow_View.setText(view.getContext().getString(R.string.ResponseBodyNull));
-                                                    }else {
-                                                        switch (response.body().getResult()){
-                                                            case "Permission":
-                                                                intent_MainFragment.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
-                                                                break;
-                                                            case "NullPermission":
-                                                                //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                                                                ShowAdvertise(getActivity(),account);
-                                                                break;
-                                                            case "error":
-                                                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                                                break;
-                                                        }
-                                                    }
-                                                }
-                                                @Override
-                                                public void onFailure(Call<LoginBean> call, Throwable t) {
-                                                    SetFailure_ShowView();
-                                                    //Toast.makeText(view.getContext(),"网络错误!请检查!!!",Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }else {
-                                            Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                        }
-                                    }else{
-                                        Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull),Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<BackChatBean> call, Throwable t) {
-                                    SetFailure_ShowView();
-                                }
-                            });
+                            DataTransController.getImage(getActivity(),content,mImage_View,mShow_View,account,intent_MainFragment);
                         }else{
                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
-                            ShowAdvertise(getActivity(),account);
+                            MatrixDialogManager.ShowAdvertise(getActivity(),account,intent_MainFragment);
                         }
 
                         break;
@@ -443,15 +286,6 @@ public class MainFragment extends Fragment {
             }
         });
         mDialog.show();
-    }
-
-    /**显示广告弹窗**/
-    public void ShowAdvertise(final Activity activity,String account){
-        String[] names = { activity.getString(R.string.SystemTitle),
-                activity.getString(R.string.ShowAdvertise),
-                activity.getString(R.string.Confirm),
-                activity.getString(R.string.Cancel) };
-        MatrixDialogManager.showVideoView(names,getActivity(),account,intent_MainFragment);
     }
 
 

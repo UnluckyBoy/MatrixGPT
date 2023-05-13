@@ -101,4 +101,12 @@ public class MatrixDialogManager {
             }
         });
     }
+
+    public static void ShowAdvertise(final Activity activity,String account,Intent tempIntent){
+        String[] names = { activity.getString(R.string.SystemTitle),
+                activity.getString(R.string.ShowAdvertise),
+                activity.getString(R.string.Confirm),
+                activity.getString(R.string.Cancel) };
+        MatrixDialogManager.showVideoView(names,activity,account,tempIntent);
+    }
 }
