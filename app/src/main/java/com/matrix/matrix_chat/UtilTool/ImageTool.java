@@ -10,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 
 /**
  * @ClassName GetBitMap
@@ -104,5 +107,31 @@ public class ImageTool{
         }
         Log.i("tag", "saveBitmap success: " + filePic.getAbsolutePath());
         Toast.makeText(mContext, "保存成功!!!", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 将图片转base64编码
+     * @param path
+     * @return
+     */
+    public static String getImageBase(String path){
+        File file=new File(path);
+        byte[] data = null;
+        try {
+            InputStream in = new FileInputStream(file);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String filename=file.getName();
+        String suffixName=filename.substring(filename.lastIndexOf(".")+1);//获取没有.的后缀名
+        String imageBaseType="data:image/"+suffixName+";base64,";
+        Base64.Encoder encoder = Base64.getEncoder();
+        return imageBaseType+encoder.encodeToString(data);
     }
 }

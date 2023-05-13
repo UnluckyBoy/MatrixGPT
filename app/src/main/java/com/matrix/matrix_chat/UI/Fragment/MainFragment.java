@@ -1,8 +1,6 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import static android.app.Activity.RESULT_OK;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,21 +32,13 @@ import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.matrix.matrix_chat.Network.API.Back.BackChatApi;
-import com.matrix.matrix_chat.Network.API.Back.BackCreateImageApi;
-import com.matrix.matrix_chat.Network.API.Back.DoGptTransApi;
-import com.matrix.matrix_chat.Network.API.Back.LoginApi;
-import com.matrix.matrix_chat.Network.API.Back.queryUserApi;
+import com.matrix.matrix_chat.Network.API.Back.GetAccessTokenApi;
+import com.matrix.matrix_chat.Network.API.Back.GetRecognitionApi;
 import com.matrix.matrix_chat.Network.DataTrans.DataTransController;
-import com.matrix.matrix_chat.Network.RecognitionTool.SampleRecognition;
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.BackChatBean;
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.UserBean;
-import com.matrix.matrix_chat.Network.Service.Back.BackChatService;
-import com.matrix.matrix_chat.Network.Service.Back.BackCreateImageService;
-import com.matrix.matrix_chat.Network.Service.Back.DoGptTransService;
-import com.matrix.matrix_chat.Network.Service.Back.LoginService;
-import com.matrix.matrix_chat.Network.Service.Back.queryUserService;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.AccessTokenBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.WordsResult;
+import com.matrix.matrix_chat.Network.Service.Back.GetAccessTokenService;
+import com.matrix.matrix_chat.Network.Service.Back.GetRecognitionService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.MatrixDialog;
@@ -61,11 +51,14 @@ import com.matrix.matrix_chat.UtilTool.ImageTool;
 import com.matrix.matrix_chat.UtilTool.TimeTool;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,8 +82,10 @@ public class MainFragment extends Fragment {
     private boolean mHasShowDownloadActive = false;
 
     private ActivityResultLauncher<Intent> mLauncher;//启动activity对象,必须要在onCreate中初始化
-    private static int RESULT_CODE=66;
 
+    private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Z";
+    private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtb";
+    private static final String grant_type="client_credentials";
 
     public static MainFragment newInstance(String param1) {
         MainFragment fragment = new MainFragment();
@@ -115,6 +110,7 @@ public class MainFragment extends Fragment {
                             //Toast.makeText(view.getContext(),"打开成功"+result,Toast.LENGTH_SHORT).show();
                             //mShow_View.setText(BGAPhotoPickerActivity.getSelectedImages(result.getData()).get(0));
                             final String localPicturePath = BGAPhotoPickerActivity.getSelectedImages(result.getData()).get(0);
+                            getImageBaseData(localPicturePath);
                         } else {
                             // 处理失败结果
                             Toast.makeText(getContext(),"打开失败",Toast.LENGTH_SHORT).show();
@@ -211,6 +207,59 @@ public class MainFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    /**
+     * 将图片转为base64格式
+     * @param filePath
+     */
+    private void getImageBaseData(String filePath){
+        String temp=ImageTool.getImageBase(filePath);
+        //mShow_View.setText(temp);
+        /**获取access_token**/
+        GetAccessTokenApi getAccessTokenApi=new GetAccessTokenApi();
+        getAccessTokenApi.SetUrl(getContext().getString(R.string.token_url));
+        GetAccessTokenService getAccessTokenService=getAccessTokenApi.getService();
+        Call<AccessTokenBean> call_token=getAccessTokenService.getState(API_KEY,SECRET_KEY,grant_type);
+        call_token.enqueue(new Callback<AccessTokenBean>() {
+            @Override
+            public void onResponse(Call<AccessTokenBean> call, Response<AccessTokenBean> response) {
+                if(response.body()!=null){
+                    //mShow_View.setText(response.body().getAccess_token());
+                    GetRecognitionApi getRecognitionApi=new GetRecognitionApi();
+                    getRecognitionApi.SetUrl(getContext().getString(R.string.recognition_url));
+                    GetRecognitionService getRecognitionService=getRecognitionApi.getService();
+                    //MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+                    //RequestBody body = RequestBody.create(mediaType,"image="+temp);
+                    RequestBody requestBody=RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=utf-8"),temp);
+                    Call<WordsResult> call_recognition=getRecognitionService.getState(response.body().getAccess_token(),requestBody);
+                    call_recognition.enqueue(new Callback<WordsResult>() {
+                        @Override
+                        public void onResponse(Call<WordsResult> call, Response<WordsResult> response) {
+                            if(response.body()!=null){
+                                mShow_View.setText(String.valueOf(response.body().getLog_id()));
+                            }else{
+                                Toast.makeText(view.getContext(), "获取失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WordsResult> call, Throwable t) {
+                            Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(view.getContext(), "获取失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccessTokenBean> call, Throwable t) {
+                Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 

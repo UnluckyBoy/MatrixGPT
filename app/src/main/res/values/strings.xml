@@ -42,4 +42,8 @@
     <string name="mType">type</string>
     <string name="mFileType">fileType</string>
     <string name="mCreateTime">createTime</string>
+
+    <!--百度识图相关url-->
+    <string name="token_url">https://aip.baidubce.com/oauth/2.0/</string>
+    <string name="recognition_url">https://aip.baidubce.com/rest/2.0/ocr/v1/</string>
 </resources>
