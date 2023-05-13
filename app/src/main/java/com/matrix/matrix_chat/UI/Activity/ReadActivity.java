@@ -1,5 +1,6 @@
 package com.matrix.matrix_chat.UI.Activity;
 
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -56,40 +57,20 @@ public class ReadActivity extends BaseActivity{
         //read_view_content.setText(test);
         //showToast(test);
         DataTransController.getArticleContent(mContext,title,author,read_view_content);
+        read_view_content.setMovementMethod(ScrollingMovementMethod.getInstance());//实现滑动条
     }
 
     private void bindViewTrans() {
         lay_read_content_back.setOnClickListener(new ArticleViewOnClick());
         read_view_content.setOnClickListener(new ArticleViewOnClick());
-//        lay_read_content_back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!mPressed){
-//                    mPressed = true;
-//                    new Timer().schedule(new TimerTask() {//延时两秒，如果超出则擦错第一次按键记录
-//                        @Override
-//                        public void run() {
-//                            mPressed = false;
-//                        }
-//                    }, 1000);
-//                }
-//                else{
-//                    if(!hideTitleBar){
-//                        lay_read_info.setVisibility(View.GONE);
-//                        hideTitleBar=!hideTitleBar;
-//                    }else{
-//                        lay_read_info.setVisibility(View.VISIBLE);
-//                        hideTitleBar=!hideTitleBar;
-//                    }
-//                }
-//            }
-//        });
-//        read_view_content.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        read_view_content.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //showToast("长按");
+                read_view_content.setTextIsSelectable(true);
+                return false;
+            }
+        });
     }
 
     private class ArticleViewOnClick implements View.OnClickListener{
