@@ -207,8 +207,8 @@ public class MainFragment extends Fragment {
                     /**打开识图activity**/
                     //mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));//原Picker工具使用
 
-                    //selectImageWindow(view);//项目使用
-                    test();//测试使用
+                    selectImageWindow(view);//项目使用
+                    //test();//测试使用
                     break;
             }
         }
@@ -222,12 +222,18 @@ public class MainFragment extends Fragment {
                     public void onResult(ArrayList<LocalMedia> result) {
                         //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
                         final String localPicturePath = result.get(0).getRealPath();
+                        final long mid=8388608;
                         final long testPath = result.get(0).getSize();
 
                         String temp=ImageTool.getImagePath2BaseCode(localPicturePath,true);
                         String temp_bitmap=ImageTool.bitmap2Base64(localPicturePath,true);
 
-                        mShow_View.setText(String.valueOf(testPath));
+                        //mShow_View.setText(String.valueOf(testPath));
+                        if(testPath>mid){
+                            mShow_View.setText(String.valueOf(testPath)+":大于8m");
+                        }else{
+                            mShow_View.setText(String.valueOf(testPath)+":小于8m");
+                        }
                     }
                     @Override
                     public void onCancel() {
@@ -278,7 +284,18 @@ public class MainFragment extends Fragment {
                                 public void onResult(ArrayList<LocalMedia> result) {
                                     //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
                                     final String localPicturePath = result.get(0).getRealPath();
-                                    getImageBaseData(localPicturePath);//调用文字识别api
+                                    final long midSize=8388608;
+                                    final long fileSize = result.get(0).getSize();//文件大小
+                                    /**识别内容要10m以内,此处设置8m以内**/
+                                    if(fileSize>midSize){
+                                        //大于8m,需要压缩
+                                        String tempCode=ImageTool.bitmap2Base64(localPicturePath,false);
+                                        String body_Code=ImageTool.getBase2Urlencode(tempCode);
+                                        DataTransController.getBaiduRecognitionData(view.getContext(),body_Code,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
+                                    }else{
+                                        getImageBaseData(localPicturePath);//否则直接调用文字识别api
+                                    }
+                                    //getImageBaseData(localPicturePath);//调用文字识别api
                                 }
                                 @Override
                                 public void onCancel() {

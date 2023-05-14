@@ -188,7 +188,7 @@ public class ImageTool{
      * @return
      */
     public static String bitmap2Base64(String  path,boolean add_head) {
-        Bitmap bitmap=imagePath2Bitmap(path);
+        Bitmap bitmap=imagePath2Bitmap(path);//通过path获取图片内容,转Bitmap
         //bitmap=sizeScaleCompressBitmap(bitmap,450,450);//压缩
         bitmap=compressImage(bitmap);
         String result = null;
@@ -220,7 +220,6 @@ public class ImageTool{
         }else{
             return result;
         }
-        //return result;
     }
 
     /**
@@ -247,9 +246,9 @@ public class ImageTool{
         if (beforeBitmap != null) {
             // 第一个参数：图片压缩的格式；第二个参数：压缩的比率；第三个参数：压缩的数据存放到bos中
             beforeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            // 循环判断压缩后的图片大小是否满足要求，这里限制6144kb,即6M,若不满足则继续压缩，每次递减10%压缩
+            // 循环判断压缩后的图片大小是否满足要求，这里限制8192kb,即8M,若不满足则继续压缩，每次递减10%压缩
             int options = 90;
-            while (bos.toByteArray().length / 1024 > 6144) {
+            while (bos.toByteArray().length / 1024 > 8192) {
                 bos.reset();//置空bos
                 beforeBitmap.compress(Bitmap.CompressFormat.JPEG, options, bos);//压缩options%，把压缩后的数据存放到bos中
                 options -= 10;
