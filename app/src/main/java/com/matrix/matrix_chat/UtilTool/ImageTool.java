@@ -117,8 +117,7 @@ public class ImageTool{
      * @param path
      * @return
      */
-    public static String getImageBase(String path){
-
+    public static String getImageBase(String path,boolean add_head){
         File file=new File(path);
         byte[] data = null;
         try {
@@ -136,7 +135,11 @@ public class ImageTool{
         String suffixName=filename.substring(filename.lastIndexOf(".")+1);//获取没有.的后缀名
         String imageBaseType="data:image/"+suffixName+";base64,";
         Base64.Encoder encoder = Base64.getEncoder();
-        return encoder.encodeToString(data);//若加入图片头,则使用:imageBaseType+encoder.encodeToString(data)
+        if(add_head){
+            return imageBaseType+encoder.encodeToString(data);
+        }else{
+            return encoder.encodeToString(data);//若加入图片头,则使用:imageBaseType+encoder.encodeToString(data)
+        }
     }
 
     /***
@@ -145,7 +148,7 @@ public class ImageTool{
      * @return
      */
     public static String getRecognitionImageBase(String path){
-        String base64code=getImageBase(path);
+        String base64code=getImageBase(path,false);
         return getBase2Urlencode(base64code);
     }
 
@@ -158,5 +161,15 @@ public class ImageTool{
             e.printStackTrace();
         }
         return result;
+    }
+
+    /***
+     * 压缩
+     * @param base64Img
+     * @return
+     */
+    public static String resizeImageTo40K(String base64Img) {
+
+        return null;
     }
 }
