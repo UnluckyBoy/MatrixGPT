@@ -290,17 +290,25 @@ public class UserFragment extends Fragment {
         selectImageWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         selectImageWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         selectImageWindow.setContentView(popUpView);
-        selectImageWindow.setOutsideTouchable(false);
-        selectImageWindow.setFocusable(false);
+        selectImageWindow.setOutsideTouchable(true);
+        selectImageWindow.setFocusable(true);
         //popupWindow.setAnimationStyle(5);//设置动画效果
-        selectImageWindow.setTouchable(true);
+        //selectImageWindow.setTouchable(true);
         selectImageWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
         /**设置背景为暗**/
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
         lp.alpha = 0.5f;
         getActivity().getWindow().setAttributes(lp);
-
         selectImageWindow.showAtLocation(getActivity().getWindow().getDecorView(),Gravity.CENTER,0,0);
+        /**点击外部时，关闭遮罩**/
+        selectImageWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                lp.alpha = 1f;
+                getActivity().getWindow().setAttributes(lp);
+            }
+        });
 
         Button btn_photo,btn_camera,btn_cancel;
         btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
