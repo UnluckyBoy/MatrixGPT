@@ -216,50 +216,7 @@ public class MainFragment extends Fragment {
     private void getImageBaseData(String filePath){
         String temp=ImageTool.getImageBase(filePath);
         //mShow_View.setText(temp);
-        /**获取access_token**/
-        GetAccessTokenApi getAccessTokenApi=new GetAccessTokenApi();
-        getAccessTokenApi.SetUrl(getContext().getString(R.string.token_url));
-        GetAccessTokenService getAccessTokenService=getAccessTokenApi.getService();
-        Call<AccessTokenBean> call_token=getAccessTokenService.getState(API_KEY,SECRET_KEY,grant_type);
-        call_token.enqueue(new Callback<AccessTokenBean>() {
-            @Override
-            public void onResponse(Call<AccessTokenBean> call, Response<AccessTokenBean> response) {
-                if(response.body()!=null){
-                    //mShow_View.setText(response.body().getAccess_token());
-                    GetRecognitionApi getRecognitionApi=new GetRecognitionApi();
-                    getRecognitionApi.SetUrl(getContext().getString(R.string.recognition_url));
-                    GetRecognitionService getRecognitionService=getRecognitionApi.getService();
-                    //MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-                    //RequestBody body = RequestBody.create(mediaType,"image="+temp);
-                    RequestBody requestBody=RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=utf-8"),temp);
-                    Call<WordsResult> call_recognition=getRecognitionService.getState(response.body().getAccess_token(),requestBody);
-                    call_recognition.enqueue(new Callback<WordsResult>() {
-                        @Override
-                        public void onResponse(Call<WordsResult> call, Response<WordsResult> response) {
-                            if(response.body()!=null){
-                                mShow_View.setText(String.valueOf(response.body().getLog_id()));
-                            }else{
-                                Toast.makeText(view.getContext(), "获取失败", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<WordsResult> call, Throwable t) {
-                            Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                }else{
-                    Toast.makeText(view.getContext(), "获取失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AccessTokenBean> call, Throwable t) {
-                Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        DataTransController.getBaiduRecognitionData(view.getContext(),temp,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
     }
 
 

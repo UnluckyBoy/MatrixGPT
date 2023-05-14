@@ -11,15 +11,21 @@ import com.matrix.matrix_chat.Network.API.Back.ArticleContentApi;
 import com.matrix.matrix_chat.Network.API.Back.BackChatApi;
 import com.matrix.matrix_chat.Network.API.Back.BackCreateImageApi;
 import com.matrix.matrix_chat.Network.API.Back.DoGptTransApi;
+import com.matrix.matrix_chat.Network.API.Back.GetAccessTokenApi;
+import com.matrix.matrix_chat.Network.API.Back.GetRecognitionApi;
 import com.matrix.matrix_chat.Network.API.Back.LogoutApi;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.AccessTokenBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleContentBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.BackChatBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LogoutBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.WordsResult;
 import com.matrix.matrix_chat.Network.Service.Back.ArticleContentService;
 import com.matrix.matrix_chat.Network.Service.Back.BackChatService;
 import com.matrix.matrix_chat.Network.Service.Back.BackCreateImageService;
 import com.matrix.matrix_chat.Network.Service.Back.DoGptTransService;
+import com.matrix.matrix_chat.Network.Service.Back.GetAccessTokenService;
+import com.matrix.matrix_chat.Network.Service.Back.GetRecognitionService;
 import com.matrix.matrix_chat.Network.Service.Back.LogoutService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
@@ -27,6 +33,8 @@ import com.matrix.matrix_chat.UtilTool.ImageTool;
 
 import org.w3c.dom.Text;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -301,6 +309,58 @@ public class DataTransController {
             public void onFailure(Call<BackChatBean> call, Throwable t) {
                 SetFailure_ShowView(activity);
                 setTextViewEmpty(textView);
+            }
+        });
+    }
+
+    public static void getBaiduRecognitionData(Context context,String image_url_code,String api_key,String secret_key,String grant_type,TextView textView){
+        /**获取access_token**/
+        GetAccessTokenApi getAccessTokenApi=new GetAccessTokenApi();
+        getAccessTokenApi.SetUrl(context.getString(R.string.token_url));
+        GetAccessTokenService getAccessTokenService=getAccessTokenApi.getService();
+        Call<AccessTokenBean> call_token=getAccessTokenService.getState(api_key,secret_key,grant_type);
+        call_token.enqueue(new Callback<AccessTokenBean>() {
+            @Override
+            public void onResponse(Call<AccessTokenBean> call, Response<AccessTokenBean> response) {
+                if(response.body()!=null){
+                    //mShow_View.setText(response.body().getAccess_token());
+                    /**获取识别内容**/
+                    GetRecognitionApi getRecognitionApi=new GetRecognitionApi();
+                    getRecognitionApi.SetUrl(context.getString(R.string.recognition_url));
+                    GetRecognitionService getRecognitionService=getRecognitionApi.getService();
+                    //MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+                    //RequestBody body = RequestBody.create(mediaType,"image="+temp);
+                    RequestBody requestBody=RequestBody.create(
+                            MediaType.parse("application/x-www-form-urlencoded;charset=utf-8"),"image="+image_url_code);
+                    Call<WordsResult> call_recognition=getRecognitionService.getState(response.body().getAccess_token(),requestBody);
+                    call_recognition.enqueue(new Callback<WordsResult>() {
+                        @Override
+                        public void onResponse(Call<WordsResult> call, Response<WordsResult> response) {
+                            if(response.body()!=null){
+                                String word_temp="";
+                                for(int i=0;i<response.body().getWords_result().size();i++){
+                                    word_temp+=response.body().getWords_result().get(i).getWords();
+                                }
+                                textView.setText(word_temp);
+                            }else{
+                                Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<WordsResult> call, Throwable t) {
+                            SetFailure_ShowView(context);
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccessTokenBean> call, Throwable t) {
+                SetFailure_ShowView(context);
             }
         });
     }

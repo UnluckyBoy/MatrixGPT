@@ -15,8 +15,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Base64;
 
 /**
@@ -132,6 +135,14 @@ public class ImageTool{
         String suffixName=filename.substring(filename.lastIndexOf(".")+1);//获取没有.的后缀名
         String imageBaseType="data:image/"+suffixName+";base64,";
         Base64.Encoder encoder = Base64.getEncoder();
-        return imageBaseType+encoder.encodeToString(data);
+        String base64code=encoder.encodeToString(data);//若加入图片头，则使用:imageBaseType+encoder.encodeToString(data)
+        String result=null;
+        try {
+            result=URLEncoder.encode(base64code, "utf-8");//将base64进行urlencode
+            //String result4 = URLDecoder.decode(result, "utf-8");//URLDecoder解码
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
