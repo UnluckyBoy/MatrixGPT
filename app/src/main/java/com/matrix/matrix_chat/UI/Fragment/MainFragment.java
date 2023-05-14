@@ -83,8 +83,8 @@ public class MainFragment extends Fragment {
 
     private ActivityResultLauncher<Intent> mLauncher;//启动activity对象,必须要在onCreate中初始化
 
-    private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Z";
-    private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtb";
+    private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Zmatrix";
+    private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtbmatrix";
     private static final String grant_type="client_credentials";
 
     public static MainFragment newInstance(String param1) {
