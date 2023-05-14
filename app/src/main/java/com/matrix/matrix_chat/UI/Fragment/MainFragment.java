@@ -305,7 +305,7 @@ public class MainFragment extends Fragment {
      * @param filePath
      */
     private void getImageBaseData(String filePath){
-        String temp=ImageTool.getImageBase(filePath);
+        String temp=ImageTool.getRecognitionImageBase(filePath);
         //mShow_View.setText(temp);
         DataTransController.getBaiduRecognitionData(view.getContext(),temp,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
     }

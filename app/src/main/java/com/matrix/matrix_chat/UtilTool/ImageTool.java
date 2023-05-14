@@ -118,6 +118,7 @@ public class ImageTool{
      * @return
      */
     public static String getImageBase(String path){
+
         File file=new File(path);
         byte[] data = null;
         try {
@@ -135,7 +136,20 @@ public class ImageTool{
         String suffixName=filename.substring(filename.lastIndexOf(".")+1);//获取没有.的后缀名
         String imageBaseType="data:image/"+suffixName+";base64,";
         Base64.Encoder encoder = Base64.getEncoder();
-        String base64code=encoder.encodeToString(data);//若加入图片头，则使用:imageBaseType+encoder.encodeToString(data)
+        return encoder.encodeToString(data);//若加入图片头,则使用:imageBaseType+encoder.encodeToString(data)
+    }
+
+    /***
+     * 获取文字识别规定body类型
+     * @param path
+     * @return
+     */
+    public static String getRecognitionImageBase(String path){
+        String base64code=getImageBase(path);
+        return getBase2Urlencode(base64code);
+    }
+
+    public static String getBase2Urlencode(String base64code){
         String result=null;
         try {
             result=URLEncoder.encode(base64code, "utf-8");//将base64进行urlencode
