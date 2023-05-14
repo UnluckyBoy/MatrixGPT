@@ -1,19 +1,25 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
 import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +38,13 @@ import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.matrix.matrix_chat.Network.API.Back.GetAccessTokenApi;
-import com.matrix.matrix_chat.Network.API.Back.GetRecognitionApi;
+import com.luck.picture.lib.basic.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.config.SelectMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.matrix.matrix_chat.Network.DataTrans.DataTransController;
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.AccessTokenBean;
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.WordsResult;
-import com.matrix.matrix_chat.Network.Service.Back.GetAccessTokenService;
-import com.matrix.matrix_chat.Network.Service.Back.GetRecognitionService;
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.MatrixDialog;
@@ -46,22 +52,14 @@ import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.Dialog.MatrixDislikeDialog;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.MatrixToast;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.config.TTAdManagerHolder;
-import com.matrix.matrix_chat.UtilTool.DataSharaPreferenceManager;
 import com.matrix.matrix_chat.UtilTool.ImageTool;
 import com.matrix.matrix_chat.UtilTool.TimeTool;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 @SuppressWarnings("EmptyMethod")
 public class MainFragment extends Fragment {
@@ -81,10 +79,12 @@ public class MainFragment extends Fragment {
     private long startTime = 0;
     private boolean mHasShowDownloadActive = false;
 
+    private PopupWindow popupWindow;//弹窗
+
     private ActivityResultLauncher<Intent> mLauncher;//启动activity对象,必须要在onCreate中初始化
 
-    private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Zmatrix";
-    private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtbmatrix";
+    private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Z";
+    private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtb";
     private static final String grant_type="client_credentials";
 
     public static MainFragment newInstance(String param1) {
@@ -100,6 +100,11 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         /**ActivityResultLauncher<Intent>必须要在onCreate中启动**/
+        //setLauncher();
+    }
+
+    /**使用registerForActivityResult打开相册,已使用新组件PictureSelector替换**/
+    private void setLauncher(){
         mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
@@ -200,12 +205,99 @@ public class MainFragment extends Fragment {
                     break;
                 case R.id.recognition_btn:
                     /**打开识图activity**/
-                    //Intent intent = new Intent(this, MyActivity.class);
-                    //BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false);
-                    mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null,
-                            1, null, false));
+                    //mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));
+                    selectImageWindow(view);
                     break;
             }
+        }
+    }
+
+    /**弹窗选择相片**/
+    public void selectImageWindow(View view){
+        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_selectimage_window, null);
+        popupWindow=new PopupWindow(view);
+        //popupWindow=new PopupWindow(popUpView,-1, -2);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(popUpView);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(false);
+        //popupWindow.setAnimationStyle(5);//设置动画效果
+        popupWindow.setTouchable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
+        /**设置背景为暗**/
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        getActivity().getWindow().setAttributes(lp);
+
+        popupWindow.showAtLocation(getActivity().getWindow().getDecorView(),Gravity.CENTER,0,0);
+
+        Button btn_photo,btn_camera,btn_cancel;
+        btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
+        btn_camera=(Button)popUpView.findViewById(R.id.btn_camera);
+        btn_cancel=(Button)popUpView.findViewById(R.id.btn_cancel);
+
+        btn_photo.setOnClickListener(new popClickListener());
+        btn_camera.setOnClickListener(new popClickListener());
+        btn_cancel.setOnClickListener(new popClickListener());
+    }
+    private class popClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_photo:
+                    //相册
+                    PictureSelector.create(getActivity())
+                            .openSystemGallery(SelectMimeType.ofImage())
+                            .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final String localPicturePath = result.get(0).getRealPath();
+                                    getImageBaseData(localPicturePath);//调用文字识别api
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
+                    closePopupWindow();
+                    break;
+                case R.id.btn_camera:
+                    //拍照
+                    //Toast.makeText(getContext(), "打开相机", Toast.LENGTH_SHORT).show();
+                    PictureSelector.create(getActivity())
+                            .openCamera(SelectMimeType.ofImage())
+                            .forResultActivity(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    Toast.makeText(getContext(), "拍照:"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
+                    closePopupWindow();
+                    break;
+                case R.id.btn_cancel:
+                    //取消
+                    closePopupWindow();
+                    break;
+            }
+        }
+    }
+    /**关闭弹窗**/
+    public void closePopupWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+            popupWindow = null;
+
+            WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+            lp.alpha = 1f;
+            getActivity().getWindow().setAttributes(lp);
         }
     }
 

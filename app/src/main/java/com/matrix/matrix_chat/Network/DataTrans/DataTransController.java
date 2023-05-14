@@ -339,7 +339,7 @@ public class DataTransController {
                             if(response.body()!=null){
                                 String word_temp="";
                                 for(int i=0;i<response.body().getWords_result().size();i++){
-                                    word_temp+=response.body().getWords_result().get(i).getWords();
+                                    word_temp+=response.body().getWords_result().get(i).getWords()+"\n";
                                 }
                                 textView.setText(word_temp);
                             }else{

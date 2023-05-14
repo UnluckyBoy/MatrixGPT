@@ -221,7 +221,6 @@ public class UserFragment extends Fragment {
         popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent)));
-
         //popupWindow.showAsDropDown(view);//弹出创建显示在按钮下面
         popupWindow.showAsDropDown(view,100,0, Gravity.CENTER);//显示在view控件的正左上方
         //popupWindow.showAsDropDown(view,100,100, Gravity.BOTTOM);//显示在view控件的正左下方
