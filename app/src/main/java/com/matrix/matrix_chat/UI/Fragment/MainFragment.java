@@ -205,11 +205,35 @@ public class MainFragment extends Fragment {
                     break;
                 case R.id.recognition_btn:
                     /**打开识图activity**/
-                    //mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));
-                    selectImageWindow(view);
+                    //mLauncher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));//原Picker工具使用
+
+                    //selectImageWindow(view);//项目使用
+                    test();//测试使用
                     break;
             }
         }
+    }
+
+    private void test(){
+        PictureSelector.create(getActivity())
+                .openSystemGallery(SelectMimeType.ofImage())
+                .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(ArrayList<LocalMedia> result) {
+                        //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                        final String localPicturePath = result.get(0).getRealPath();
+                        final long testPath = result.get(0).getSize();
+
+                        String temp=ImageTool.getImagePath2BaseCode(localPicturePath,true);
+                        String temp_bitmap=ImageTool.bitmap2Base64(localPicturePath,true);
+
+                        mShow_View.setText(String.valueOf(testPath));
+                    }
+                    @Override
+                    public void onCancel() {
+                        //closePopupWindow();
+                    }
+                });
     }
 
     /**弹窗选择相片**/
