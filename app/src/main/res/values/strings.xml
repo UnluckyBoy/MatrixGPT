@@ -46,4 +46,5 @@
     <!--百度识图相关url-->
     <string name="token_url">https://aip.baidubce.com/oauth/2.0/</string>
     <string name="recognition_url">https://aip.baidubce.com/rest/2.0/ocr/v1/</string>
+    <string name="recognition_list_null">识别失败,请检查图片是否符合规则:\n图片尽可能保存清晰</string>
 </resources>

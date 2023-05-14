@@ -337,13 +337,19 @@ public class DataTransController {
                         @Override
                         public void onResponse(Call<WordsResult> call, Response<WordsResult> response) {
                             if(response.body()!=null){
-                                String word_temp="";
-                                for(int i=0;i<response.body().getWords_result().size();i++){
-                                    word_temp+=response.body().getWords_result().get(i).getWords()+"\n";
+                                if(response.body().getWords_result()!=null){
+                                    String word_temp="";
+                                    for(int i=0;i<response.body().getWords_result().size();i++){
+                                        word_temp+=response.body().getWords_result().get(i).getWords()+"\n";
+                                    }
+                                    textView.setText(word_temp);
+                                }else {
+                                    //Toast.makeText(context, "识别失败", Toast.LENGTH_SHORT).show();
+                                    textView.setText(context.getString(R.string.recognition_list_null));
                                 }
-                                textView.setText(word_temp);
                             }else{
-                                Toast.makeText(context, "获取失败", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(context, "识别失败,请检查图片是否符合", Toast.LENGTH_SHORT).show();
+                                textView.setText(context.getString(R.string.recognition_list_null));
                             }
                         }
 

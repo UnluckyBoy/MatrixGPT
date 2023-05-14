@@ -284,17 +284,8 @@ public class MainFragment extends Fragment {
                                 public void onResult(ArrayList<LocalMedia> result) {
                                     //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
                                     final String localPicturePath = result.get(0).getRealPath();
-                                    final long midSize=8388608;
                                     final long fileSize = result.get(0).getSize();//文件大小
-                                    /**识别内容要10m以内,此处设置8m以内**/
-                                    if(fileSize>midSize){
-                                        //大于8m,需要压缩
-                                        String tempCode=ImageTool.bitmap2Base64(localPicturePath,false);
-                                        String body_Code=ImageTool.getBase2Urlencode(tempCode);
-                                        DataTransController.getBaiduRecognitionData(view.getContext(),body_Code,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
-                                    }else{
-                                        getImageBaseData(localPicturePath);//否则直接调用文字识别api
-                                    }
+                                    getRecognitionTrans(fileSize,localPicturePath);
                                     //getImageBaseData(localPicturePath);//调用文字识别api
                                 }
                                 @Override
@@ -312,7 +303,10 @@ public class MainFragment extends Fragment {
                             .forResultActivity(new OnResultCallbackListener<LocalMedia>() {
                                 @Override
                                 public void onResult(ArrayList<LocalMedia> result) {
-                                    Toast.makeText(getContext(), "拍照:"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "拍照:"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final String localPicturePath = result.get(0).getRealPath();
+                                    final long fileSize = result.get(0).getSize();//文件大小
+                                    getRecognitionTrans(fileSize,localPicturePath);
                                 }
 
                                 @Override
@@ -338,6 +332,20 @@ public class MainFragment extends Fragment {
             WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
             lp.alpha = 1f;
             getActivity().getWindow().setAttributes(lp);
+        }
+    }
+
+    /**判断是否压缩**/
+    private void getRecognitionTrans(final long fileSize,String localPicturePath){
+        final long midSize=8388608;
+        /**识别内容要10m以内,此处设置8m以内**/
+        if(fileSize>midSize){
+            //大于8m,需要压缩
+            String tempCode=ImageTool.bitmap2Base64(localPicturePath,false);
+            String body_Code=ImageTool.getBase2Urlencode(tempCode);
+            DataTransController.getBaiduRecognitionData(view.getContext(),body_Code,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
+        }else{
+            getImageBaseData(localPicturePath);//否则直接调用文字识别api
         }
     }
 
