@@ -256,7 +256,6 @@ public class MainFragment extends Fragment {
                                     final String localPicturePath = result.get(0).getRealPath();
                                     getImageBaseData(localPicturePath);//调用文字识别api
                                 }
-
                                 @Override
                                 public void onCancel() {
                                     //closePopupWindow();

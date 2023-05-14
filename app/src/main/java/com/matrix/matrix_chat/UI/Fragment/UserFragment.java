@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,6 +28,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.luck.picture.lib.basic.PictureSelector;
+import com.luck.picture.lib.config.SelectMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.matrix.matrix_chat.Network.API.Back.upHeadApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.IsTrueBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.LoginBean;
@@ -41,6 +46,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import okhttp3.MediaType;
@@ -59,6 +65,7 @@ public class UserFragment extends Fragment {
     private static int openPickCode=99;
 
     private ActivityResultLauncher<Intent> launcher;
+    private PopupWindow selectImageWindow;//弹窗
 
 
     public static UserFragment newInstance(String param1) {
@@ -73,6 +80,12 @@ public class UserFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /**launcher必须在onCreate初始化并处理结果**/
+        //initLauncher();
+
+    }
+
+    /**初始化launcher打开相册,已用其他工具替代**/
+    private void initLauncher(){
         launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -200,8 +213,8 @@ public class UserFragment extends Fragment {
                 break;
                 case R.id.user_head:
                     /**使用launcher.launch()打开图库**/
-                    launcher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null,
-                            1, null, false));
+                    //launcher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));
+                    selectHeadWindow(v);
                     break;
                 case R.id.btn_info_edit:
                     Toast.makeText(getContext(),"功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
@@ -210,6 +223,7 @@ public class UserFragment extends Fragment {
         }
     }
 
+    /**信息视图弹窗**/
     private void popUpWindow(View view){
         //创建窗口
         PopupWindow popupWindow=new PopupWindow(view);
@@ -222,8 +236,8 @@ public class UserFragment extends Fragment {
         popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent)));
         //popupWindow.showAsDropDown(view);//弹出创建显示在按钮下面
-        popupWindow.showAsDropDown(view,100,0, Gravity.CENTER);//显示在view控件的正左上方
         //popupWindow.showAsDropDown(view,100,100, Gravity.BOTTOM);//显示在view控件的正左下方
+        popupWindow.showAsDropDown(view,100,0, Gravity.CENTER);//显示在view控件的正左上方
 
         TextView accountText,nameText,emailText,phoneText,genderText,gpt_numText;
         Button getNumBtn=popUpView.findViewById(R.id.top_up_btn);
@@ -266,6 +280,94 @@ public class UserFragment extends Fragment {
             //Toast.makeText(getContext(),"UserFragment",Toast.LENGTH_SHORT).show();
             //SetHead(intent_UserFragment.getStringExtra("U_head"));
             //freshData();
+        }
+    }
+
+
+    private void selectHeadWindow(View view){
+        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_selectimage_window, null);
+        selectImageWindow=new PopupWindow(view);
+        selectImageWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        selectImageWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        selectImageWindow.setContentView(popUpView);
+        selectImageWindow.setOutsideTouchable(false);
+        selectImageWindow.setFocusable(false);
+        //popupWindow.setAnimationStyle(5);//设置动画效果
+        selectImageWindow.setTouchable(true);
+        selectImageWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
+        /**设置背景为暗**/
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        getActivity().getWindow().setAttributes(lp);
+
+        selectImageWindow.showAtLocation(getActivity().getWindow().getDecorView(),Gravity.CENTER,0,0);
+
+        Button btn_photo,btn_camera,btn_cancel;
+        btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
+        btn_camera=(Button)popUpView.findViewById(R.id.btn_camera);
+        btn_cancel=(Button)popUpView.findViewById(R.id.btn_cancel);
+
+        btn_photo.setOnClickListener(new headWinClickListener());
+        btn_camera.setOnClickListener(new headWinClickListener());
+        btn_cancel.setOnClickListener(new headWinClickListener());
+    }
+    private class headWinClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_photo:
+                    //相册
+                    PictureSelector.create(getActivity())
+                            .openSystemGallery(SelectMimeType.ofImage())
+                            .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final String localPicturePath = result.get(0).getRealPath();
+                                    upHead(localPicturePath);
+                                }
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
+                    closePopupWindow();
+                    break;
+                case R.id.btn_camera:
+                    //拍照
+                    //Toast.makeText(getContext(), "打开相机", Toast.LENGTH_SHORT).show();
+                    PictureSelector.create(getActivity())
+                            .openCamera(SelectMimeType.ofImage())
+                            .forResultActivity(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    //Toast.makeText(getContext(), "拍照:"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final String localPicturePath = result.get(0).getRealPath();
+                                    upHead(localPicturePath);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
+                    closePopupWindow();
+                    break;
+                case R.id.btn_cancel:
+                    //取消
+                    closePopupWindow();
+                    break;
+            }
+        }
+    }
+    /**关闭弹窗**/
+    private void closePopupWindow() {
+        if (selectImageWindow != null && selectImageWindow.isShowing()) {
+            selectImageWindow.dismiss();
+            selectImageWindow = null;
+            WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+            lp.alpha = 1f;
+            getActivity().getWindow().setAttributes(lp);
         }
     }
 }

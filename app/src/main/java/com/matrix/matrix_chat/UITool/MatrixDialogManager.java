@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * @Date 2023/4/11 0011 16:01
  */
 public class MatrixDialogManager {
+    private static PopupWindow popupWindow;//弹窗
 
     public MatrixDialogManager(){
     }
@@ -125,4 +126,88 @@ public class MatrixDialogManager {
                 activity.getString(R.string.Cancel) };
         MatrixDialogManager.showVideoView(names,activity,account,tempIntent);
     }
+
+    /**弹窗选择相片**/
+//    public static void selectImageWindow(Activity activity,View view){
+//        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_selectimage_window, null);
+//        popupWindow=new PopupWindow(view);
+//        //popupWindow=new PopupWindow(popUpView,-1, -2);
+//        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+//        popupWindow.setContentView(popUpView);
+//        popupWindow.setOutsideTouchable(false);
+//        popupWindow.setFocusable(false);
+//        //popupWindow.setAnimationStyle(5);//设置动画效果
+//        popupWindow.setTouchable(true);
+//        popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
+//        /**设置背景为暗**/
+//        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+//        lp.alpha = 0.5f;
+//        activity.getWindow().setAttributes(lp);
+//
+//        popupWindow.showAtLocation(activity.getWindow().getDecorView(),Gravity.CENTER,0,0);
+//
+//        Button btn_photo,btn_camera,btn_cancel;
+//        btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
+//        btn_camera=(Button)popUpView.findViewById(R.id.btn_camera);
+//        btn_cancel=(Button)popUpView.findViewById(R.id.btn_cancel);
+//
+//        btn_photo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PictureSelector.create(activity)
+//                        .openSystemGallery(SelectMimeType.ofImage())
+//                        .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+//                            @Override
+//                            public void onResult(ArrayList<LocalMedia> result) {
+//                                //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+//                                final String localPicturePath = result.get(0).getRealPath();
+//                                getImageBaseData(localPicturePath);//调用文字识别api
+//                            }
+//
+//                            @Override
+//                            public void onCancel() {
+//                                //closePopupWindow();
+//                            }
+//                        });
+//                closePopupWindow(activity,popupWindow);
+//            }
+//        });
+//        btn_camera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PictureSelector.create(activity)
+//                        .openCamera(SelectMimeType.ofImage())
+//                        .forResultActivity(new OnResultCallbackListener<LocalMedia>() {
+//                            @Override
+//                            public void onResult(ArrayList<LocalMedia> result) {
+//                                Toast.makeText(activity, "拍照:"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancel() {
+//                                //closePopupWindow();
+//                            }
+//                        });
+//                closePopupWindow(activity,popupWindow);
+//            }
+//        });
+//        btn_cancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                closePopupWindow(activity,popupWindow);
+//            }
+//        });
+//    }
+//    /**关闭弹窗**/
+//    public static void closePopupWindow(Activity activity,PopupWindow popupWindow) {
+//        if (popupWindow != null && popupWindow.isShowing()) {
+//            popupWindow.dismiss();
+//            popupWindow = null;
+//
+//            WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+//            lp.alpha = 1f;
+//            activity.getWindow().setAttributes(lp);
+//        }
+//    }
 }
