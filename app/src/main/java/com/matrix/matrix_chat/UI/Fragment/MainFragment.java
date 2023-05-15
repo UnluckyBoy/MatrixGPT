@@ -252,6 +252,7 @@ public class MainFragment extends Fragment {
         popupWindow.setContentView(popUpView);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.popup_selector_image_anim_style);//设置动画效果
         //popupWindow.setTouchable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
         /**设置背景为暗**/

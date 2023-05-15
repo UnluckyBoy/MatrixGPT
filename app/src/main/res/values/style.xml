@@ -66,7 +66,11 @@
         <!--        <item name="selectableItemBackgroundBorderless">@drawable/item_background_borderless_material</item>-->
         <!--        <item name="borderlessButtonStyle">@style/Widget.Material.Light.Button.Borderless</item>-->
         <!--        <item name="buttonBarButtonStyle">@style/Widget.Material.Light.Button.ButtonBar.AlertDialog</item>-->
+    </style>
 
+    <style name="popup_selector_image_anim_style">
+        <item name="android:windowEnterAnimation">@anim/popup_selector_image_show_anim</item>
+        <item name="android:windowExitAnimation">@anim/popup_selector_image_hidden_anim</item>
     </style>
 
 </resources>
