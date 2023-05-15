@@ -65,7 +65,7 @@ public class UserFragment extends Fragment {
     private static int openPickCode=99;
 
     private ActivityResultLauncher<Intent> launcher;
-    private PopupWindow selectImageWindow;//弹窗
+    private PopupWindow popupWindow;//弹窗
 
 
     public static UserFragment newInstance(String param1) {
@@ -209,12 +209,13 @@ public class UserFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.info_btn:
-                    popUpWindow(v);
+                    popUpWindow(v,R.layout.view_info_window);
                 break;
                 case R.id.user_head:
                     /**使用launcher.launch()打开图库**/
                     //launcher.launch(BGAPhotoPickerActivity.newIntent(getActivity(), null, 1, null, false));
-                    selectHeadWindow(v);
+                    //selectHeadWindow(v);
+                    popUpWindow(v,R.layout.view_selectimage_window);
                     break;
                 case R.id.btn_info_edit:
                     Toast.makeText(getContext(),"功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
@@ -224,43 +225,69 @@ public class UserFragment extends Fragment {
     }
 
     /**信息视图弹窗**/
-    private void popUpWindow(View view){
+    private void popUpWindow(View view,int pop_lay_id){
         //创建窗口
-        PopupWindow popupWindow=new PopupWindow(view);
+        View popUpView=LayoutInflater.from(view.getContext()).inflate(pop_lay_id, null);
+        popupWindow=new PopupWindow(view);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_info_window, null);
         popupWindow.setContentView(popUpView);
-        popupWindow.setOutsideTouchable(false);
+        popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
-        popupWindow.setTouchable(true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent)));
-        //popupWindow.showAsDropDown(view);//弹出创建显示在按钮下面
-        //popupWindow.showAsDropDown(view,100,100, Gravity.BOTTOM);//显示在view控件的正左下方
-        popupWindow.showAsDropDown(view,100,0, Gravity.CENTER);//显示在view控件的正左上方
-
-        TextView accountText,nameText,emailText,phoneText,genderText,gpt_numText;
-        Button getNumBtn=popUpView.findViewById(R.id.top_up_btn);
-        accountText=popUpView.findViewById(R.id.info_account);
-        nameText=popUpView.findViewById(R.id.info_name);
-        emailText=popUpView.findViewById(R.id.info_email);
-        phoneText=popUpView.findViewById(R.id.info_phone);
-        genderText=popUpView.findViewById(R.id.info_gender);
-        gpt_numText=popUpView.findViewById(R.id.info_gpt_num);
-
-        accountText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_account)));
-        nameText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_name)));
-        emailText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_email)));
-        phoneText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_phone)));
-        genderText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_sex)));
-        gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra(view.getContext().getString(R.string.info_gptNum),0)));
-
-        getNumBtn.setOnClickListener(new View.OnClickListener() {
+        popupWindow.setAnimationStyle(R.style.popup_selector_image_anim_style);//设置动画效果
+        //selectImageWindow.setTouchable(true);//设置此属性时，setContentView与setFocusable出问题
+        popupWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
+        /**设置背景为暗**/
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        getActivity().getWindow().setAttributes(lp);
+        popupWindow.showAtLocation(getActivity().getWindow().getDecorView(),Gravity.CENTER,0,0);
+        /**点击外部时，关闭遮罩**/
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"充值功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                lp.alpha = 1f;
+                getActivity().getWindow().setAttributes(lp);
             }
         });
+        switch (pop_lay_id){
+            case R.layout.view_info_window:
+                TextView accountText,nameText,emailText,phoneText,genderText,gpt_numText;
+                Button getNumBtn=popUpView.findViewById(R.id.top_up_btn);
+                accountText=popUpView.findViewById(R.id.info_account);
+                nameText=popUpView.findViewById(R.id.info_name);
+                emailText=popUpView.findViewById(R.id.info_email);
+                phoneText=popUpView.findViewById(R.id.info_phone);
+                genderText=popUpView.findViewById(R.id.info_gender);
+                gpt_numText=popUpView.findViewById(R.id.info_gpt_num);
+
+                accountText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_account)));
+                nameText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_name)));
+                emailText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_email)));
+                phoneText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_phone)));
+                genderText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_sex)));
+                gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra(view.getContext().getString(R.string.info_gptNum),0)));
+
+                getNumBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"充值功能未实装,敬请期待",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+            case R.layout.view_selectimage_window:
+                Button btn_photo,btn_camera,btn_cancel;
+                btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
+                btn_camera=(Button)popUpView.findViewById(R.id.btn_camera);
+                btn_cancel=(Button)popUpView.findViewById(R.id.btn_cancel);
+
+                btn_photo.setOnClickListener(new headWinClickListener());
+                btn_camera.setOnClickListener(new headWinClickListener());
+                btn_cancel.setOnClickListener(new headWinClickListener());
+                break;
+        }
+
     }
 
     /**开启线程刷新数据**/
@@ -283,42 +310,7 @@ public class UserFragment extends Fragment {
         }
     }
 
-
-    private void selectHeadWindow(View view){
-        View popUpView=LayoutInflater.from(view.getContext()).inflate(R.layout.view_selectimage_window, null);
-        selectImageWindow=new PopupWindow(view);
-        selectImageWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        selectImageWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        selectImageWindow.setContentView(popUpView);
-        selectImageWindow.setOutsideTouchable(true);
-        selectImageWindow.setFocusable(true);
-        selectImageWindow.setAnimationStyle(R.style.popup_selector_image_anim_style);//设置动画效果
-        //selectImageWindow.setTouchable(true);
-        selectImageWindow.setBackgroundDrawable(new ColorDrawable(view.getResources().getColor(R.color.transparent,null)));
-        /**设置背景为暗**/
-        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-        lp.alpha = 0.5f;
-        getActivity().getWindow().setAttributes(lp);
-        selectImageWindow.showAtLocation(getActivity().getWindow().getDecorView(),Gravity.CENTER,0,0);
-        /**点击外部时，关闭遮罩**/
-        selectImageWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-                lp.alpha = 1f;
-                getActivity().getWindow().setAttributes(lp);
-            }
-        });
-
-        Button btn_photo,btn_camera,btn_cancel;
-        btn_photo=(Button)popUpView.findViewById(R.id.btn_photo);
-        btn_camera=(Button)popUpView.findViewById(R.id.btn_camera);
-        btn_cancel=(Button)popUpView.findViewById(R.id.btn_cancel);
-
-        btn_photo.setOnClickListener(new headWinClickListener());
-        btn_camera.setOnClickListener(new headWinClickListener());
-        btn_cancel.setOnClickListener(new headWinClickListener());
-    }
+    /**修改头像弹窗按钮响应方法**/
     private class headWinClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -370,9 +362,9 @@ public class UserFragment extends Fragment {
     }
     /**关闭弹窗**/
     private void closePopupWindow() {
-        if (selectImageWindow != null && selectImageWindow.isShowing()) {
-            selectImageWindow.dismiss();
-            selectImageWindow = null;
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+            popupWindow = null;
             WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
             lp.alpha = 1f;
             getActivity().getWindow().setAttributes(lp);
