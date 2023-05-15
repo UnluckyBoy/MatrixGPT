@@ -1,12 +1,20 @@
 package com.matrix.matrix_chat.UI.Fragment;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -35,8 +43,10 @@ public class ChatFragment extends Fragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
+    private RelativeLayout add_article_lay;
+
     private List<ArticleBean> articleList;
-    private Button add_article;
+    private Button add_article,hide_add_view_btn;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -73,11 +83,15 @@ public class ChatFragment extends Fragment {
     private void InitView(View view){
         mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLay);
         mRecyclerView=(RecyclerView) view.findViewById(R.id.article_list_view);
-        add_article=(Button)view.findViewById(R.id.add_article);
+        add_article_lay=(RelativeLayout)view.findViewById(R.id.add_article_lay);
+        add_article_lay.setVisibility(View.GONE);//先隐藏视图
 
-        addTrans();
+        add_article=(Button)view.findViewById(R.id.add_article);
+        hide_add_view_btn=(Button)view.findViewById(R.id.hide_add_view_btn);
+
         InitArticlesData();
         initRefresh(view);
+        btnClickTrans();
     }
 
     /**加载数据**/
@@ -113,13 +127,9 @@ public class ChatFragment extends Fragment {
     }
 
     /**创建文章**/
-    public void addTrans(){
-        add_article.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(view.getContext(),"功能未实装",Toast.LENGTH_SHORT).show();
-            }
-        });
+    public void btnClickTrans(){
+        add_article.setOnClickListener(new setBtnClick());
+        hide_add_view_btn.setOnClickListener(new setBtnClick());
     }
     /**绑定数据到视图**/
     private void bindDataView(final List<ArticleBean> articles){
@@ -189,5 +199,92 @@ public class ChatFragment extends Fragment {
         intent.putExtra(view.getContext().getString(R.string.mCreateTime),list.get(index).getmCreateTime());
         intent.putExtra(view.getContext().getString(R.string.mHot),list.get(index).getmHot());
         intent.putExtra(view.getContext().getString(R.string.mContent),list.get(index).getmContent());
+    }
+
+    private class setBtnClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.add_article:
+
+                    /**使用ViewTreeObserver确保在完全测量和绘制RelativeLayout后获取正确的宽度和高度**/
+                    ViewTreeObserver vto_show = add_article_lay.getViewTreeObserver();
+                    vto_show.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            // 获取宽度和高度
+                            int width = add_article_lay.getWidth();
+                            int height = add_article_lay.getHeight();
+                            // 在这里进行你的操作
+                            //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
+                            setShowAnim(width,height);
+//                            ScaleAnimation animation = new ScaleAnimation(0f, 1f, 0f, 1f,
+//                                    Animation.RELATIVE_TO_PARENT,0.5f,Animation.RELATIVE_TO_PARENT,0.5f);
+//                            animation.setDuration(1000); // 设置动画持续时间为 1000 毫秒
+//                            animation.setFillAfter(true); // 设置动画结束后保持最后的状态
+//                            add_article_lay.startAnimation(animation);// 启动动画
+
+                            // 在获取到宽度和高度后,移除监听器以避免多次回调
+                            add_article_lay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    });
+                    add_article_lay.setVisibility(View.VISIBLE);//显示视图
+                    add_article.setVisibility(View.GONE);//隐藏按钮
+                    break;
+                case R.id.hide_add_view_btn:
+                    ViewTreeObserver vto_hide = add_article_lay.getViewTreeObserver();
+                    vto_hide.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            // 获取宽度和高度
+                            int width = add_article_lay.getWidth();
+                            int height = add_article_lay.getHeight();
+                            // 在这里进行你的操作
+                            //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
+
+                            setHideAnim(width,height);
+
+                            // 在获取到宽度和高度后,移除监听器以避免多次回调
+                            add_article_lay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        }
+                    });
+                    add_article_lay.setVisibility(View.GONE);
+                    add_article.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    }
+
+    private void setShowAnim(final int width,final int height){
+        //Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
+        AnimationSet animationSet=new AnimationSet(false);
+        AlphaAnimation show_alpha = new AlphaAnimation(0, 1);
+        TranslateAnimation show_translate=new TranslateAnimation(0, 0, height, 0);
+        ScaleAnimation show_scale = new ScaleAnimation(0f, 1f, 0f, 1f,
+                Animation.RELATIVE_TO_PARENT,0.5f,Animation.RELATIVE_TO_PARENT,0.5f);
+
+        animationSet.addAnimation(show_alpha);
+        animationSet.addAnimation(show_translate);
+        animationSet.addAnimation(show_scale);
+        animationSet.setDuration(1000);
+        animationSet.setRepeatMode(AnimationSet.REVERSE);
+        animationSet.reset();//释放资源
+        add_article_lay.startAnimation(animationSet);//开始动画
+    }
+
+    private void setHideAnim(final int width,final int height){
+        AnimationSet animationSet=new AnimationSet(false);
+        AlphaAnimation hide_alpha = new AlphaAnimation(1, 0);
+        TranslateAnimation hide_translate=new TranslateAnimation(0, 0, 0, height);
+        ScaleAnimation hide_scale = new ScaleAnimation(1f, 0f, 1f, 0f,
+                Animation.RELATIVE_TO_PARENT,0.5f,Animation.RELATIVE_TO_PARENT,0.5f);
+
+        animationSet.addAnimation(hide_alpha);
+        animationSet.addAnimation(hide_translate);
+        animationSet.addAnimation(hide_scale);
+        animationSet.setDuration(1000);
+        animationSet.setRepeatMode(AnimationSet.REVERSE);
+        animationSet.reset();//释放资源
+        add_article_lay.startAnimation(animationSet);//开始动画
     }
 }

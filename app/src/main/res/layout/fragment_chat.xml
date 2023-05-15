@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/lay_back_gray"
-        android:orientation="vertical">
+        android:background="@drawable/lay_back_gray">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLay"
@@ -33,6 +32,52 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:background="@drawable/btn_add_article" />
+
+        <RelativeLayout
+            android:id="@+id/add_article_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/swipeRefreshLay"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/hide_add_view_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="6dp"
+                android:background="@drawable/hide_down"/>
+
+            <EditText
+                android:id="@+id/add_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="42dp"
+                android:background="@drawable/lay_back_white"/>
+
+            <LinearLayout
+                android:id="@+id/add_file_lay"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/lay_back_brown"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/add_image_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/add_image"/>
+                <Button
+                    android:id="@+id/add_video_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/add_video"/>
+            </LinearLayout>
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>
