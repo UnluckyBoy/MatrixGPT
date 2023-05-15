@@ -374,16 +374,16 @@ public class MainFragment extends Fragment {
      */
     private void GetBackChatData(String content,String openAi_type){
         intent_MainFragment=getActivity().getIntent();
-        if(intent_MainFragment.getStringExtra("U_account").equals(null)||
-                intent_MainFragment.getStringExtra("U_account").equals("")){
+        if(intent_MainFragment.getStringExtra(view.getContext().getString(R.string.info_account)).equals(null)||
+                intent_MainFragment.getStringExtra(view.getContext().getString(R.string.info_account)).equals("")){
             //游客
             /*提示登录*/
             MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(), LoginActivity.class);
         }else{
             //用户登录
-            int mLevel=intent_MainFragment.getIntExtra("U_level",0);
-            int mGptNum=intent_MainFragment.getIntExtra("U_gptNum",0);
-            UserHandBackChat(content,openAi_type,mLevel,mGptNum,intent_MainFragment.getStringExtra("U_account"));
+            int mLevel=intent_MainFragment.getIntExtra(view.getContext().getString(R.string.info_level),0);
+            int mGptNum=intent_MainFragment.getIntExtra(view.getContext().getString(R.string.info_gptNum),0);
+            UserHandBackChat(content,openAi_type,mLevel,mGptNum,intent_MainFragment.getStringExtra(view.getContext().getString(R.string.info_account)));
         }
     }
 

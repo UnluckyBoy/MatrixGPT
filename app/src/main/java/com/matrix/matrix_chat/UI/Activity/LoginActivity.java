@@ -168,16 +168,16 @@ public class LoginActivity extends Activity {
     }
 
     private void setExtra(Response<LoginBean> response,Intent intent){
-        intent.putExtra("U_id",response.body().getId());
-        intent.putExtra("U_head",response.body().getHead());
-        intent.putExtra("U_name",response.body().getName());
-        intent.putExtra("U_password",response.body().getPassword());
-        intent.putExtra("U_sex",response.body().getSex());
-        intent.putExtra("U_account",response.body().getAccount());
-        intent.putExtra("U_phone",response.body().getPhone());
-        intent.putExtra("U_email",response.body().getEmail());
-        intent.putExtra("U_gptNum",response.body().getGptNum());
-        intent.putExtra("U_level",response.body().getLevel());
+        intent.putExtra(this.getString(R.string.info_id),response.body().getId());
+        intent.putExtra(this.getString(R.string.info_head),response.body().getHead());
+        intent.putExtra(this.getString(R.string.info_name),response.body().getName());
+        intent.putExtra(this.getString(R.string.info_password),response.body().getPassword());
+        intent.putExtra(this.getString(R.string.info_sex),response.body().getSex());
+        intent.putExtra(this.getString(R.string.info_account),response.body().getAccount());
+        intent.putExtra(this.getString(R.string.info_phone),response.body().getPhone());
+        intent.putExtra(this.getString(R.string.info_email),response.body().getEmail());
+        intent.putExtra(this.getString(R.string.info_gptNum),response.body().getGptNum());
+        intent.putExtra(this.getString(R.string.info_level),response.body().getLevel());
     }
 
 //    /**

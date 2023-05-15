@@ -48,7 +48,7 @@ public class MatrixDialogManager {
             public void onClickListener2SecondLastItem() {
                 //Class<MainActivity> tset=MainActivity.class;
                 Intent main_Intent=new Intent(currentTGA, targetTGA);
-                main_Intent.putExtra("U_account","");
+                main_Intent.putExtra(currentTGA.getString(R.string.info_account),"");
                 currentTGA.startActivity(main_Intent);
                 currentTGA.finish();
                 mDialog.dismiss();

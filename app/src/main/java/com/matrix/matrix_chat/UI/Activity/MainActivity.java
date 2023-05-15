@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         /**获取用户信息**/
-        String account_id=intent_MainActivity.getStringExtra("U_account");
+        String account_id=intent_MainActivity.getStringExtra(this.getString(R.string.info_account));
 
         if(account_id==null){
             MatrixDialogManager.hintLoginDialog(TGA,intent_MainActivity,this,LoginActivity.class);//提示登录
@@ -225,7 +225,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             //退出程序
-            logoutTrans();
+            if(intent_MainActivity.getStringExtra(this.getString(R.string.info_account))!=null||
+                    !(intent_MainActivity.getStringExtra(this.getString(R.string.info_account)).equals(null))||
+                    intent_MainActivity.getStringExtra(this.getString(R.string.info_account))!=""||
+                    !(intent_MainActivity.getStringExtra(this.getString(R.string.info_account)).equals(""))){
+                logoutTrans();
+            }
             this.finish();
             //System.exit(0);
         }
@@ -241,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
          * 登出
          * 结果:success,error,unlogin
          */
-        String account=intent_MainActivity.getStringExtra("U_account");
-        String password= Pwd3DESUtil.decode3Des(PASSWORD_EncryKEY,intent_MainActivity.getStringExtra("U_password"));
+        String account=intent_MainActivity.getStringExtra(this.getString(R.string.info_account));
+        String password= Pwd3DESUtil.decode3Des(PASSWORD_EncryKEY,intent_MainActivity.getStringExtra(this.getString(R.string.info_password)));
         LogoutApi logoutApi=new LogoutApi();
         logoutApi.SetUrl(TGA.getString(R.string.BackUrl)
                 +TGA.getString(R.string.Url_UserInfo));

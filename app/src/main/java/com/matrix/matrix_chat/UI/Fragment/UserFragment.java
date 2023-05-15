@@ -131,8 +131,8 @@ public class UserFragment extends Fragment {
         userName=view.findViewById(R.id.userName);
         userLevel=view.findViewById(R.id.userLevel);
 
-        userName.setText(intent_UserFragment.getStringExtra("U_name"));
-        switch (intent_UserFragment.getIntExtra("U_level",0)){
+        userName.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_name)));
+        switch (intent_UserFragment.getIntExtra(view.getContext().getString(R.string.info_level),0)){
             case 9:
                 userLevel.setText("管理员");
                 break;
@@ -145,7 +145,7 @@ public class UserFragment extends Fragment {
         }
 
         imageButton=view.findViewById(R.id.user_head);
-        SetHead(intent_UserFragment.getStringExtra("U_head"));
+        SetHead(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_head)));
 
         mInfoBtn=view.findViewById(R.id.info_btn);
         mEditInfoBtn=view.findViewById(R.id.btn_info_edit);
@@ -248,12 +248,12 @@ public class UserFragment extends Fragment {
         genderText=popUpView.findViewById(R.id.info_gender);
         gpt_numText=popUpView.findViewById(R.id.info_gpt_num);
 
-        accountText.setText(intent_UserFragment.getStringExtra("U_account"));
-        nameText.setText(intent_UserFragment.getStringExtra("U_name"));
-        emailText.setText(intent_UserFragment.getStringExtra("U_email"));
-        phoneText.setText(intent_UserFragment.getStringExtra("U_phone"));
-        genderText.setText(intent_UserFragment.getStringExtra("U_sex"));
-        gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra("U_gptNum",0)));
+        accountText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_account)));
+        nameText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_name)));
+        emailText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_email)));
+        phoneText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_phone)));
+        genderText.setText(intent_UserFragment.getStringExtra(view.getContext().getString(R.string.info_sex)));
+        gpt_numText.setText(String.valueOf(intent_UserFragment.getIntExtra(view.getContext().getString(R.string.info_gptNum),0)));
 
         getNumBtn.setOnClickListener(new View.OnClickListener() {
             @Override

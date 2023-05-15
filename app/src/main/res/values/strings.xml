@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">趣事</string>
-    <string name="BackUrl">https://15327498.r3.cpolar.cn</string>
+    <string name="BackUrl">https://46d66350.r2.cpolar.cn</string>
     <string name="Url_UserInfo">/UserInfo/</string>
     <string name="Url_Gpt">/MatrixGPT/</string>
     <string name="Url_Article">/article/</string>
@@ -30,6 +30,18 @@
     <string name="help">帮助</string>
     <string name="about">应用相关</string>
     <string name="encryptionkey">EncryptionKey_By-WuMing</string>
+
+    <!--用户-->
+    <string name="info_id">uId</string>
+    <string name="info_head">uHead</string>
+    <string name="info_name">uName</string>
+    <string name="info_password">uPassword</string>
+    <string name="info_sex">uSex</string>
+    <string name="info_account">uAccount</string>
+    <string name="info_phone">uPhone</string>
+    <string name="info_email">uEmail</string>
+    <string name="info_gptNum">uGptNum</string>
+    <string name="info_level">uLevel</string>
 
     <!--文字定义-->
     <string name="mId">id</string>
