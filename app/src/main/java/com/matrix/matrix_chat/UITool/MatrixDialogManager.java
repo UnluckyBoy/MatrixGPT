@@ -68,7 +68,7 @@ public class MatrixDialogManager {
             /**取消按钮**/
             @Override
             public void onClickListener2LastItem() {
-                intent.putExtra("U_account","");
+                intent.putExtra(mContext.getString(R.string.info_account),"");
                 mDialog.dismiss();
             }
             /**确定按钮**/

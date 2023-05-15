@@ -83,6 +83,8 @@ public class MainFragment extends Fragment {
 
     private ActivityResultLauncher<Intent> mLauncher;//启动activity对象,必须要在onCreate中初始化
 
+    private static String args_account;
+
     private static final String API_KEY ="lTOov0EPAKvHDrB66z6G4U7Z";
     private static final String SECRET_KEY ="HqD8XwBF57v6mE3uY5ayLjdHDszyTZtb";
     private static final String grant_type="client_credentials";
@@ -139,7 +141,7 @@ public class MainFragment extends Fragment {
         }else{
             view = inflater.inflate(R.layout.fragment_main, container, false);
             Bundle bundle = getArguments();
-            String args_account = bundle.getString("args_account");
+            args_account = bundle.getString("args_account");
             Init_Component(view,args_account);
         }
 
@@ -184,7 +186,11 @@ public class MainFragment extends Fragment {
                     if(content.equals(null)||content.equals("")){
                         Toast.makeText(view.getContext(),view.getContext().getString(R.string.EditIsNull),Toast.LENGTH_SHORT).show();
                     }else{
-                        //OnAndroidGetChat(content);
+//                        if(args_account==""||args_account==null|| args_account.equals("")||args_account.equals(null)){
+//                            MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(),LoginActivity.class);
+//                        }else{
+//                            GetBackChatData(content,"chat");
+//                        }
                         GetBackChatData(content,"chat");
                     }
                     //mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条
@@ -197,8 +203,12 @@ public class MainFragment extends Fragment {
                     if(prompt.equals(null)||prompt.equals("")){
                         Toast.makeText(view.getContext(),view.getContext().getString(R.string.EditIsNull),Toast.LENGTH_SHORT).show();
                     }else{
-                        //OnAndroidGetCreateImage(prompt);
-                        GetBackChatData(prompt,"createImage");
+                        if(args_account==""||args_account==null|| args_account.equals("")||args_account.equals(null)){
+                            MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(),LoginActivity.class);
+                        }else{
+                            GetBackChatData(prompt,"createImage");
+                        }
+                        //GetBackChatData(prompt,"createImage");
                     }
                     mImage_View.setVisibility(View.VISIBLE);//图片显示
                     //mShow_View.setVisibility(View.GONE);//显示图片时，文本隐藏
