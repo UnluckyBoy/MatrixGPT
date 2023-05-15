@@ -206,7 +206,7 @@ public class DataTransController {
                                 }else {
                                     switch (response.body().getResult()){
                                         case "Permission":
-                                            temp_intent.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
+                                            temp_intent.putExtra(activity.getString(R.string.info_gptNum),response.body().getGptNum());//将数据刷新
                                             break;
                                         case "NullPermission":
                                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
@@ -275,7 +275,7 @@ public class DataTransController {
                                 }else {
                                     switch (response.body().getResult()){
                                         case "Permission":
-                                            temp_intent.putExtra("U_gptNum",response.body().getGptNum());//将数据刷新
+                                            temp_intent.putExtra(activity.getString(R.string.info_gptNum),response.body().getGptNum());//将数据刷新
                                             break;
                                         case "NullPermission":
                                             //Toast.makeText(view.getContext(),view.getContext().getString(R.string.NullPermission),Toast.LENGTH_SHORT).show();
