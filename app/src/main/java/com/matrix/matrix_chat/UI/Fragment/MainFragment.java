@@ -171,7 +171,7 @@ public class MainFragment extends Fragment {
         /**测试**/
 //        SpannableString spannableString = new SpannableString("文字和图片 ");
 //        // 创建一个ImageSpan，并设置要显示的图片
-//        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(R.drawable.back); // 替换为你的图片资源
+//        Drawable drawable = getResources().getDrawable(R.drawable.back,null); // 替换为你的图片资源
 //        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 //        ImageSpan imageSpan = new ImageSpan(drawable);
 //        // 将ImageSpan应用到SpannableString的指定位置
@@ -183,6 +183,7 @@ public class MainFragment extends Fragment {
         mImage_View=view.findViewById(R.id.image_View);
 
         mImage_View.setOnClickListener(new ImageClickListener());
+
 
         mChatBtn.setOnClickListener(new ClickListener());
         mPaintBtn.setOnClickListener(new ClickListener());
@@ -202,11 +203,6 @@ public class MainFragment extends Fragment {
                     if(content.equals(null)||content.equals("")){
                         Toast.makeText(view.getContext(),view.getContext().getString(R.string.EditIsNull),Toast.LENGTH_SHORT).show();
                     }else{
-//                        if(args_account==""||args_account==null|| args_account.equals("")||args_account.equals(null)){
-//                            MatrixDialogManager.hintLoginDialog(view.getContext(),intent_MainFragment,getActivity(),LoginActivity.class);
-//                        }else{
-//                            GetBackChatData(content,"chat");
-//                        }
                         GetBackChatData(content,"chat");
                     }
                     //mShow_View.setMovementMethod(ScrollingMovementMethod.getInstance());//添加文本视图滚动条

@@ -50,12 +50,40 @@
                 android:background="@drawable/hide_down"/>
 
             <EditText
-                android:id="@+id/add_edit"
+                android:id="@+id/add_title"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:background="@drawable/lay_back_white"
+                android:hint="主题"/>
+            <EditText
+                android:id="@+id/add_description"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="2dp"
+                android:layout_below="@+id/add_title"
+                android:background="@drawable/lay_back_white"
+                android:hint="请输入描述"/>
+
+            <EditText
+                android:id="@+id/add_content"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@id/add_description"
+                android:layout_marginTop="2dp"
+                android:background="@color/md_white"
+                android:gravity="top|left"
+                android:hint="请输入内容..."/>
+            <LinearLayout
+                android:id="@+id/add_image_lay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="42dp"
-                android:gravity="top|left"
-                android:background="@drawable/lay_back_white"/>
+                android:orientation="horizontal"
+                android:layout_below="@+id/add_content"
+                android:background="@color/md_white"
+                android:layout_marginBottom="42dp">
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/add_file_lay"
