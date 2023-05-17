@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="42dp"
+                android:gravity="top|left"
                 android:background="@drawable/lay_back_white"/>
 
             <LinearLayout
@@ -75,6 +76,12 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/add_video"/>
+                <Button
+                    android:id="@+id/up_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/up_load"
+                    android:layout_marginLeft="10dp"/>
             </LinearLayout>
         </RelativeLayout>
 

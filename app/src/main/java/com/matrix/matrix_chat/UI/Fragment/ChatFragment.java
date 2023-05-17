@@ -2,8 +2,12 @@ package com.matrix.matrix_chat.UI.Fragment;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -22,6 +27,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.luck.picture.lib.basic.PictureSelector;
+import com.luck.picture.lib.config.SelectMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.matrix.matrix_chat.Network.API.Back.getArticlesApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
@@ -46,7 +55,8 @@ public class ChatFragment extends Fragment {
     private RelativeLayout add_article_lay;
 
     private List<ArticleBean> articleList;
-    private Button add_article,hide_add_view_btn;
+    private Button add_article,hide_add_view_btn,add_image_btn,add_video_btn,up_btn;
+    private EditText add_edit;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -88,6 +98,10 @@ public class ChatFragment extends Fragment {
 
         add_article=(Button)view.findViewById(R.id.add_article);
         hide_add_view_btn=(Button)view.findViewById(R.id.hide_add_view_btn);
+        add_edit=(EditText)view.findViewById(R.id.add_edit);
+        add_image_btn=(Button)view.findViewById(R.id.add_image_btn);
+        add_video_btn=(Button)view.findViewById(R.id.add_video_btn);
+        up_btn=(Button)view.findViewById(R.id.up_btn);
 
         InitArticlesData();
         initRefresh(view);
@@ -206,7 +220,6 @@ public class ChatFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.add_article:
-
                     /**使用ViewTreeObserver确保在完全测量和绘制RelativeLayout后获取正确的宽度和高度**/
                     ViewTreeObserver vto_show = add_article_lay.getViewTreeObserver();
                     vto_show.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -218,11 +231,8 @@ public class ChatFragment extends Fragment {
                             // 在这里进行你的操作
                             //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
                             setShowAnim(width,height);
-//                            ScaleAnimation animation = new ScaleAnimation(0f, 1f, 0f, 1f,
-//                                    Animation.RELATIVE_TO_PARENT,0.5f,Animation.RELATIVE_TO_PARENT,0.5f);
-//                            animation.setDuration(1000); // 设置动画持续时间为 1000 毫秒
-//                            animation.setFillAfter(true); // 设置动画结束后保持最后的状态
-//                            add_article_lay.startAnimation(animation);// 启动动画
+                            add_image_btn.setOnClickListener(new setBtnClick());
+                            add_video_btn.setOnClickListener(new setBtnClick());
 
                             // 在获取到宽度和高度后,移除监听器以避免多次回调
                             add_article_lay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -249,12 +259,65 @@ public class ChatFragment extends Fragment {
                         }
                     });
                     add_article_lay.setVisibility(View.GONE);
+
+                    AlphaAnimation show_btn_article_alpha = new AlphaAnimation(0, 1);
+                    show_btn_article_alpha.setDuration(1000);
+                    add_article.startAnimation(show_btn_article_alpha);//开始动画
                     add_article.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.add_image_btn:
+                    final int[] image_start_index = {0};
+                    PictureSelector.create(getActivity())
+                            .openSystemGallery(SelectMimeType.ofImage())
+                            .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final LocalMedia localMedia = result.get(0);
+                                    //Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
+
+                                    String temp=add_edit.getText().toString();
+                                    image_start_index[0] =temp.length()+1;
+                                    //Toast.makeText(view.getContext(), "add_edit内容长度:"+image_start_index[0], Toast.LENGTH_SHORT).show();
+                                    add_edit.setText(temp+"{image/"+localMedia.getFileName()+":"+image_start_index[0]+"}");
+
+                                }
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
+
+
+                    break;
+                case R.id.add_video_btn:
+                    final int[] video_start_index = {0};
+                    PictureSelector.create(getActivity())
+                            .openSystemGallery(SelectMimeType.ofVideo())
+                            .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
+                                @Override
+                                public void onResult(ArrayList<LocalMedia> result) {
+                                    //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
+                                    final LocalMedia localMedia = result.get(0);
+                                    Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
+
+                                    String temp=add_edit.getText().toString();
+                                    video_start_index[0] =temp.length()+1;
+                                    //Toast.makeText(view.getContext(), "add_edit内容长度:"+image_start_index[0], Toast.LENGTH_SHORT).show();
+                                    add_edit.setText(temp+"{video/"+localMedia.getFileName()+":"+video_start_index[0]+"}");
+
+                                }
+                                @Override
+                                public void onCancel() {
+                                    //closePopupWindow();
+                                }
+                            });
                     break;
             }
         }
     }
 
+    /**弹出框动画**/
     private void setShowAnim(final int width,final int height){
         //Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
         AnimationSet animationSet=new AnimationSet(false);

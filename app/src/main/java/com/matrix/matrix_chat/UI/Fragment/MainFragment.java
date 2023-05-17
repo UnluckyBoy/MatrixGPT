@@ -2,13 +2,18 @@ package com.matrix.matrix_chat.UI.Fragment;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -162,6 +167,17 @@ public class MainFragment extends Fragment {
         mPaintBtn=view.findViewById(R.id.paint_btn);
         recognition_btn=view.findViewById(R.id.recognition_btn);
         mShow_View=view.findViewById(R.id.show_View);
+
+        /**测试**/
+//        SpannableString spannableString = new SpannableString("文字和图片 ");
+//        // 创建一个ImageSpan，并设置要显示的图片
+//        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = getResources().getDrawable(R.drawable.back); // 替换为你的图片资源
+//        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+//        ImageSpan imageSpan = new ImageSpan(drawable);
+//        // 将ImageSpan应用到SpannableString的指定位置
+//        spannableString.setSpan(imageSpan, 5, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        // 设置TextView的文本为SpannableString
+//        mShow_View.setText(spannableString);
 
         mEditText=view.findViewById(R.id.edit_text);
         mImage_View=view.findViewById(R.id.image_View);
