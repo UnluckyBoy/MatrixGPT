@@ -72,6 +72,10 @@ public class ChatFragment extends Fragment {
     private Button add_article,hide_add_view_btn,add_image_btn,add_video_btn,up_btn;
     private EditText add_title,add_description,add_content;
 
+    private static int height;
+    private static String cover;
+    private static LocalMedia localMedia;
+
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
 
@@ -237,8 +241,8 @@ public class ChatFragment extends Fragment {
     }
 
     private class setBtnClick implements View.OnClickListener {
-        private String cover;
-        private LocalMedia localMedia;
+        //private String cover;
+        //private LocalMedia localMedia;
         //private Bitmap[] bitmap;
         //private int mapIndex=0;
 
@@ -253,7 +257,8 @@ public class ChatFragment extends Fragment {
                         public void onGlobalLayout() {
                             // 获取宽度和高度
                             int width = add_article_lay.getWidth();
-                            int height = add_article_lay.getHeight();
+                            //int height = add_article_lay.getHeight();
+                            height = add_article_lay.getHeight();
                             // 在这里进行你的操作
                             //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
                             setShowAnim(width,height);
@@ -275,7 +280,8 @@ public class ChatFragment extends Fragment {
                         public void onGlobalLayout() {
                             // 获取宽度和高度
                             int width = add_article_lay.getWidth();
-                            int height = add_article_lay.getHeight();
+                            //int height = add_article_lay.getHeight();
+                            height = add_article_lay.getHeight();
                             // 在这里进行你的操作
                             //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
 
@@ -347,7 +353,7 @@ public class ChatFragment extends Fragment {
 
                     break;
                 case R.id.add_video_btn:
-                    final int[] video_start_index = {0};
+                    //final int[] video_start_index = {0};
                     PictureSelector.create(getActivity())
                             .openSystemGallery(SelectMimeType.ofVideo())
                             .forSystemResult(new OnResultCallbackListener<LocalMedia>() {
@@ -357,10 +363,10 @@ public class ChatFragment extends Fragment {
                                     final LocalMedia localMedia = result.get(0);
                                     Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
 
-                                    String temp=add_content.getText().toString();
-                                    video_start_index[0] =temp.length()+1;
+                                    //String temp=add_content.getText().toString();
+                                    //video_start_index[0] =temp.length()+1;
                                     //Toast.makeText(view.getContext(), "add_edit内容长度:"+image_start_index[0], Toast.LENGTH_SHORT).show();
-                                    add_content.setText(temp+"{video/"+localMedia.getFileName()+":"+video_start_index[0]+"}");
+                                    //add_content.setText(temp+"{video/"+localMedia.getFileName()+":"+video_start_index[0]+"}");
 
                                 }
                                 @Override
@@ -371,42 +377,9 @@ public class ChatFragment extends Fragment {
                     break;
 
                 case R.id.up_btn:
-                    //Toast.makeText(view.getContext(), "上传内容:"+add_edit.getText().toString(), Toast.LENGTH_SHORT).show();
-                    upArticleContentApi mUpArticleContentApi=new upArticleContentApi();
-                    mUpArticleContentApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
-                    upArticleContentService mUpArticleContentService=mUpArticleContentApi.getService();
+                    Toast.makeText(view.getContext(), "上传内容:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
 
-                    //Toast.makeText(view.getContext(), "author:"+intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)), Toast.LENGTH_SHORT).show();
-                    UpArticleBean articleBean=new UpArticleBean();
-                    articleBean.setTitle(add_title.getText().toString());
-                    articleBean.setCover("default.png");
-                    articleBean.setDescription(add_description.getText().toString());
-                    articleBean.setContent(add_content.getText().toString());
-                    articleBean.setAuthor(intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)));
-                    Gson gson = new Gson();
-                    String requestJson=gson.toJson(articleBean);
-
-                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),requestJson);
-                    Call<IsTrueBean> call = mUpArticleContentService.getState(requestBody);
-                    call.enqueue(new Callback<IsTrueBean>() {
-                        @Override
-                        public void onResponse(Call<IsTrueBean> call, Response<IsTrueBean> response) {
-                            // 处理响应结果
-                            if(response.body()!=null){
-                                Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
-                                setAdd_View_Empty();
-
-                            }else{
-                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<IsTrueBean> call, Throwable t) {
-                            Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                    setUpTrans();//调用上传接口
                     break;
             }
         }
@@ -414,7 +387,7 @@ public class ChatFragment extends Fragment {
 
     /**弹出框动画**/
     private void setShowAnim(final int width,final int height){
-        //Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
+        Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
         AnimationSet animationSet=new AnimationSet(false);
         AlphaAnimation show_alpha = new AlphaAnimation(0, 1);
         TranslateAnimation show_translate=new TranslateAnimation(0, 0, height, 0);
@@ -444,6 +417,44 @@ public class ChatFragment extends Fragment {
         animationSet.setRepeatMode(AnimationSet.REVERSE);
         animationSet.reset();//释放资源
         add_article_lay.startAnimation(animationSet);//开始动画
+    }
+
+    private void setUpTrans(){
+        upArticleContentApi mUpArticleContentApi=new upArticleContentApi();
+        mUpArticleContentApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
+        upArticleContentService mUpArticleContentService=mUpArticleContentApi.getService();
+        //Toast.makeText(view.getContext(), "author:"+intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)), Toast.LENGTH_SHORT).show();
+        UpArticleBean articleBean=new UpArticleBean();
+        articleBean.setTitle(add_title.getText().toString());
+        articleBean.setCover("default.png");
+        articleBean.setDescription(add_description.getText().toString());
+        articleBean.setContent(add_content.getText().toString());
+        articleBean.setAuthor(intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)));
+        Gson gson = new Gson();
+        String requestJson=gson.toJson(articleBean);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),requestJson);
+        Call<IsTrueBean> call = mUpArticleContentService.getState(requestBody);
+        call.enqueue(new Callback<IsTrueBean>() {
+            @Override
+            public void onResponse(Call<IsTrueBean> call, Response<IsTrueBean> response) {
+                // 处理响应结果
+                if(response.body()!=null){
+                    Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    setAdd_View_Empty();
+
+                    //setHideAnim();
+
+                }else{
+                    Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IsTrueBean> call, Throwable t) {
+                Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setAdd_View_Empty(){
