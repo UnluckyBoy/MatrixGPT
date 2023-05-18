@@ -41,6 +41,7 @@ import com.matrix.matrix_chat.Network.API.Back.getArticlesApi;
 import com.matrix.matrix_chat.Network.API.Back.upArticleContentApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.IsTrueBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.UpArticleBean;
 import com.matrix.matrix_chat.Network.Service.Back.getArticleService;
 import com.matrix.matrix_chat.Network.Service.Back.upArticleContentService;
@@ -319,7 +320,7 @@ public class ChatFragment extends Fragment {
                                     //add_content.setText(temp+"{image/"+localMedia.getFileName()+":"+image_start_index[0]+"}");
 
                                     int image_width=add_image_lay.getWidth();
-                                    Toast.makeText(view.getContext(), "图片区域高度:"+image_width, Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(view.getContext(), "图片区域高度:"+image_width, Toast.LENGTH_SHORT).show();
 
                                     for (int i = 0; i < result.size(); i++) {
                                         //建ImageView对象
@@ -375,10 +376,10 @@ public class ChatFragment extends Fragment {
                     mUpArticleContentApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
                     upArticleContentService mUpArticleContentService=mUpArticleContentApi.getService();
 
-                    Toast.makeText(view.getContext(), "author:"+intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(), "author:"+intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)), Toast.LENGTH_SHORT).show();
                     UpArticleBean articleBean=new UpArticleBean();
                     articleBean.setTitle(add_title.getText().toString());
-                    articleBean.setCover("测试.png");
+                    articleBean.setCover("default.png");
                     articleBean.setDescription(add_description.getText().toString());
                     articleBean.setContent(add_content.getText().toString());
                     articleBean.setAuthor(intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)));
@@ -386,16 +387,23 @@ public class ChatFragment extends Fragment {
                     String requestJson=gson.toJson(articleBean);
 
                     RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),requestJson);
-                    Call<UpArticleBean> call = mUpArticleContentService.getState(requestBody);
-                    call.enqueue(new Callback<UpArticleBean>() {
+                    Call<IsTrueBean> call = mUpArticleContentService.getState(requestBody);
+                    call.enqueue(new Callback<IsTrueBean>() {
                         @Override
-                        public void onResponse(Call<UpArticleBean> call, Response<UpArticleBean> response) {
+                        public void onResponse(Call<IsTrueBean> call, Response<IsTrueBean> response) {
                             // 处理响应结果
+                            if(response.body()!=null){
+                                Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
+                                setAdd_View_Empty();
+
+                            }else{
+                                Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<UpArticleBean> call, Throwable t) {
-                            // 处理请求失败
+                        public void onFailure(Call<IsTrueBean> call, Throwable t) {
+                            Toast.makeText(view.getContext(), view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -436,5 +444,11 @@ public class ChatFragment extends Fragment {
         animationSet.setRepeatMode(AnimationSet.REVERSE);
         animationSet.reset();//释放资源
         add_article_lay.startAnimation(animationSet);//开始动画
+    }
+
+    private void setAdd_View_Empty(){
+        add_title.setText("");
+        add_description.setText("");
+        add_content.setText("");
     }
 }

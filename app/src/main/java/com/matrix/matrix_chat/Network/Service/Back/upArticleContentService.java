@@ -1,6 +1,6 @@
 package com.matrix.matrix_chat.Network.Service.Back;
 
-import com.matrix.matrix_chat.Network.ResponseBean.BackService.UpArticleBean;
+import com.matrix.matrix_chat.Network.ResponseBean.BackService.IsTrueBean;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -15,7 +15,7 @@ import retrofit2.http.Query;
  */
 public interface upArticleContentService {
     @POST("up_article_content")
-    Call<UpArticleBean> getState(
+    Call<IsTrueBean> getState(
             @Body RequestBody fileContent
     );
 }
