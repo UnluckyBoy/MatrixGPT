@@ -74,7 +74,7 @@ public class ChatFragment extends Fragment {
 
     private static int height;
     private static int width;
-    private static LocalMedia localMedia;
+    private static ArrayList<LocalMedia> localMedia;
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -127,6 +127,8 @@ public class ChatFragment extends Fragment {
         add_image_btn=(Button)view.findViewById(R.id.add_image_btn);
         add_video_btn=(Button)view.findViewById(R.id.add_video_btn);
         up_btn=(Button)view.findViewById(R.id.up_btn);
+
+        localMedia=new ArrayList<>();
 
         InitArticlesData();
         initRefresh(view);
@@ -308,7 +310,10 @@ public class ChatFragment extends Fragment {
                                 @Override
                                 public void onResult(ArrayList<LocalMedia> result) {
                                     //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
-                                    localMedia = result.get(0);
+                                    //localMedia = result.get(0);
+                                    for(int i=0;i<result.size();i++){
+                                        localMedia.add(result.get(i));
+                                    }
                                     //Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
 
                                     for (int i = 0; i < result.size(); i++) {
@@ -362,7 +367,8 @@ public class ChatFragment extends Fragment {
                 case R.id.up_btn:
                     setUpTrans();//调用上传接口
 
-                    //Toast.makeText(view.getContext(), "上传内容:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
+                    //String temp=localMedia.get(0).getFileName();
+                    //Toast.makeText(view.getContext(), "上传内容:"+temp, Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -425,6 +431,8 @@ public class ChatFragment extends Fragment {
                 if(response.body()!=null){
                     Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
                     setAdd_View_Empty();
+
+                    localMedia.clear();
 
                     //setHideAnim(width,height);
 
