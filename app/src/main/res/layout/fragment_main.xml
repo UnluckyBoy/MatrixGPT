@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/chat_btn"
             android:layout_marginTop="5dp"
-            android:text="提示:由于网络原因，导致AI无法快速响应\n相关技术由OpenAi提供支持"
+            android:text="@string/prompt"
             android:gravity="center"
             android:textColor="@color/LavaRed"
             android:layout_marginBottom="10dp"
