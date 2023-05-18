@@ -73,7 +73,7 @@ public class ChatFragment extends Fragment {
     private EditText add_title,add_description,add_content;
 
     private static int height;
-    private static String cover;
+    private static int width;
     private static LocalMedia localMedia;
 
 //    private TTAdNative mTTAdNative;
@@ -256,8 +256,9 @@ public class ChatFragment extends Fragment {
                         @Override
                         public void onGlobalLayout() {
                             // 获取宽度和高度
-                            int width = add_article_lay.getWidth();
+                            //int width = add_article_lay.getWidth();
                             //int height = add_article_lay.getHeight();
+                            width= add_article_lay.getWidth();
                             height = add_article_lay.getHeight();
                             // 在这里进行你的操作
                             //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
@@ -279,8 +280,9 @@ public class ChatFragment extends Fragment {
                         @Override
                         public void onGlobalLayout() {
                             // 获取宽度和高度
-                            int width = add_article_lay.getWidth();
+                            //int width = add_article_lay.getWidth();
                             //int height = add_article_lay.getHeight();
+                            width= add_article_lay.getWidth();
                             height = add_article_lay.getHeight();
                             // 在这里进行你的操作
                             //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
@@ -308,25 +310,6 @@ public class ChatFragment extends Fragment {
                                     //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
                                     localMedia = result.get(0);
                                     //Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
-
-                                    cover=localMedia.getRealPath();
-
-//                                    Bitmap bitmap = BitmapFactory.decodeFile(cover);// 获取要添加的图片资源
-//                                    BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);// 将图片转换为Drawable
-//                                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-//                                    SpannableStringBuilder builder = new SpannableStringBuilder();// 创建SpannableStringBuilder，并将图片添加到文本中
-//                                    builder.append(add_content.getText().toString()+" ");
-//                                    // 在指定位置插入图片
-//                                    builder.setSpan(new ImageSpan(drawable), builder.length() - 1, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                                    add_content.setText(builder);// 设置EditText的文本为SpannableStringBuilder
-
-                                    //String temp=add_content.getText().toString();
-                                    //image_start_index[0] =temp.length()+1;
-                                    //Toast.makeText(view.getContext(), "add_edit内容长度:"+image_start_index[0], Toast.LENGTH_SHORT).show();
-                                    //add_content.setText(temp+"{image/"+localMedia.getFileName()+":"+image_start_index[0]+"}");
-
-                                    int image_width=add_image_lay.getWidth();
-                                    //Toast.makeText(view.getContext(), "图片区域高度:"+image_width, Toast.LENGTH_SHORT).show();
 
                                     for (int i = 0; i < result.size(); i++) {
                                         //建ImageView对象
@@ -377,9 +360,9 @@ public class ChatFragment extends Fragment {
                     break;
 
                 case R.id.up_btn:
-                    Toast.makeText(view.getContext(), "上传内容:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
-
                     setUpTrans();//调用上传接口
+
+                    //Toast.makeText(view.getContext(), "上传内容:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -387,7 +370,7 @@ public class ChatFragment extends Fragment {
 
     /**弹出框动画**/
     private void setShowAnim(final int width,final int height){
-        Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(view.getContext(), "height:"+height, Toast.LENGTH_SHORT).show();
         AnimationSet animationSet=new AnimationSet(false);
         AlphaAnimation show_alpha = new AlphaAnimation(0, 1);
         TranslateAnimation show_translate=new TranslateAnimation(0, 0, height, 0);
@@ -443,7 +426,7 @@ public class ChatFragment extends Fragment {
                     Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
                     setAdd_View_Empty();
 
-                    //setHideAnim();
+                    //setHideAnim(width,height);
 
                 }else{
                     Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
