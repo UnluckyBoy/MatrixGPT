@@ -1,6 +1,8 @@
 package com.matrix.matrix_chat.UI.Activity;
 
 import android.text.method.ScrollingMovementMethod;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -27,6 +29,11 @@ public class ReadActivity extends BaseActivity{
     private FrameLayout lay_read_content_back;
     private TextView read_view_title,read_view_author,read_view_time,read_view_hot;
     private WebView read_view_content;
+
+    private static final long DOUBLE_CLICK_TIME_DELTA = 300; //双击事件间隔时间
+    private long lastClickTime = 0;
+
+
     @Override
     protected int setLayoutResourceID() {
         return R.layout.activity_read;
@@ -64,24 +71,50 @@ public class ReadActivity extends BaseActivity{
         //read_view_content.setText(test);
         //showToast(test);
         DataTransController.getArticleContent(mContext,title,author,read_view_content);
-        //read_view_content.setMovementMethod(ScrollingMovementMethod.getInstance());//实现滑动条
     }
 
     private void bindViewTrans() {
         lay_read_content_back.setOnClickListener(new ArticleViewOnClick());
-        read_view_content.setOnClickListener(new ArticleViewOnClick());
-//        read_view_content.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                //showToast("长按");
-//                read_view_content.setTextIsSelectable(true);//长按复制
-//                return false;
-//            }
-//        });
+        //read_view_content.setOnClickListener(new ArticleViewOnClick());
+
+        // 创建GestureDetector实例
+        final GestureDetector gestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                // 双击事件处理逻辑
+                if(!hideTitleBar){
+                    lay_read_info.setVisibility(View.GONE);
+                    hideTitleBar=!hideTitleBar;
+                }else{
+                    lay_read_info.setVisibility(View.VISIBLE);
+                    hideTitleBar=!hideTitleBar;
+                }
+                return true;
+            }
+        });
+
+        // 设置WebView的OnTouchListener
+        read_view_content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // 将触摸事件传递给GestureDetector进行处理
+                gestureDetector.onTouchEvent(event);
+
+                // 处理滑动事件
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        // 在此处处理滑动事件
+                        // 可以根据需要进行相应的处理逻辑
+                        break;
+                }
+
+                // 返回false表示继续处理其他触摸事件
+                return false;
+            }
+        });
     }
 
     private class ArticleViewOnClick implements View.OnClickListener{
-
         @Override
         public void onClick(View v) {
             if(!mPressed){
