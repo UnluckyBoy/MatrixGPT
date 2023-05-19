@@ -3,6 +3,11 @@ package com.matrix.matrix_chat.Network.DataTrans;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +37,11 @@ import com.matrix.matrix_chat.UITool.MatrixDialogManager;
 import com.matrix.matrix_chat.UtilTool.ImageTool;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -78,7 +88,7 @@ public class DataTransController {
         });
     }
 
-    public static void getArticleContent(Context context, String title, String author, TextView tempView){
+    public static void getArticleContent(Context context, String title, String author, WebView tempView){
         ArticleContentApi articleContentApi=new ArticleContentApi();
         articleContentApi.SetUrl(context.getString(R.string.BackUrl)+context.getString(R.string.Url_Article));
         ArticleContentService articleContentService=articleContentApi.getService();
@@ -87,7 +97,38 @@ public class DataTransController {
             @Override
             public void onResponse(Call<ArticleContentBean> call, Response<ArticleContentBean> response) {
                 if(response.body()!=null){
-                    tempView.setText(response.body().getArticle_content());
+                    //tempView.setText(response.body().getArticle_content());
+                    String htmlContent=null;
+                    if(response.body().getArticle_content().split("&").length>1){
+                        String content_temp=response.body().getArticle_content().split("&")[0];
+                        String[] html_p_num=content_temp.split("\n");
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (String string : html_p_num) {
+                            stringBuilder.append("<p style=\"text-indent: 2em;\">").append(string).append("</p>");
+                        }
+
+                        StringBuilder imgBuilder = new StringBuilder();
+                        String image_Str=response.body().getArticle_content().split("&")[1];
+                        List<String> image_temp=extractList(image_Str);
+                        for (String list : image_temp) {
+                            imgBuilder.append("<img src=\""+context.getString(R.string.BackUrl)+
+                                    context.getString(R.string.Url_GetFile)+context.getString(R.string.Url_Art_image)).append(list).append("\"/>");
+                        }
+                        htmlContent = "<html><head><style>"+"p{font-size:46px;text-indent:2em;}"+
+                                "div.container { display: flex; }"+"div.container img {width: 33.33%;}"+"</style></head><body>"
+                                +stringBuilder+"<div class=\"container\">"+imgBuilder+"</div>"+"</body></html>";
+                    }else{
+                        //tempView.setText(response.body().getArticle_content());
+                        String[] html_p_num=response.body().getArticle_content().split("\n");
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (String string : html_p_num) {
+                            stringBuilder.append("<p>").append(string).append("</p>");
+                        }
+                        htmlContent = "<html><head><style>"+"p{font-size:46px;text-indent:2em;}"+"</style></head><body>"
+                                +stringBuilder.toString() + "</body></html>";
+                    }
+                    tempView.loadDataWithBaseURL(null, htmlContent, "text/html", "UTF-8", null);
                 }else{
                     Toast.makeText(context, context.getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
                 }
@@ -377,5 +418,23 @@ public class DataTransController {
 
     public static void setTextViewEmpty(TextView textView){
         textView.setText("");
+    }
+
+    /***
+     * 正则表达式将字符串的list.tostring提取为list
+     * @param input
+     * @return
+     */
+    private static List<String> extractList(String input) {
+        List<String> fileList = new ArrayList<>();
+        // 使用正则表达式提取文件名
+        Pattern pattern = Pattern.compile("\\{([^{}]+)\\}");
+        Matcher matcher = pattern.matcher(input);
+        // 遍历匹配结果，并将文件名添加到列表中
+        while (matcher.find()) {
+            String fileName = matcher.group(1);
+            fileList.add(fileName);
+        }
+        return fileList;
     }
 }

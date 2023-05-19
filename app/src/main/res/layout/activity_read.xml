@@ -64,14 +64,21 @@
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
         android:background="@drawable/lay_read_back">
-        <TextView
+<!--        <TextView-->
+<!--            android:id="@+id/read_view_content"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:scrollbars="vertical"-->
+<!--            android:fadeScrollbars="true"-->
+<!--            android:text="测试内容"-->
+<!--            android:textSize="20dp"/>-->
+
+        <WebView
             android:id="@+id/read_view_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="true"
-            android:text="测试内容"
-            android:textSize="20dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:layout_gravity="center|top"/>
     </FrameLayout>
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.matrix.matrix_chat.UI.Activity;
 
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,7 +25,8 @@ public class ReadActivity extends BaseActivity{
 
     private RelativeLayout lay_read_info;
     private FrameLayout lay_read_content_back;
-    private TextView read_view_title,read_view_author,read_view_time,read_view_hot,read_view_content;
+    private TextView read_view_title,read_view_author,read_view_time,read_view_hot;
+    private WebView read_view_content;
     @Override
     protected int setLayoutResourceID() {
         return R.layout.activity_read;
@@ -40,6 +42,11 @@ public class ReadActivity extends BaseActivity{
         read_view_time=findComponent(R.id.read_view_time);
         read_view_hot=findComponent(R.id.read_view_hot);
         read_view_content=findComponent(R.id.read_view_content);
+        // 启用WebView的支持JavaScript代码
+        read_view_content.getSettings().setJavaScriptEnabled(true);
+        // 设置WebView的缩放模式为适应屏幕
+        read_view_content.getSettings().setLoadWithOverviewMode(true);
+        read_view_content.getSettings().setUseWideViewPort(true);
 
         bindViewTrans();
         bindDataTrans();
@@ -52,25 +59,25 @@ public class ReadActivity extends BaseActivity{
         read_view_author.setText(author);
         read_view_time.setText(TAG_Intent.getStringExtra(mContext.getString(R.string.mCreateTime)));
         read_view_hot.setText(String.valueOf(TAG_Intent.getIntExtra(mContext.getString(R.string.mHot),0)));
-        read_view_content.setText("");//先置空,防止出现视图错误
+        //read_view_content.setText("");//先置空,防止出现视图错误
         //String test=mContext.getString(R.string.BackUrl)+mContext.getString(R.string.Url_GetFile)+ TAG_Intent.getStringExtra(mContext.getString(R.string.mContent));
         //read_view_content.setText(test);
         //showToast(test);
         DataTransController.getArticleContent(mContext,title,author,read_view_content);
-        read_view_content.setMovementMethod(ScrollingMovementMethod.getInstance());//实现滑动条
+        //read_view_content.setMovementMethod(ScrollingMovementMethod.getInstance());//实现滑动条
     }
 
     private void bindViewTrans() {
         lay_read_content_back.setOnClickListener(new ArticleViewOnClick());
         read_view_content.setOnClickListener(new ArticleViewOnClick());
-        read_view_content.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //showToast("长按");
-                read_view_content.setTextIsSelectable(true);//长按复制
-                return false;
-            }
-        });
+//        read_view_content.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                //showToast("长按");
+//                read_view_content.setTextIsSelectable(true);//长按复制
+//                return false;
+//            }
+//        });
     }
 
     private class ArticleViewOnClick implements View.OnClickListener{

@@ -448,9 +448,10 @@ public class ChatFragment extends Fragment {
         if(localMedia.size()!=0){
             articleBean.setCover(localMedia.get(0).getFileName());
             for(int i=0;i<localMedia.size();i++){
-                content_temp.add("{"+localMedia.get(0).getFileName()+"}");
+                content_temp.add("{"+localMedia.get(i).getFileName()+"}");
             }
-            articleBean.setContent(add_content.getText().toString()+content_temp);
+            //content_temp.add(String.valueOf(content_temp.toString().length()));
+            articleBean.setContent(add_content.getText().toString()+"&"+content_temp);
         }else{
             articleBean.setCover("default.png");
             articleBean.setContent(add_content.getText().toString());
