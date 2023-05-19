@@ -54,6 +54,7 @@ import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UITool.MatrixDialog;
 import com.matrix.matrix_chat.UITool.MatrixDialogManager;
+import com.matrix.matrix_chat.UITool.StringUtil;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.Dialog.MatrixDislikeDialog;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.MatrixToast;
 import com.matrix.matrix_chat.UtilTool.AdverUtil.config.TTAdManagerHolder;
@@ -388,6 +389,15 @@ public class MainFragment extends Fragment {
         String temp=ImageTool.getRecognitionImageBase(filePath);
         //mShow_View.setText(temp);
         DataTransController.getBaiduRecognitionData(view.getContext(),temp,API_KEY,SECRET_KEY,grant_type,mShow_View);//调取api获得识别的内容
+
+//        if(mShow_View.getText().toString()!=""){
+//            mShow_View.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(view.getContext(), "长按响应", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
     }
 
 

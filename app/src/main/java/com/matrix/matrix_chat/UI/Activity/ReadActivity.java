@@ -104,10 +104,8 @@ public class ReadActivity extends BaseActivity{
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
                         // 在此处处理滑动事件
-                        // 可以根据需要进行相应的处理逻辑
                         break;
                 }
-
                 // 返回false表示继续处理其他触摸事件
                 return false;
             }
