@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 
 import com.matrix.matrix_chat.R;
 import com.matrix.matrix_chat.UI.Activity.Tools.ActivityUtil;
-import com.matrix.matrix_chat.UI.Activity.Tools.StringUtil;
 
 /**
  * @ClassName BaseActivity

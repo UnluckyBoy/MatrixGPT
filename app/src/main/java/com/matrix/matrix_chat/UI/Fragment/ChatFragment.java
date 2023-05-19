@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,22 +38,29 @@ import com.luck.picture.lib.basic.PictureSelector;
 import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
+import com.matrix.matrix_chat.Network.API.Back.UpArticlesImageApi;
 import com.matrix.matrix_chat.Network.API.Back.getArticlesApi;
 import com.matrix.matrix_chat.Network.API.Back.upArticleContentApi;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticleBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.ArticlesBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.IsTrueBean;
 import com.matrix.matrix_chat.Network.ResponseBean.BackService.UpArticleBean;
+import com.matrix.matrix_chat.Network.Service.Back.UpArticlesImageService;
 import com.matrix.matrix_chat.Network.Service.Back.getArticleService;
 import com.matrix.matrix_chat.Network.Service.Back.upArticleContentService;
 import com.matrix.matrix_chat.R;
+import com.matrix.matrix_chat.UI.Activity.LoginActivity;
 import com.matrix.matrix_chat.UI.Activity.ReadActivity;
 import com.matrix.matrix_chat.UI.Adapter.AllArticlesAdapter;
+import com.matrix.matrix_chat.UITool.MatrixDialogManager;
+import com.matrix.matrix_chat.UITool.StringUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,7 +82,10 @@ public class ChatFragment extends Fragment {
 
     private static int height;
     private static int width;
-    private static ArrayList<LocalMedia> localMedia;
+    private static List<LocalMedia> localMedia;//文件List
+    private static List<String> filePaths= new ArrayList<>();;
+    private static List<ImageView> imageViews = new ArrayList<>();//创建一个ImageView集合,作清空准备
+    private static List<MultipartBody.Part> parts = new ArrayList<>();
 
 //    private TTAdNative mTTAdNative;
 //    private AdLoadListener mAdLoadListener;
@@ -121,9 +132,11 @@ public class ChatFragment extends Fragment {
         add_description=(EditText)view.findViewById(R.id.add_description);
         add_content=(EditText)view.findViewById(R.id.add_content);
 
-        add_article=(Button)view.findViewById(R.id.add_article);
-        hide_add_view_btn=(Button)view.findViewById(R.id.hide_add_view_btn);
 
+
+        add_article=(Button)view.findViewById(R.id.add_article);
+
+        hide_add_view_btn=(Button)view.findViewById(R.id.hide_add_view_btn);
         add_image_btn=(Button)view.findViewById(R.id.add_image_btn);
         add_video_btn=(Button)view.findViewById(R.id.add_video_btn);
         up_btn=(Button)view.findViewById(R.id.up_btn);
@@ -252,29 +265,33 @@ public class ChatFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.add_article:
-                    /**使用ViewTreeObserver确保在完全测量和绘制RelativeLayout后获取正确的宽度和高度**/
-                    ViewTreeObserver vto_show = add_article_lay.getViewTreeObserver();
-                    vto_show.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            // 获取宽度和高度
-                            //int width = add_article_lay.getWidth();
-                            //int height = add_article_lay.getHeight();
-                            width= add_article_lay.getWidth();
-                            height = add_article_lay.getHeight();
-                            // 在这里进行你的操作
-                            //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
-                            setShowAnim(width,height);
-                            add_image_btn.setOnClickListener(new setBtnClick());
-                            add_video_btn.setOnClickListener(new setBtnClick());
-                            up_btn.setOnClickListener(new setBtnClick());
+                    if(StringUtil.isEmptyOrBlank(args)){
+                        MatrixDialogManager.hintLoginDialog(view.getContext(),intent_Chat,getActivity(), LoginActivity.class);
+                    }else{
+                        /**使用ViewTreeObserver确保在完全测量和绘制RelativeLayout后获取正确的宽度和高度**/
+                        ViewTreeObserver vto_show = add_article_lay.getViewTreeObserver();
+                        vto_show.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                // 获取宽度和高度
+                                //int width = add_article_lay.getWidth();
+                                //int height = add_article_lay.getHeight();
+                                width= add_article_lay.getWidth();
+                                height = add_article_lay.getHeight();
+                                // 在这里进行你的操作
+                                //Toast.makeText(view.getContext(), "height:"+height+"\twidth:"+width, Toast.LENGTH_SHORT).show();
+                                setShowAnim(width,height);
+                                add_image_btn.setOnClickListener(new setBtnClick());
+                                add_video_btn.setOnClickListener(new setBtnClick());
+                                up_btn.setOnClickListener(new setBtnClick());
 
-                            // 在获取到宽度和高度后,移除监听器以避免多次回调
-                            add_article_lay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                    });
-                    add_article_lay.setVisibility(View.VISIBLE);//显示视图
-                    add_article.setVisibility(View.GONE);//隐藏按钮
+                                // 在获取到宽度和高度后,移除监听器以避免多次回调
+                                add_article_lay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            }
+                        });
+                        add_article_lay.setVisibility(View.VISIBLE);//显示视图
+                        add_article.setVisibility(View.GONE);//隐藏按钮
+                    }
                     break;
                 case R.id.hide_add_view_btn:
                     ViewTreeObserver vto_hide = add_article_lay.getViewTreeObserver();
@@ -311,22 +328,25 @@ public class ChatFragment extends Fragment {
                                 public void onResult(ArrayList<LocalMedia> result) {
                                     //Toast.makeText(getContext(), "打开相册"+result.get(0).getRealPath(), Toast.LENGTH_SHORT).show();
                                     //localMedia = result.get(0);
+
                                     for(int i=0;i<result.size();i++){
                                         localMedia.add(result.get(i));
+                                        filePaths.add(result.get(i).getRealPath());
                                     }
                                     //Toast.makeText(view.getContext(), "本地文件:"+localMedia.getFileName(), Toast.LENGTH_SHORT).show();
 
                                     for (int i = 0; i < result.size(); i++) {
                                         //建ImageView对象
-                                        ImageView imageView = new ImageView(view.getContext());
+                                        ImageView articleImageView = new ImageView(view.getContext());
                                         // 设置ImageView的宽高、图片资源等属性
-                                        imageView.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
+                                        articleImageView.setLayoutParams(new LinearLayout.LayoutParams(200, 200));
                                         Bitmap bitmap = BitmapFactory.decodeFile(result.get(i).getRealPath());
                                         // 设置ImageView的图片资源
-                                        imageView.setImageBitmap(bitmap);
-
+                                        articleImageView.setImageBitmap(bitmap);
                                         // 将ImageView添加到布局中
-                                        add_image_lay.addView(imageView);
+                                        add_image_lay.addView(articleImageView);
+
+                                        imageViews.add(articleImageView);
                                     }
                                     // 将ImageView添加到布局中
                                     //add_image_lay.addView(imageView);
@@ -365,10 +385,17 @@ public class ChatFragment extends Fragment {
                     break;
 
                 case R.id.up_btn:
-                    setUpTrans();//调用上传接口
-
-                    //String temp=localMedia.get(0).getFileName();
-                    //Toast.makeText(view.getContext(), "上传内容:"+temp, Toast.LENGTH_SHORT).show();
+                    //int test=localMedia.size();
+                    if(StringUtil.isEmptyOrBlank(add_title.getText().toString())||
+                            StringUtil.isEmptyOrBlank(add_description.getText().toString())||
+                            StringUtil.isEmptyOrBlank(add_content.getText().toString())){
+                        Toast.makeText(view.getContext(), "输入内容为空，请检查!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(localMedia.size()!=0){
+                            getUpCoverImage();
+                        }
+                        setUpContentTrans();//调用上传接口
+                    }
                     break;
             }
         }
@@ -408,20 +435,30 @@ public class ChatFragment extends Fragment {
         add_article_lay.startAnimation(animationSet);//开始动画
     }
 
-    private void setUpTrans(){
+    /**上传内容**/
+    private void setUpContentTrans(){
         upArticleContentApi mUpArticleContentApi=new upArticleContentApi();
         mUpArticleContentApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
         upArticleContentService mUpArticleContentService=mUpArticleContentApi.getService();
         //Toast.makeText(view.getContext(), "author:"+intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)), Toast.LENGTH_SHORT).show();
+
         UpArticleBean articleBean=new UpArticleBean();
         articleBean.setTitle(add_title.getText().toString());
-        articleBean.setCover("default.png");
+        List<String> content_temp=new ArrayList<>();
+        if(localMedia.size()!=0){
+            articleBean.setCover(localMedia.get(0).getFileName());
+            for(int i=0;i<localMedia.size();i++){
+                content_temp.add("{"+localMedia.get(0).getFileName()+"}");
+            }
+            articleBean.setContent(add_content.getText().toString()+content_temp);
+        }else{
+            articleBean.setCover("default.png");
+            articleBean.setContent(add_content.getText().toString());
+        }
         articleBean.setDescription(add_description.getText().toString());
-        articleBean.setContent(add_content.getText().toString());
         articleBean.setAuthor(intent_Chat.getStringExtra(view.getContext().getString(R.string.info_name)));
         Gson gson = new Gson();
         String requestJson=gson.toJson(articleBean);
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),requestJson);
         Call<IsTrueBean> call = mUpArticleContentService.getState(requestBody);
         call.enqueue(new Callback<IsTrueBean>() {
@@ -429,13 +466,9 @@ public class ChatFragment extends Fragment {
             public void onResponse(Call<IsTrueBean> call, Response<IsTrueBean> response) {
                 // 处理响应结果
                 if(response.body()!=null){
-                    Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(view.getContext(), "上传成功:"+response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    content_temp.clear();
                     setAdd_View_Empty();
-
-                    localMedia.clear();
-
-                    //setHideAnim(width,height);
-
                 }else{
                     Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
                 }
@@ -447,10 +480,60 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+    /**上传图片内容**/
+    private void getUpCoverImage(){
+        //获取的图片不为空,上传
+        for (String filePath : filePaths) {
+            File file = new File(filePath);
+            RequestBody requestBody_images = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", file.getName(), requestBody_images);
+            parts.add(filePart);
+        }
+
+        UpArticlesImageApi upArticlesImageApi=new UpArticlesImageApi();
+        upArticlesImageApi.SetUrl(view.getContext().getString(R.string.BackUrl)+view.getContext().getString(R.string.Url_Article));
+        UpArticlesImageService upArticlesImageService=upArticlesImageApi.getService();
+        Call<IsTrueBean> call_article_image=upArticlesImageService.up_Article_Image(
+                intent_Chat.getStringExtra(view.getContext().getString(R.string.info_account)),add_title.getText().toString(),parts);
+        call_article_image.enqueue(new Callback<IsTrueBean>() {
+            @Override
+            public void onResponse(Call<IsTrueBean> call, Response<IsTrueBean> response) {
+                if(response.body()!=null){
+                    Toast.makeText(view.getContext(), "上传图片成功", Toast.LENGTH_SHORT).show();
+                    setListClear();
+                }else{
+                    Toast.makeText(view.getContext(),view.getContext().getString(R.string.ResponseBodyNull), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IsTrueBean> call, Throwable t) {
+                Toast.makeText(view.getContext(),view.getContext().getString(R.string.NetworkFailure), Toast.LENGTH_SHORT).show();
+            }
+        });
+//        if(localMedia!=null){
+//
+//        }
+//        else{
+//            Toast.makeText(view.getContext(), "上传内容:_localMedia为空", Toast.LENGTH_SHORT).show();
+//        }
+    }
 
     private void setAdd_View_Empty(){
         add_title.setText("");
         add_description.setText("");
         add_content.setText("");
+        if(imageViews.size()!=0){
+            for (ImageView imageView : imageViews) {
+                imageView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void setListClear(){
+        filePaths.clear();
+        parts.clear();
+        imageViews.clear();
+        localMedia.clear();
     }
 }
